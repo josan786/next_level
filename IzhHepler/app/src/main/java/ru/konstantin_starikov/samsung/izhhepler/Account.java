@@ -4,21 +4,23 @@ import java.util.ArrayList;
 
 public class Account {
     public long ID;
-    public String name;
+    public String firstName;
+    public String lastName;
     public String phoneNumber;
     public Address address;
     public ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
 
     public Account()
     {
-
+        ID = 0;
     }
 
-    public Account(long ID, String name, String phoneNumber, Address address)
+    public Account(long ID, String firstName, String lastName, String phoneNumber, Address address)
     {
         this();
         this.ID = ID;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
