@@ -10,6 +10,8 @@
 [<div align="center">Figma</div>](https://www.figma.com/file/I29B3JGJcYMTeyfpCSZ4Da/IzhHelper?node-id=0%3A1)
 [<div align="center">Диаграмма классов</div>](https://drive.google.com/file/d/1V7rvEoPjWr2Yuo4HSD35qOZ7d4bNo9z4/view)
 
+___
+
 ## Планируемые функции
 ### Обязательные
 * Создание жалобы, выбор места, и создание фотографий правонарушения
