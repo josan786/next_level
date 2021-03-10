@@ -15,6 +15,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="scrollButtonsStyle">
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
+
     <style name="Theme.IzhHelperGreen" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/soft_green</item>
@@ -25,6 +29,22 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.ViolationReportCreation"
+        parent="@style/Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/blueAppBarColor</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <style name="Theme.IzhHelperBlue" parent="Theme.MaterialComponents.Light">
+        <item name="android:windowBackground">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="actionBarItemBackground">@color/blueAppBarColor</item>
+        <item name="actionBarTheme">@style/Theme.ViolationReportCreation</item>
         <!-- Customize your theme here. -->
     </style>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ru.konstantin_starikov.samsung.izhhelper" >
+    package="ru.konstantin_starikov.samsung.izhhelper">
 
     <application
         android:allowBackup="true"
@@ -8,15 +8,18 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IzhHelperGreen" >
+        android:theme="@style/Theme.IzhHelperGreen">
+        <activity
+            android:name=".PlaceChoiceActivity"
+            android:theme="@style/Theme.IzhHelperBlue">
+        </activity>
         <activity
             android:name=".registration"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" >
-        </activity>
+            android:theme="@style/Theme.IzhHelper.NoActionBar"></activity>
         <activity android:name=".mainMenu" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" >
+            android:theme="@style/Theme.IzhHelper.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

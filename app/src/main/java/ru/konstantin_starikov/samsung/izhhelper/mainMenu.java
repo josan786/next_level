@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class mainMenu extends AppCompatActivity {
@@ -18,6 +19,12 @@ public class mainMenu extends AppCompatActivity {
         userAccount = GetUserAccountByID(accountID);
         GetUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
         GetUserIDTextView().setText("\u0040" + Long.toString(userAccount.ID));
+    }
+
+    public void CreateViolationReport(View v)
+    {
+        Intent choosePlaceIntent = new Intent(mainMenu.this, PlaceChoiceActivity.class);
+        startActivity(choosePlaceIntent);
     }
 
     private TextView GetUserNameTextView()

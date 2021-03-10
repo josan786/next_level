@@ -13,10 +13,11 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="10dp"
         android:clickable="true"
+        android:onClick="CreateViolationReport"
         android:src="@drawable/plus_without_background"
         app:backgroundTint="#28ABB9"
-        app:tint="@color/white"
-        app:backgroundTintMode="add" />
+        app:backgroundTintMode="add"
+        app:tint="@color/white" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -60,8 +61,10 @@
                     android:layout_height="35dp"
                     android:fontFamily="sans-serif"
                     android:text="Имя"
+                    android:textColor="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold"
+                    android:typeface="normal"
                     tools:text="Имя" />
 
                 <TextView
@@ -70,8 +73,10 @@
                     android:layout_height="43dp"
                     android:fontFamily="sans-serif"
                     android:text="\u004012345"
+                    android:textAllCaps="false"
+                    android:textColor="#000000"
                     android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:typeface="normal"
                     tools:text="\u004012345" />
 
                 <LinearLayout
@@ -97,7 +102,9 @@
                         android:layout_weight="3"
                         android:fontFamily="sans-serif"
                         android:gravity="center_vertical"
-                        android:text="Отредактировать профиль" />
+                        android:text="Отредактировать профиль"
+                        android:textColor="#000000"
+                        android:typeface="normal" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -119,21 +126,68 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="12"
-                android:background="#EFFAD3"
+                android:layout_weight="10"
+                android:background="#00FFFFFF"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView7"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center_vertical"
-                    android:text="Отправленные нарушения"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/button"
+                            style="@style/scrollButtonsStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif"
+                            android:text="Отправленные нарушения"
+                            android:textAllCaps="false"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:typeface="normal"
+                            app:backgroundTint="#EFFAD3"
+                            app:cornerRadius="12dp" />
+
+                        <Button
+                            android:id="@+id/button2"
+                            style="@style/scrollButtonsStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif"
+                            android:text="Достижения"
+                            android:textAllCaps="false"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:typeface="normal"
+                            app:backgroundTint="#EFFAD3"
+                            app:cornerRadius="12dp" />
+
+                        <Button
+                            android:id="@+id/button3"
+                            style="@style/scrollButtonsStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif"
+                            android:text="Карта"
+                            android:textAllCaps="false"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:typeface="normal"
+                            app:backgroundTint="#EFFAD3"
+                            app:cornerRadius="12dp" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
             </LinearLayout>
 
             <LinearLayout
