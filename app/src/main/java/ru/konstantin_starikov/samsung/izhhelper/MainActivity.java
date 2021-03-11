@@ -37,9 +37,6 @@ public class MainActivity extends AppCompatActivity {
         TextView isRightText = (TextView) findViewById(R.id.isRightText);
 
         if(isInputDataRight(inputLogin, inputPassword)) {
-            isRightText.setVisibility(View.VISIBLE);
-            isRightText.setText(R.string.right_input_text);
-            isRightText.setTextColor(Color.GREEN);
             Intent loginIntent = new Intent(this, mainMenu.class);
             loginIntent.putExtra(ACCOUNT_ID, GetAccountID(inputLogin, inputPassword));
             startActivity(loginIntent);
@@ -52,12 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
                 loginText.setText("");
                 passwordText.setText("");
-
-                RegisterUser();
             }
     }
 
-    private void RegisterUser()
+    public void RegisterUser(View v)
     {
         Intent registrationIntent = new Intent(MainActivity.this, registration.class);
         startActivityForResult(registrationIntent, REGISTRATION_REQUEST_CODE);
