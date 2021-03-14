@@ -2,10 +2,11 @@ package ru.konstantin_starikov.samsung.izhhelper;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 
-public class ViolationReport {
+public class ViolationReport implements Serializable {
     protected long ID;
     private ViolationStatus status;
 

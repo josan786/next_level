@@ -1,8 +1,9 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class AuthorizedBody {
+public class AuthorizedBody implements Serializable {
     private String name;
     private ArrayList<ViolationReport> receivedViolationReports;
     private ArrayList<ViolationReport> acceptedViolationReports;

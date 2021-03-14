@@ -1,6 +1,8 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
-public enum ViolationStatus {
+import java.io.Serializable;
+
+public enum ViolationStatus implements Serializable {
     Created,
     Sent,
     Received,

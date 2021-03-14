@@ -4,4 +4,6 @@
     <string name="password_text">Пароль</string>
     <string name="right_input_text">Верно</string>
     <string name="false_input_text">Вы ошиблись в логине или пароле</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

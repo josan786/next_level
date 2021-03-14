@@ -1,6 +1,8 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
-public class ViolationType {
+import java.io.Serializable;
+
+public class ViolationType implements Serializable {
     private AuthorizedBody authorizedBody;
 
     public ViolationType(AuthorizedBody authorizedBody)

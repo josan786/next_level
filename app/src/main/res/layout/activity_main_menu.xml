@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mainMenu">
+    tools:context=".MainMenuActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton6"
@@ -141,7 +141,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/button"
+                            android:id="@+id/fragmentClickButton"
                             style="@style/scrollButtonsStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"

@@ -1,8 +1,9 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Account {
+public class Account implements Serializable {
     public long ID;
     public String firstName;
     public String lastName;

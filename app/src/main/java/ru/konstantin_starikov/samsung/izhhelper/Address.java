@@ -1,6 +1,8 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable {
     public String home;
     public String street;
     public int flat;

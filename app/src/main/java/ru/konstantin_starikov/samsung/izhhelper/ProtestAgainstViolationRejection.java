@@ -1,6 +1,8 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
-public class ProtestAgainstViolationRejection {
+import java.io.Serializable;
+
+public class ProtestAgainstViolationRejection implements Serializable {
     private String reasonForUserProtest;
     private RejectedViolationReport rejectedViolationReport;
 

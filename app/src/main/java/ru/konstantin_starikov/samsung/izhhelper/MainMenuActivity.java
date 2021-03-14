@@ -4,18 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.TextView;
 
-public class mainMenu extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MainMenuActivity extends AppCompatActivity {
 
     private Account userAccount = null;
+
+    public final static String VIOLATION_REPORT = "violation_report";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        long accountID = getIntent().getLongExtra(MainActivity.ACCOUNT_ID, 0);
+        long accountID = getIntent().getLongExtra(LoginActivity.ACCOUNT_ID, 0);
         userAccount = GetUserAccountByID(accountID);
         GetUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
         GetUserIDTextView().setText("\u0040" + Long.toString(userAccount.ID));
@@ -23,7 +28,11 @@ public class mainMenu extends AppCompatActivity {
 
     public void CreateViolationReport(View v)
     {
-        Intent choosePlaceIntent = new Intent(mainMenu.this, PlaceChoiceActivity.class);
+        ViolationReport violationReport = new ViolationReport();
+        violationReport.senderAccount = userAccount;
+
+        Intent choosePlaceIntent = new Intent(MainMenuActivity.this, PlaceChoiceActivity.class);
+        choosePlaceIntent.putExtra(VIOLATION_REPORT, violationReport);
         startActivity(choosePlaceIntent);
     }
 

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-public class registration extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
 
     public static final String REGISTERED_LOGIN_KEY = "registered_login_key";
     public static final String REGISTERED_PASSWORD_KEY = "registered_password_key";
@@ -25,7 +25,6 @@ public class registration extends AppCompatActivity {
 
     public void Register(View view) {
         AddNewAccount(loginText.getText().toString(), passwordText.getText().toString());
-
     }
 
     private void AddNewAccount(String login, String password)

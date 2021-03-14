@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private final static String LOGIN = "Kapusta";
-    private final static String PASSWORD = "12345";
+    private final static String LOGIN = "1";
+    private final static String PASSWORD = "1";
 
     private final static int REGISTRATION_REQUEST_CODE = 1061;
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         TextView isRightText = (TextView) findViewById(R.id.isRightText);
 
         if(isInputDataRight(inputLogin, inputPassword)) {
-            Intent loginIntent = new Intent(this, mainMenu.class);
+            Intent loginIntent = new Intent(this, MainMenuActivity.class);
             loginIntent.putExtra(ACCOUNT_ID, GetAccountID(inputLogin, inputPassword));
             startActivity(loginIntent);
         }
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void RegisterUser(View v)
     {
-        Intent registrationIntent = new Intent(MainActivity.this, registration.class);
+        Intent registrationIntent = new Intent(LoginActivity.this, RegistrationActivity.class);
         startActivityForResult(registrationIntent, REGISTRATION_REQUEST_CODE);
     }
 
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == REGISTRATION_REQUEST_CODE) {
             switch (resultCode) {
                 case RESULT_OK:
-                    loginText.setText(data.getStringExtra(registration.REGISTERED_LOGIN_KEY));
-                    passwordText.setText(data.getStringExtra(registration.REGISTERED_PASSWORD_KEY));
+                    loginText.setText(data.getStringExtra(RegistrationActivity.REGISTERED_LOGIN_KEY));
+                    passwordText.setText(data.getStringExtra(RegistrationActivity.REGISTERED_PASSWORD_KEY));
                     break;
             }
         }
