@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final static String LOGIN = "1";
-    private final static String PASSWORD = "1";
+    private final static String LOGIN = "Kapusta";
+    private final static String PASSWORD = "12345";
 
     private final static int REGISTRATION_REQUEST_CODE = 1061;
 
