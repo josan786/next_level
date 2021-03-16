@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 public class ViolationTypeSelectionActivity extends AppCompatActivity {
 
     private ViolationReport violationReport;
+    public final static String VIOLATION_REPORT = "violation_report";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -47,6 +49,52 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
         fragment3.setViolationTypeName("Стоянка на тротуаре");
         fragment4.setViolationTypeName("Стоянка в зоне действия знака «Стоянка запрещена»");
         fragment5.setViolationTypeName("Стоянка в зоне действия знака «Остановка запрещена»");
+        //установка перехода на следующую активность по клику на фрагмент
+        fragment.setTypeClickListener(new TypeClickListener() {
+            @Override
+            public void execute() {
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.Lawn, null);
+                Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
+                carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
+                startActivity(carDetectionIntent);
+            }
+        });
+        fragment2.setTypeClickListener(new TypeClickListener() {
+            @Override
+            public void execute() {
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.PedestrianCrossing, null);
+                Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
+                carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
+                startActivity(carDetectionIntent);
+            }
+        });
+        fragment3.setTypeClickListener(new TypeClickListener() {
+            @Override
+            public void execute() {
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.Pavement, null);
+                Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
+                carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
+                startActivity(carDetectionIntent);
+            }
+        });
+        fragment4.setTypeClickListener(new TypeClickListener() {
+            @Override
+            public void execute() {
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.ParkingProhibited, null);
+                Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
+                carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
+                startActivity(carDetectionIntent);
+            }
+        });
+        fragment5.setTypeClickListener(new TypeClickListener() {
+            @Override
+            public void execute() {
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.StoppingProhibited, null);
+                Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
+                carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
+                startActivity(carDetectionIntent);
+            }
+        });
     }
 
     @Override

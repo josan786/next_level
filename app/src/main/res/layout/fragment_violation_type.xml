@@ -30,13 +30,12 @@
         <TextView
             android:id="@+id/violationTypeName"
             android:layout_width="241dp"
-            android:layout_height="64dp"
+            android:layout_height="95dp"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="1dp"
             android:autoText="false"
             android:freezesText="true"
             android:text="Стоянка в зоне действия знака «Стоянка запрещена»"
@@ -52,7 +51,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/fragmentClickButton"
+        android:id="@+id/fragmentTypeClickButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0" />

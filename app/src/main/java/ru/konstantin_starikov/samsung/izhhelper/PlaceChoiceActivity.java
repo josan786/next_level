@@ -2,12 +2,18 @@ package ru.konstantin_starikov.samsung.izhhelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -15,6 +21,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.GeoObjectCollection;
@@ -65,7 +72,7 @@ import com.yandex.runtime.image.ImageProvider;
 import java.io.Serializable;
 import java.util.List;
 
-public class PlaceChoiceActivity extends AppCompatActivity implements UserLocationObjectListener, Session.SearchListener, CameraListener {
+public class PlaceChoiceActivity extends AppCompatActivity implements UserLocationObjectListener, Session.SearchListener, CameraListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final String MAPKIT_API_KEY = "e72ee1eb-bdb6-4062-8c43-75b8a03bca81";
 
@@ -82,6 +89,10 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     private ViolationReport violationReport;
 
     public final static String VIOLATION_REPORT = "violation_report";
+
+    private static final int PERMISSION_REQUEST_LOCATION = 1;
+
+    private MapKit mapKit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +112,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        MapKit mapKit = MapKitFactory.getInstance();
+        mapKit = MapKitFactory.getInstance();
 
         mapView = (MapView) findViewById(R.id.mapview);
 
@@ -119,10 +130,12 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         map.addCameraListener(this);
 
         //слой для отслеживания местоположения пользователя
-        userLocationLayer = mapKit.createUserLocationLayer(mapView.getMapWindow());
-        userLocationLayer.setVisible(true);
-        userLocationLayer.setHeadingEnabled(true);
-        userLocationLayer.setObjectListener(this);
+        if (checkIfAlreadyhavePermission()) {
+            userLocationLayer = mapKit.createUserLocationLayer(mapView.getMapWindow());
+            userLocationLayer.setVisible(true);
+            userLocationLayer.setHeadingEnabled(true);
+            userLocationLayer.setObjectListener(this);
+        }
 
         //обратное геокодирование для поиска улицы, находящейся в местоположении камеры
         searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED);
@@ -185,8 +198,41 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void moveToUserLocation(View v) {
-        mapView.getMap().move(userLocationLayer.cameraPosition());
+        if (!checkIfAlreadyhavePermission()) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+        else if (userLocationLayer.cameraPosition() != null)
+            mapView.getMap().move(userLocationLayer.cameraPosition());
+    }
+
+    private boolean checkIfAlreadyhavePermission() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //Log.v("Grant_Results", String.valueOf(grantResults[0]));
+                    Toast.makeText(this, "Разрешение на местоположение получено", Toast.LENGTH_LONG).show();
+                    userLocationLayer = mapKit.createUserLocationLayer(mapView.getMapWindow());
+                    userLocationLayer.setVisible(true);
+                    userLocationLayer.setHeadingEnabled(true);
+                    userLocationLayer.setObjectListener(this);
+                    moveToUserLocation(null);
+                } else {
+                    Toast.makeText(this, "Нет разрешения на местоположение", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
     }
 
     public void openViolationTypeSelectionActivity(View v) {

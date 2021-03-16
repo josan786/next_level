@@ -30,6 +30,8 @@ public class ViolationTypeFragment extends Fragment {
     private ImageView violationTypeIcon;
     private TextView violationTypeName;
 
+    private TypeClickListener typeClickListener;
+
     public ViolationTypeFragment() {
         // Required empty public constructor
     }
@@ -70,6 +72,12 @@ public class ViolationTypeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_violation_type, container, false);
         violationTypeIcon = rootView.findViewById(R.id.violationTypeIcon);
         violationTypeName = rootView.findViewById(R.id.violationTypeName);
+        rootView.findViewById(R.id.fragmentTypeClickButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                typeClickListener.execute();
+            }
+        });
         return rootView;
     }
 
@@ -81,5 +89,10 @@ public class ViolationTypeFragment extends Fragment {
     public void setViolationTypeName(String violationTypeName)
     {
         this.violationTypeName.setText(violationTypeName);
+    }
+
+    public void setTypeClickListener(TypeClickListener typeClickListener)
+    {
+        this.typeClickListener = typeClickListener;
     }
 }
