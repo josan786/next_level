@@ -1,7 +1,6 @@
 package ru.konstantin_starikov.samsung.izhhelper;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,31 +10,19 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.GeoObjectCollection;
 import com.yandex.mapkit.MapKit;
 import com.yandex.mapkit.MapKitFactory;
-import com.yandex.mapkit.geometry.BoundingBox;
 import com.yandex.mapkit.geometry.Point;
-import com.yandex.mapkit.layers.GeoObjectTapEvent;
-import com.yandex.mapkit.layers.GeoObjectTapListener;
 import com.yandex.mapkit.layers.ObjectEvent;
-import com.yandex.mapkit.location.Location;
-import com.yandex.mapkit.location.LocationListener;
-import com.yandex.mapkit.location.LocationStatus;
-import com.yandex.mapkit.location.LocationViewSource;
 import com.yandex.mapkit.logo.Alignment;
 import com.yandex.mapkit.logo.HorizontalAlignment;
 import com.yandex.mapkit.logo.VerticalAlignment;
@@ -44,12 +31,8 @@ import com.yandex.mapkit.map.CameraPosition;
 
 import com.yandex.mapkit.map.CameraUpdateReason;
 import com.yandex.mapkit.map.CompositeIcon;
-import com.yandex.mapkit.map.GeoObjectSelectionMetadata;
 import com.yandex.mapkit.map.IconStyle;
-import com.yandex.mapkit.map.InputListener;
 import com.yandex.mapkit.map.Map;
-import com.yandex.mapkit.map.MapObjectCollection;
-import com.yandex.mapkit.map.PlacemarkMapObject;
 import com.yandex.mapkit.map.RotationType;
 import com.yandex.mapkit.mapview.MapView;
 import com.yandex.mapkit.search.Response;
@@ -59,18 +42,11 @@ import com.yandex.mapkit.search.SearchManagerType;
 import com.yandex.mapkit.search.SearchOptions;
 import com.yandex.mapkit.search.SearchType;
 import com.yandex.mapkit.search.Session;
-import com.yandex.mapkit.search.SuggestItem;
-import com.yandex.mapkit.search.SuggestOptions;
-import com.yandex.mapkit.search.SuggestSession;
 import com.yandex.mapkit.user_location.UserLocationLayer;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
-import com.yandex.mapkit.user_location.UserLocationTapListener;
 import com.yandex.mapkit.user_location.UserLocationView;
 import com.yandex.runtime.Error;
 import com.yandex.runtime.image.ImageProvider;
-
-import java.io.Serializable;
-import java.util.List;
 
 public class PlaceChoiceActivity extends AppCompatActivity implements UserLocationObjectListener, Session.SearchListener, CameraListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
@@ -130,7 +106,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         map.addCameraListener(this);
 
         //слой для отслеживания местоположения пользователя
-        if (checkIfAlreadyhavePermission()) {
+        if (checkIfAlreadyHavePermission()) {
             userLocationLayer = mapKit.createUserLocationLayer(mapView.getMapWindow());
             userLocationLayer.setVisible(true);
             userLocationLayer.setHeadingEnabled(true);
@@ -200,14 +176,14 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void moveToUserLocation(View v) {
-        if (!checkIfAlreadyhavePermission()) {
+        if (!checkIfAlreadyHavePermission()) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
         else if (userLocationLayer.cameraPosition() != null)
             mapView.getMap().move(userLocationLayer.cameraPosition());
     }
 
-    private boolean checkIfAlreadyhavePermission() {
+    private boolean checkIfAlreadyHavePermission() {
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         return result == PackageManager.PERMISSION_GRANTED;
     }
@@ -263,6 +239,6 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     public void onCameraPositionChanged(@NonNull Map map, @NonNull CameraPosition cameraPosition, @NonNull CameraUpdateReason cameraUpdateReason, boolean b) {
         SearchOptions searchOptions = new SearchOptions();
         searchOptions.setSearchTypes(SearchType.GEO.value);
-        searchManager.submit(mapView.getMap().getCameraPosition().getTarget(), (int) 18f, searchOptions, this);
+        searchManager.submit(mapView.getMap().getCameraPosition().getTarget(), 18, searchOptions, this);
     }
 }
