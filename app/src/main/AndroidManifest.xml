@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,22 +21,43 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IzhHelperGreen">
-        <activity android:name=".PhotofixationActivity"></activity>
+
         <activity
-            android:name=".CarNumberDetectionActivity"
-            android:theme="@style/Theme.IzhHelperBlue"></activity>
+            android:name=".activities.SuccessfullySentActivity"
+            android:theme="@style/Theme.IzhHelper.NoActionBar">
+        </activity>
+
         <activity
-            android:name=".ViolationTypeSelectionActivity"
-            android:theme="@style/Theme.IzhHelperBlue"></activity>
+            android:name=".activities.SendViolationActivity"
+            android:theme="@style/Theme.IzhHelperBlue">
+        </activity>
+
         <activity
-            android:name=".PlaceChoiceActivity"
-            android:theme="@style/Theme.IzhHelperBlue"></activity>
+            android:name=".activities.PhotofixationActivity"
+            android:theme="@style/Theme.IzhHelperBlue">
+        </activity>
+
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".activities.CarNumberDetectionActivity"
+            android:theme="@style/Theme.IzhHelperBlue">
+        </activity>
+
+        <activity
+            android:name=".activities.ViolationTypeSelectionActivity"
+            android:theme="@style/Theme.IzhHelperBlue">
+        </activity>
+
+        <activity
+            android:name=".activities.PlaceChoiceActivity"
+            android:theme="@style/Theme.IzhHelperBlue">
+        </activity>
+
+        <activity
+            android:name=".activities.RegistrationActivity"
             android:theme="@style/Theme.IzhHelper.NoActionBar" />
-        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".activities.MainMenuActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:theme="@style/Theme.IzhHelper.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

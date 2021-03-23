@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViolationTypeSelectionActivity">
+    tools:context=".activities.ViolationTypeSelectionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
 
             <fragment
                 android:id="@+id/fragment"
-                android:name="ru.konstantin_starikov.samsung.izhhelper.ViolationTypeFragment"
+                android:name="ru.konstantin_starikov.samsung.izhhelper.fragments.ViolationTypeFragment"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
                 tools:layout="@layout/fragment_violation_type" />
@@ -39,7 +39,7 @@
 
             <fragment
                 android:id="@+id/fragment2"
-                android:name="ru.konstantin_starikov.samsung.izhhelper.ViolationTypeFragment"
+                android:name="ru.konstantin_starikov.samsung.izhhelper.fragments.ViolationTypeFragment"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
                 tools:layout="@layout/fragment_violation_type" />
@@ -50,7 +50,7 @@
 
             <fragment
                 android:id="@+id/fragment3"
-                android:name="ru.konstantin_starikov.samsung.izhhelper.ViolationTypeFragment"
+                android:name="ru.konstantin_starikov.samsung.izhhelper.fragments.ViolationTypeFragment"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
                 tools:layout="@layout/fragment_violation_type" />
@@ -61,7 +61,7 @@
 
             <fragment
                 android:id="@+id/fragment4"
-                android:name="ru.konstantin_starikov.samsung.izhhelper.ViolationTypeFragment"
+                android:name="ru.konstantin_starikov.samsung.izhhelper.fragments.ViolationTypeFragment"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
                 tools:layout="@layout/fragment_violation_type" />
@@ -72,7 +72,7 @@
 
             <fragment
                 android:id="@+id/fragment5"
-                android:name="ru.konstantin_starikov.samsung.izhhelper.ViolationTypeFragment"
+                android:name="ru.konstantin_starikov.samsung.izhhelper.fragments.ViolationTypeFragment"
                 android:layout_width="match_parent"
                 android:layout_height="105dp"
                 tools:layout="@layout/fragment_violation_type" />

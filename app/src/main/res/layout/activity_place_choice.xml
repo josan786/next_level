@@ -10,7 +10,7 @@
     android:scrollbarTrackHorizontal="@color/white"
     android:scrollbarTrackVertical="@color/white"
     app:statusBarBackground="@color/white"
-    tools:context=".PlaceChoiceActivity">
+    tools:context=".activities.PlaceChoiceActivity">
 
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapview"

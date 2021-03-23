@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "ru.konstantin_starikov.samsung.izhhelper"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -35,6 +35,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.yandex.android:maps.mobile:4.0.0-full'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
