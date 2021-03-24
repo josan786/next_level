@@ -52,7 +52,7 @@
         android:text="номер автомобиля"
         android:textColor="#F6F6F6"
         android:textSize="18sp"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
     <FrameLayout
         android:id="@+id/informationLayout"

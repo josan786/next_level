@@ -28,11 +28,11 @@ public class ViolationType implements Serializable {
             case Lawn:
                 return "Стоянка на газоне";
             case ParkingProhibited:
-                return "Стоянка у знака \\\"Стоянка запрещена\\\"";
+                return "Стоянка у знака \"Стоянка запрещена\"";
             case PedestrianCrossing:
                 return "Стоянка на пешеходном переходе";
             case StoppingProhibited:
-                return "Стоянка в зоне действия знака \\\"Остановка запрещена\\\"";
+                return "Стоянка в зоне действия знака \"Остановка запрещена\"";
         }
         return "Неизвестное нарушение";
     }

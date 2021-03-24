@@ -35,6 +35,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.SandroMachado:openalpr-android:1.1.2'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.yandex.android:maps.mobile:4.0.0-full'
     implementation 'androidx.appcompat:appcompat:1.2.0'
