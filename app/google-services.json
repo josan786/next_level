@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1029873666423",
+    "project_id": "izh-helper",
+    "storage_bucket": "izh-helper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029873666423:android:ebeef88f1fbdc7316ff972",
+        "android_client_info": {
+          "package_name": "ru.konstantin_starikov.samsung.izhhelper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029873666423-8b1nlk5g7a0h5qbro4r3bqhcmcu0d1de.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2W15orKEsKjMzQbZ_TORTWosFTGlmQ5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029873666423-8b1nlk5g7a0h5qbro4r3bqhcmcu0d1de.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

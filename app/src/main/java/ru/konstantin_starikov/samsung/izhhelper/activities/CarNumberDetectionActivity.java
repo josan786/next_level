@@ -222,7 +222,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         //вращаем исходное изображение, если его ширина больше высоты
         Bitmap rotatedPicture = rotateImageIfRequired(getBitmapFromPath(picturePath));
         //удаляем исходное изображение
-        new File(picturePath).delete();
+        deleteImageByPath(picturePath);
         //дальше получаем путь корректного изображения
         String rotatedPicturePath = "";
         FileOutputStream fileOutputStream = null;
@@ -270,6 +270,13 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         return result;
     }
 
+    @SuppressLint("LongLogTag")
+    private void deleteImageByPath(String imagePath)
+    {
+        Log.i("Image deleted, path was - ", imagePath);
+        new File(imagePath).delete();
+    }
+
     private void recognizeNumber(String picturePath) {
         AsyncTask.execute(new Runnable() {
             @SuppressLint("LongLogTag")
@@ -277,7 +284,6 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
             public void run() {
                 Log.i("Recognizing picture path", picturePath);
                 String result = alpr.recognizeWithCountryRegionNConfig("eu", "", picturePath, openAlprConfFile, 10);
-                new File(picturePath).delete();
                 Log.i("OpenALPR result", result);
                 //Результаты представлены в JSON Формате, поэтому парсим их с помощью GSON
                 final Results results = new Gson().fromJson(result, Results.class);
@@ -286,12 +292,13 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                     public void run() {
                         if (results != null && results.getResults() != null && results.getResults().size() != 0) {
                             List<Result> resultsList = results.getResults();
+                            boolean isRecognizedCorrectly = false;
                             for (int i = 0; i < resultsList.size(); ++i) {
                                 {
                                     Result result = resultsList.get(i);
                                     String plate = result.getPlate();
                                     //Длина распознанного номера должны быть не меньше 6, но может распознать ещё и регион, тогда ещё плюс 2 или 3 (8 или 9 соответственно)
-                                    if (result.getConfidence() > 85 && plate.length() >= 6) {
+                                    if (result.getConfidence() > 82 && plate.length() >= 6) {
                                         String carNumberSeries = "";
                                         //Серия номера машины - это первый, пятый и шестой символы (это  буквы)
                                         carNumberSeries += plate.charAt(0);
@@ -309,13 +316,16 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                         catch (NumberFormatException exception)
                                         {
                                             Log.e("RegistrationNumber parsing exception", exception.getMessage());
-                                            return;
+                                            continue;
                                         }
                                         violationReport.carNumber = new CarNumber(carNumberSeries, carNumberRegistrationNumber);
 
                                         //проверяем, не распознал ли номер уже другой процесс
-                                        if(carNumberText.getVisibility() == View.VISIBLE) return;
-
+                                        if(carNumberText.getVisibility() == View.VISIBLE)
+                                        {
+                                            deleteImageByPath(picturePath);
+                                            return;
+                                        }
                                         //Если все условия пройдены, работаем с UI и устанавливаем 10-секундный таймер
                                         CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
                                             public void run() {
@@ -334,7 +344,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             public void onTick(long millisUntilFinished) {
                                                 CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        timerSecondsCountText.setText((int) (10 * 1000 - millisUntilFinished) / 1000);
+                                                        timerSecondsCountText.setText("0:" + Long.toString(millisUntilFinished / 1000));
                                                     }
                                                 });
                                             }
@@ -342,12 +352,17 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             @Override
                                             public void onFinish() {
                                                 cancelTimer.cancel();
+                                                violationReport.carNumberPhotoName = picturePath.substring(picturePath.lastIndexOf('/') + 1);
+                                                Log.i("CarNumberPhotoName", violationReport.carNumberPhotoName);
                                                 goToNextActivity();
                                             }
                                         };
+                                        cancelTimer.start();
+                                        return;
                                     }
                                 }
                             }
+                            deleteImageByPath(picturePath);
                         }
                     }
                 });

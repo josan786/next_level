@@ -1,13 +1,25 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.storage.StorageManager;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ViolationReport implements Serializable {
-    protected long ID;
+    protected String ID;
     private ViolationStatus status;
 
     public String place;
@@ -15,13 +27,21 @@ public class ViolationReport implements Serializable {
     public Account senderAccount;
     public ViolationType violationType;
     public CarNumber carNumber;
+    public String carNumberPhotoName;
 
-    public ArrayList<Bitmap> photos;
+    public ArrayList<String> photosNames;
+
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+
+    private FirebaseStorage firebaseStorage;
+    private StorageReference storageReference;
 
     public ViolationReport()
     {
+        generateID();
         status = ViolationStatus.Created;
-        photos = new ArrayList<Bitmap>();
+        photosNames = new ArrayList<String>();
     }
 
     public ViolationReport(String place, Time departureTime, Account senderAccount, ViolationType violationType)
@@ -41,14 +61,14 @@ public class ViolationReport implements Serializable {
         this.senderAccount = senderAccount;
     }
 
-    public ViolationReport(String place, Time departureTime, Account senderAccount, CarNumber carNumber, ArrayList<Bitmap> photos)
+    public ViolationReport(String place, Time departureTime, Account senderAccount, CarNumber carNumber, ArrayList<String> photosNames)
     {
         this();
         this.place = place;
         this.departureTime = departureTime;
         this.senderAccount = senderAccount;
         this.carNumber = carNumber;
-        this.photos = photos;
+        this.photosNames = photosNames;
     }
 
     public ViolationReport(ViolationReport violationReport)
@@ -59,10 +79,11 @@ public class ViolationReport implements Serializable {
         this.departureTime = violationReport.departureTime;
         this.senderAccount = violationReport.senderAccount;
         this.carNumber = violationReport.carNumber;
-        this.photos = violationReport.photos;
+        this.photosNames = violationReport.photosNames;
     }
 
     public ViolationReport(String place, Time departureTime, Account senderAccount, ViolationType violationType, CarNumber carNumber) {
+        this();
         this.place = place;
         this.departureTime = departureTime;
         this.senderAccount = senderAccount;
@@ -70,18 +91,37 @@ public class ViolationReport implements Serializable {
         this.carNumber = carNumber;
     }
 
-    public void AddPhoto(Bitmap photo)
+    public void AddPhoto(String photoName)
     {
-        photos.add(photo);
+        photosNames.add(photoName);
     }
 
-    public boolean SubmitViolationToAuthorizedBody()
+    public boolean SubmitViolationToAuthorizedBody(Context context)
     {
-        violationType.SubmitViolationToAuthorizedBody(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference(ID);
+        databaseReference = firebaseDatabase.getReference(ID).child("Place");
+        databaseReference.setValue(place);
+        databaseReference = firebaseDatabase.getReference(ID).child("Type");
+        databaseReference.setValue(violationType.toString());
+        databaseReference = firebaseDatabase.getReference(ID).child("CarNumber");
+        databaseReference.setValue(carNumber.toString());
+
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReferenceFromUrl("gs://izh-helper.appspot.com/" + ID + "/CarNumberPhoto");
+        File file = new File(context.getApplicationInfo().dataDir + File.separator + carNumberPhotoName);
+        UploadTask uploadTask = storageReference.putFile(Uri.fromFile(file));
+        storageReference = firebaseStorage.getReferenceFromUrl("gs://izh-helper.appspot.com/" + ID + "/Photos");
         return true;
     }
 
-    public long GetID()
+    private void generateID()
+    {
+        UUID uuid = UUID.randomUUID();
+        ID = uuid.toString();
+    }
+
+    public String GetID()
     {
         return ID;
     }

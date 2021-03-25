@@ -43,13 +43,9 @@ public class SendViolationActivity extends AppCompatActivity {
         violationTypeText.setText("Тип нарушения: " + violationReport.violationType.toString());
 
         //установка номера машины
-        String carNumber = "";
-        carNumber += violationReport.carNumber.getSeries().charAt(0);
-        carNumber += violationReport.carNumber.getRegistrationNumber();
-        carNumber += violationReport.carNumber.getSeries().substring(1,3);
         Log.i("CarNumber series", violationReport.carNumber.getSeries());
         Log.i("CarNumber registration number", violationReport.carNumber.getRegistrationNumber());
-        violationCarNumberText.setText("Номер машины: " + carNumber);
+        violationCarNumberText.setText("Номер машины: " + violationReport.carNumber.toString());
 
         //ActionBar - настройка
         ActionBar actionBar = getSupportActionBar();
@@ -70,6 +66,7 @@ public class SendViolationActivity extends AppCompatActivity {
 
     public void sendViolation(View v)
     {
+        violationReport.SubmitViolationToAuthorizedBody(this);
         Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
         startActivity(openSuccessfullySentIntent);
     }

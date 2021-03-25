@@ -46,17 +46,13 @@ import com.yandex.mapkit.user_location.UserLocationLayer;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
 import com.yandex.runtime.Error;
-import com.yandex.runtime.i18n.I18nManagerFactory;
 import com.yandex.runtime.image.ImageProvider;
 
-import java.util.Locale;
-
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class PlaceChoiceActivity extends AppCompatActivity implements UserLocationObjectListener, Session.SearchListener, CameraListener, ActivityCompat.OnRequestPermissionsResultCallback {
-
-    private final String MAPKIT_API_KEY = "e72ee1eb-bdb6-4062-8c43-75b8a03bca81";
 
     public final static String VIOLATION_REPORT = "violation_report";
 
@@ -81,7 +77,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         //получаем переданный violationReport (с данными аккаунта пользователя)
         violationReport = (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
 
-        MapKitFactory.setApiKey(MAPKIT_API_KEY);
+        MapKitFactory.setApiKey(Helper.getConfigValue(this, "MAPKIT_API_KEY"));
         MapKitFactory.setLocale("ru_RU");
         MapKitFactory.initialize(this);
 

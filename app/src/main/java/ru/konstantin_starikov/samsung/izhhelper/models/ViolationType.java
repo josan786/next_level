@@ -6,18 +6,9 @@ public class ViolationType implements Serializable {
 
     private ViolationTypeEnum violationType;
 
-    private AuthorizedBody authorizedBody;
-
-    public ViolationType(ViolationTypeEnum violationType, AuthorizedBody authorizedBody)
+    public ViolationType(ViolationTypeEnum violationType)
     {
         this.violationType = violationType;
-        this.authorizedBody = authorizedBody;
-    }
-
-    public boolean SubmitViolationToAuthorizedBody(ViolationReport violationReport)
-    {
-        authorizedBody.AddViolation(violationReport);
-        return true;
     }
 
     @Override
@@ -35,10 +26,6 @@ public class ViolationType implements Serializable {
                 return "Стоянка в зоне действия знака \"Остановка запрещена\"";
         }
         return "Неизвестное нарушение";
-    }
-
-    public AuthorizedBody GetAuthorizedBody() {
-        return authorizedBody;
     }
 
     public ViolationTypeEnum getViolationType() {

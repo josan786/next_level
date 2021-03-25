@@ -1,5 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -31,17 +33,17 @@ public class Account implements Serializable {
         violationReports.add(new ViolationReport());
     }
 
-    public boolean SendViolationReport(long ID)
+    public boolean SendViolationReport(String ID, Context context)
     {
-        FindViolationReportByID(ID).SubmitViolationToAuthorizedBody();
+        FindViolationReportByID(ID).SubmitViolationToAuthorizedBody(context);
         return true;
     }
 
-    private ViolationReport FindViolationReportByID(long ID)
+    private ViolationReport FindViolationReportByID(String ID)
     {
         for (ViolationReport violationReport : violationReports)
         {
-            if(violationReport.GetID() == ID) return violationReport;
+            if(violationReport.GetID().equals(ID)) return violationReport;
         }
         return null;
     }

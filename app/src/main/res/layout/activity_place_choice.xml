@@ -61,7 +61,7 @@
         android:layout_height="133dp"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="40dp"
-        android:background="#FFFFFF">
+        android:background="@drawable/layout_round_background">
 
         <TextView
             android:id="@+id/placeDescription"

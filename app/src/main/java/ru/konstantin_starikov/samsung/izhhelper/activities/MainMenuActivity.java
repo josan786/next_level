@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
     {
         ViolationReport violationReport = new ViolationReport();
         violationReport.senderAccount = userAccount;
+        Log.i("Report ID: ", violationReport.GetID());
 
         Intent choosePlaceIntent = new Intent(MainMenuActivity.this, PlaceChoiceActivity.class);
         choosePlaceIntent.putExtra(VIOLATION_REPORT, violationReport);

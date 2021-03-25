@@ -29,6 +29,15 @@ public class CarNumber implements Serializable {
         this.country = country;
     }
 
+    @Override
+    public String toString() {
+        String result = "";
+        result += series.charAt(0);
+        result += registrationNumber;
+        result += series.substring(1,3);
+        return result;
+    }
+
     public String getSeries() {
         return series;
     }

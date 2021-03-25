@@ -62,7 +62,7 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
         fragment.setTypeClickListener(new TypeClickListener() {
             @Override
             public void execute() {
-                violationReport.violationType = new ViolationType(ViolationTypeEnum.Lawn, null);
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.Lawn);
                 Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
                 carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
                 startActivity(carDetectionIntent);
@@ -71,7 +71,7 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
         fragment2.setTypeClickListener(new TypeClickListener() {
             @Override
             public void execute() {
-                violationReport.violationType = new ViolationType(ViolationTypeEnum.PedestrianCrossing, null);
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.PedestrianCrossing);
                 Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
                 carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
                 startActivity(carDetectionIntent);
@@ -80,7 +80,7 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
         fragment3.setTypeClickListener(new TypeClickListener() {
             @Override
             public void execute() {
-                violationReport.violationType = new ViolationType(ViolationTypeEnum.Pavement, null);
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.Pavement);
                 Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
                 carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
                 startActivity(carDetectionIntent);
@@ -89,7 +89,7 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
         fragment4.setTypeClickListener(new TypeClickListener() {
             @Override
             public void execute() {
-                violationReport.violationType = new ViolationType(ViolationTypeEnum.ParkingProhibited, null);
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.ParkingProhibited);
                 Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
                 carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
                 startActivity(carDetectionIntent);
@@ -98,7 +98,7 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
         fragment5.setTypeClickListener(new TypeClickListener() {
             @Override
             public void execute() {
-                violationReport.violationType = new ViolationType(ViolationTypeEnum.StoppingProhibited, null);
+                violationReport.violationType = new ViolationType(ViolationTypeEnum.StoppingProhibited);
                 Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
                 carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
                 startActivity(carDetectionIntent);

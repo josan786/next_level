@@ -14,7 +14,7 @@ public class ProtestAgainstViolationRejection implements Serializable {
 
     public void SendProtestToAuthorisedBody()
     {
-        rejectedViolationReport.violationType.GetAuthorizedBody().AddProtestAgainstRejection(this);
+        //rejectedViolationReport.violationType.GetAuthorizedBody().AddProtestAgainstRejection(this);
     }
 
     public String GetReasonForUserProtest()
