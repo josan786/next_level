@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.Timer;
@@ -47,6 +48,16 @@ public class PhotofixationActivity extends AppCompatActivity {
 
         takingPhotosTimer = new Timer();
         takingPhotosTimer.schedule(new TakingPhotosTimerTask(), 5000);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     class TakingPhotosTimerTask extends TimerTask implements CameraView.SaveImageListener{

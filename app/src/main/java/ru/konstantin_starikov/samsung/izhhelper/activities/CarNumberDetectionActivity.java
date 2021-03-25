@@ -170,21 +170,21 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                 cameraView.takePicture(this);
             }
             catch (Exception e){
-                Log.i("Taking picture exception", "не удаётся сделать снимок : " + e.getMessage());
+                Log.e("Taking picture exception", "не удаётся сделать снимок : " + e.getMessage());
             }
         }
 
         @Override
         public void saveFile(String path) {
-            String picturePath = path;
-            processPicture(picturePath);
             cameraView.refreshCamera();
             cameraView.ini();
+            String picturePath = path;
+            processPicture(picturePath);
         }
 
         @Override
         public void error(Exception e) {
-            Toast.makeText( CarNumberDetectionActivity.this, "Error" + e.toString(), Toast.LENGTH_SHORT).show();
+            Log.e("Save file error", "не удаётся сохранить изображение для распознавания: " + e.getMessage());
         }
     }
 
@@ -205,6 +205,18 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void cancelResults(View v)
+    {
+        carNumberText.setVisibility(View.INVISIBLE);
+        informationLayout.setVisibility(View.VISIBLE);
+        foreground.setVisibility(View.INVISIBLE);
+        cancelButton.setVisibility(View.INVISIBLE);
+        timerSecondsCountText.setVisibility(View.INVISIBLE);
+        carNumberRecognizeTimer = new Timer();
+        carNumberRecognizeTimer.schedule(new CarNumberRecognizeUpdateTimerTask(), 3500, recognitionPeriod);
+        cancelTimer.cancel();
     }
 
     @SuppressLint("Range")
@@ -269,6 +281,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                 String result = alpr.recognizeWithCountryRegionNConfig("eu", "", picturePath, openAlprConfFile, 10);
                 new File(picturePath).delete();
                 Log.i("OpenALPR result", result);
+                //Результаты представлены в JSON Формате, поэтому парсим их с помощью GSON
                 final Results results = new Gson().fromJson(result, Results.class);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -279,15 +292,19 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                 {
                                     Result result = resultsList.get(i);
                                     String plate = result.getPlate();
+                                    //Длина распознанного номера должны быть не меньше 6, но может распознать ещё и регион, тогда ещё плюс 2 или 3 (8 или 9 соответственно)
                                     if (result.getConfidence() > 85 && plate.length() >= 6) {
                                         String carNumberSeries = "";
+                                        //Серия номера машины - это первый, пятый и шестой символы (это  буквы)
                                         carNumberSeries += plate.charAt(0);
                                         carNumberSeries += plate.charAt(4);
                                         carNumberSeries += plate.charAt(5);
+                                        //Регистрационный номер машины - второй, третий и четвёртый символы (это цифры)
                                         String carNumberRegistrationNumber = "";
                                         carNumberRegistrationNumber += plate.charAt(1);
                                         carNumberRegistrationNumber += plate.charAt(2);
                                         carNumberRegistrationNumber += plate.charAt(3);
+                                        //Проверяем, действительно ли регистрационный номер представляет из себя число
                                         try {
                                             Integer.parseInt(carNumberRegistrationNumber);
                                         }
@@ -297,6 +314,11 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             return;
                                         }
                                         violationReport.carNumber = new CarNumber(carNumberSeries, carNumberRegistrationNumber);
+
+                                        //проверяем, не распознал ли номер уже другой процесс
+                                        if(carNumberText.getVisibility() == View.VISIBLE) return;
+
+                                        //Если все условия пройдены, работаем с UI и устанавливаем 10-секундный таймер
                                         CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
                                             public void run() {
                                                 carNumberText.setVisibility(View.VISIBLE);
