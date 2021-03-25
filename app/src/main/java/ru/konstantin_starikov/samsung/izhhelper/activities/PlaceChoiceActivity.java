@@ -46,7 +46,10 @@ import com.yandex.mapkit.user_location.UserLocationLayer;
 import com.yandex.mapkit.user_location.UserLocationObjectListener;
 import com.yandex.mapkit.user_location.UserLocationView;
 import com.yandex.runtime.Error;
+import com.yandex.runtime.i18n.I18nManagerFactory;
 import com.yandex.runtime.image.ImageProvider;
+
+import java.util.Locale;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
@@ -55,23 +58,22 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
 
     private final String MAPKIT_API_KEY = "e72ee1eb-bdb6-4062-8c43-75b8a03bca81";
 
+    public final static String VIOLATION_REPORT = "violation_report";
+
+    private static final int PERMISSION_REQUEST_LOCATION = 1;
+
     //счётчик, сколько раз камера перемещалась в местоположение пльзователя
     private int userLocationUsagesCount = 0;
-
-    private MapView mapView;
-    private UserLocationLayer userLocationLayer;
-
-    private SearchManager searchManager;
 
     TextView placeDescription;
 
     private ViolationReport violationReport;
 
-    public final static String VIOLATION_REPORT = "violation_report";
-
-    private static final int PERMISSION_REQUEST_LOCATION = 1;
-
     private MapKit mapKit;
+    private MapView mapView;
+    private UserLocationLayer userLocationLayer;
+    private SearchManager searchManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         violationReport = (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
 
         MapKitFactory.setApiKey(MAPKIT_API_KEY);
+        MapKitFactory.setLocale("ru_RU");
         MapKitFactory.initialize(this);
 
         super.onCreate(savedInstanceState);
@@ -223,11 +226,12 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     @Override
     public void onSearchResponse(@NonNull Response response) {
         String violationPlace = "";
-        int addressDepth = 5;
+        int addressDepth = response.getCollection().getChildren().size();
         for(int i = 0; i < addressDepth; i++)
         {
             GeoObjectCollection.Item geoObject = response.getCollection().getChildren().get(i);
             violationPlace += geoObject.getObj().getName();
+            if(geoObject.getObj().getName().contains("Ижевск")) break;
             if(i < addressDepth - 1) violationPlace += ", ";
         }
         placeDescription.setText(violationPlace);
@@ -243,6 +247,6 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     public void onCameraPositionChanged(@NonNull Map map, @NonNull CameraPosition cameraPosition, @NonNull CameraUpdateReason cameraUpdateReason, boolean b) {
         SearchOptions searchOptions = new SearchOptions();
         searchOptions.setSearchTypes(SearchType.GEO.value);
-        searchManager.submit(mapView.getMap().getCameraPosition().getTarget(), 18, searchOptions, this);
+        searchManager.submit(mapView.getMap().getCameraPosition().getTarget(), 20, searchOptions, this);
     }
 }

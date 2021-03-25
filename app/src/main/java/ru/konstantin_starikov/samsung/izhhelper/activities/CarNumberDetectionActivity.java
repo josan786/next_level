@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +54,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
 
     private CameraView cameraView;
     private Timer carNumberRecognizeTimer;
-    private Timer cancelTimer;
+    private CountDownTimer cancelTimer;
     private Button foreground;
     private Button cancelButton;
     private TextView timerSecondsCountText;
@@ -188,13 +189,10 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         }
     }
 
-    class CancelUpdateTimerTask extends TimerTask {
-        public void run() {
-            cancelTimer.cancel();
-            Intent openPhotofixationIntent = new Intent(CarNumberDetectionActivity.this, PhotofixationActivity.class);
-            openPhotofixationIntent.putExtra(VIOLATION_REPORT, violationReport);
-            startActivity(openPhotofixationIntent);
-        }
+    private void goToNextActivity() {
+        Intent openPhotofixationIntent = new Intent(CarNumberDetectionActivity.this, PhotofixationActivity.class);
+        openPhotofixationIntent.putExtra(VIOLATION_REPORT, violationReport);
+        startActivity(openPhotofixationIntent);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -331,8 +329,22 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             }
                                         });
                                         carNumberRecognizeTimer.cancel();
-                                        cancelTimer = new Timer();
-                                        cancelTimer.schedule(new CancelUpdateTimerTask(), 10 * 1000);
+                                        cancelTimer = new CountDownTimer(10 * 1000, 1000) {
+                                            @Override
+                                            public void onTick(long millisUntilFinished) {
+                                                CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        timerSecondsCountText.setText((int) (10 * 1000 - millisUntilFinished) / 1000);
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onFinish() {
+                                                cancelTimer.cancel();
+                                                goToNextActivity();
+                                            }
+                                        };
                                     }
                                 }
                             }

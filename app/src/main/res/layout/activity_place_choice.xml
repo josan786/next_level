@@ -56,17 +56,24 @@
         android:layout_gravity="center"
         app:srcCompat="@drawable/mark" />
 
-    <TextView
-        android:id="@+id/placeDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:layout_width="221dp"
+        android:layout_height="133dp"
         android:layout_gravity="bottom|center"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="80dp"
-        android:background="#FFFFFF"
-        android:textSize="18sp" />
+        android:layout_marginBottom="40dp"
+        android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/placeDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#090909"
+            android:textSize="14sp" />
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
