@@ -1,8 +1,5 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +7,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
@@ -26,8 +26,7 @@ public class SendViolationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //получаем переданный violationReport (с всеми данными правонарушения)
-        violationReport = (ViolationReport) getIntent().getSerializableExtra(PhotofixationActivity.VIOLATION_REPORT);
+        violationReport = getTransmittedViolationReport();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_violation);
@@ -38,7 +37,7 @@ public class SendViolationActivity extends AppCompatActivity {
 
         //установка полученных значений
         //установка места нарушения
-        violationPlaceText.setText("Место: " + violationReport.place);
+        violationPlaceText.setText("Место: " + violationReport.location.getPlace());
         //установка типа нарушения
         violationTypeText.setText("Тип нарушения: " + violationReport.violationType.toString());
 
@@ -47,9 +46,18 @@ public class SendViolationActivity extends AppCompatActivity {
         Log.i("CarNumber registration number", violationReport.carNumber.getRegistrationNumber());
         violationCarNumberText.setText("Номер машины: " + violationReport.carNumber.toString());
 
-        //ActionBar - настройка
+        tuneActionBar();
+    }
+
+    private ViolationReport getTransmittedViolationReport()
+    {
+        return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+    }
+
+    private void tuneActionBar()
+    {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Отправить нарушение");
+        actionBar.setTitle("Отправка нарушения");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -66,7 +74,7 @@ public class SendViolationActivity extends AppCompatActivity {
 
     public void sendViolation(View v)
     {
-        violationReport.SubmitViolationToAuthorizedBody(this);
+        violationReport.submitViolationToAuthorizedBody(this);
         Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
         startActivity(openSuccessfullySentIntent);
     }

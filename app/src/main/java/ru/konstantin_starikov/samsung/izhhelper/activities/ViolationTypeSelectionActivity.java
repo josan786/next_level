@@ -27,16 +27,12 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //получаем переданный violationReport (с данными местоположения пользователя)
-        violationReport = (ViolationReport) getIntent().getSerializableExtra(PlaceChoiceActivity.VIOLATION_REPORT);
+        violationReport = getTransmittedViolationReport();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_violation_type_selection);
 
-        //ActionBar - настройка
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Выберете тип нарушения");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        tuneActionBar();
 
         //настройка фрагментов типов науршений
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -104,6 +100,19 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity {
                 startActivity(carDetectionIntent);
             }
         });
+    }
+
+    private ViolationReport getTransmittedViolationReport()
+    {
+        return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+    }
+
+    private void tuneActionBar()
+    {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Выберете тип нарушения");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -1,22 +1,25 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.CarViewpointFragment;
+import ru.konstantin_starikov.samsung.izhhelper.models.PhotofixationPictureTakingListener;
+import ru.konstantin_starikov.samsung.izhhelper.models.PhotofixationSequence;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
 
-public class PhotofixationActivity extends AppCompatActivity {
+public class PhotofixationActivity extends AppCompatActivity implements PhotofixationPictureTakingListener {
 
     public final static String VIOLATION_REPORT = "violation_report";
 
@@ -24,30 +27,55 @@ public class PhotofixationActivity extends AppCompatActivity {
 
     private CameraView cameraView;
 
-    private Timer takingPhotosTimer;
+    private CarViewpointFragment carViewpointFragment;
 
-    CarViewpointFragment carViewpointFragment;
+    private ProgressBar progressBar;
+    private TextView timerText;
+    private ArrayList<String> photosDescriptions;
+    private TextView photoDescriptionText;
+
+    private PhotofixationSequence photofixationSequence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //получаем переданный violationReport (с номером автомобиля правонарушителя)
-        violationReport = (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+        violationReport = getTransmittedViolationReport();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photofixation);
 
-        cameraView = findViewById(R.id.cameraViewPhotofixation);
+        findAndSetViews();
         carViewpointFragment = (CarViewpointFragment) getSupportFragmentManager().findFragmentById(R.id.carViewpointFragment);
 
-        //ActionBar - настройка
+        tuneActionBar();
+
+        photosDescriptions = new ArrayList<String>();
+        photosDescriptions.add("Обзорная фотография. Должен быть виден автомобиль и окружающая его местность");
+        photosDescriptions.add("Машина должны быть на общем плане");
+        photosDescriptions.add("Машина и её номер должны быть полностью видны");
+        photofixationSequence = new PhotofixationSequence(cameraView, this,10, progressBar, timerText, photoDescriptionText, photosDescriptions);
+        photofixationSequence.start();
+    }
+
+    private void findAndSetViews()
+    {
+        cameraView = findViewById(R.id.cameraViewPhotofixation);
+        progressBar = findViewById(R.id.timerProgressBar);
+        timerText = findViewById(R.id.photofixationTimerText);
+        photoDescriptionText = findViewById(R.id.photoDescriptionText);
+    }
+
+    private ViolationReport getTransmittedViolationReport()
+    {
+        return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+    }
+
+    private void tuneActionBar()
+    {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Фотофиксация");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        takingPhotosTimer = new Timer();
-        takingPhotosTimer.schedule(new TakingPhotosTimerTask(), 5000);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -60,25 +88,19 @@ public class PhotofixationActivity extends AppCompatActivity {
         }
     }
 
-    class TakingPhotosTimerTask extends TimerTask implements CameraView.SaveImageListener{
-        @Override
-        public void run() {
-            Intent openSendViolationIntent = new Intent(PhotofixationActivity.this, SendViolationActivity.class);
-            openSendViolationIntent.putExtra(VIOLATION_REPORT, violationReport);
-            startActivity(openSendViolationIntent);
-/*            cameraView.takePicture(this);
-            cameraView.refreshCamera();*/
-        }
+    @SuppressLint("LongLogTag")
+    @Override
+    public void saveTakedPicture(String picturePath) {
+        cameraView.refreshCamera();
+        cameraView.ini();
+        violationReport.addPhoto(picturePath.substring(picturePath.lastIndexOf('/') + 1));
+    }
 
-        @Override
-        public void saveFile(String path) {
-            carViewpointFragment.addPhotoToProcessing(null);
-            carViewpointFragment.updateUserPosition();
-        }
-
-        @Override
-        public void error(Exception e) {
-            Toast.makeText( PhotofixationActivity.this, "Error" + e.toString(), Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onPhotofixationFinished(String picturePath) {
+        saveTakedPicture(picturePath);
+        Intent openSendViolationIntent = new Intent(PhotofixationActivity.this, SendViolationActivity.class);
+        openSendViolationIntent.putExtra(VIOLATION_REPORT, violationReport);
+        startActivity(openSendViolationIntent);
     }
 }

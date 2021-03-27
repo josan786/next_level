@@ -1,18 +1,10 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +16,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 
@@ -40,6 +38,7 @@ import java.util.TimerTask;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.CarNumber;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
 
@@ -71,20 +70,16 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //получаем переданный violationReport (с типом нарушения)
-        violationReport = (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+        violationReport = getTransmittedViolationReport();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_number_detection);
 
-        cameraView = findViewById(R.id.cameraView);
-        foreground = findViewById(R.id.foreground);
-        cancelButton = findViewById(R.id.cancelButton);
-        timerSecondsCountText = findViewById(R.id.timerSecondsCountText);
-        informationLayout = findViewById(R.id.informationLayout);
-        carNumberText = findViewById(R.id.carNumberText);
+        findAndSetViews();
 
-        cameraView.setFocusable(true);
+        tuneCamera();
+
+        tuneActionBar();
 
         //Проверяем, есть ли доступ к камере и памяти устройства
         //Если разрешения отсутсвуют, спрашиваем их у пользователя
@@ -99,14 +94,40 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         }
         else requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
-        //ActionBar - настройка
+        ANDROID_DATA_DIR = this.getApplicationInfo().dataDir;
+        setupALPR();
+    }
+
+    private ViolationReport getTransmittedViolationReport()
+    {
+        return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+    }
+
+    private void findAndSetViews()
+    {
+        cameraView = findViewById(R.id.cameraView);
+        foreground = findViewById(R.id.foreground);
+        cancelButton = findViewById(R.id.cancelButton);
+        timerSecondsCountText = findViewById(R.id.timerSecondsCountText);
+        informationLayout = findViewById(R.id.informationLayout);
+        carNumberText = findViewById(R.id.carNumberText);
+    }
+
+    private void tuneCamera()
+    {
+        cameraView.setFocusable(true);
+    }
+
+    private void tuneActionBar()
+    {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Определение номера");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
 
-        //OpenALPR
-        ANDROID_DATA_DIR = this.getApplicationInfo().dataDir;
+    private void setupALPR()
+    {
         openAlprConfFile = ANDROID_DATA_DIR + File.separatorChar + "runtime_data" + File.separatorChar + "openalpr.conf";
         alpr = OpenALPR.Factory.create(CarNumberDetectionActivity.this, ANDROID_DATA_DIR);
     }
@@ -220,7 +241,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
     @SuppressLint("Range")
     public void processPicture(String picturePath) {
         //вращаем исходное изображение, если его ширина больше высоты
-        Bitmap rotatedPicture = rotateImageIfRequired(getBitmapFromPath(picturePath));
+        Bitmap rotatedPicture = Helper.rotateImageIfRequired(Helper.getBitmapFromPath(picturePath));
         //удаляем исходное изображение
         deleteImageByPath(picturePath);
         //дальше получаем путь корректного изображения
@@ -242,32 +263,6 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         }
         //передаём изображение на распознавание
         recognizeNumber(rotatedPicturePath);
-    }
-
-    private Bitmap rotateImageIfRequired(Bitmap img) {
-
-        if(img.getWidth() > img.getHeight()) return rotateImage(img, 90);
-        else return img;
-    }
-
-    private Bitmap rotateImage(Bitmap image, int degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
-        image.recycle();
-        return rotatedImg;
-    }
-
-    private Bitmap getBitmapFromPath(String imagePath) {
-
-        File imgFile = new  File(imagePath);
-        Bitmap result = null;
-
-        if(imgFile.exists()) {
-            result = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-        }
-
-        return result;
     }
 
     @SuppressLint("LongLogTag")
@@ -339,10 +334,11 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             }
                                         });
                                         carNumberRecognizeTimer.cancel();
-                                        cancelTimer = new CountDownTimer(10 * 1000, 1000) {
+                                        cancelTimer = new CountDownTimer(15 * 1000, 1000) {
                                             @Override
                                             public void onTick(long millisUntilFinished) {
-                                                CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
                                                     public void run() {
                                                         timerSecondsCountText.setText("0:" + Long.toString(millisUntilFinished / 1000));
                                                     }
@@ -364,6 +360,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                             }
                             deleteImageByPath(picturePath);
                         }
+                        else deleteImageByPath(picturePath);
                     }
                 });
             }

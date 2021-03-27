@@ -11,7 +11,7 @@ public class Account implements Serializable {
     public String lastName;
     public String phoneNumber;
     public Address address;
-    public ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
+    private ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
 
     public Account()
     {
@@ -35,15 +35,26 @@ public class Account implements Serializable {
 
     public boolean SendViolationReport(String ID, Context context)
     {
-        FindViolationReportByID(ID).SubmitViolationToAuthorizedBody(context);
+        FindViolationReportByID(ID).submitViolationToAuthorizedBody(context);
         return true;
+    }
+
+    public void addViolationReport(ViolationReport violationReport)
+    {
+        violationReports.add(violationReport);
+        saveViolationReports();
+    }
+
+    private void saveViolationReports()
+    {
+        //
     }
 
     private ViolationReport FindViolationReportByID(String ID)
     {
         for (ViolationReport violationReport : violationReports)
         {
-            if(violationReport.GetID().equals(ID)) return violationReport;
+            if(violationReport.getID().equals(ID)) return violationReport;
         }
         return null;
     }

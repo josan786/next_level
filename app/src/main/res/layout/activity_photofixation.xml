@@ -20,4 +20,67 @@
         android:background="#FFFFFF"
         tools:layout="@layout/fragment_car_viewpoint" />
 
+    <FrameLayout
+        android:layout_width="336dp"
+        android:layout_height="133dp"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/layout_round_background">
+
+        <LinearLayout
+            android:id="@+id/timerLayout"
+            android:layout_width="305dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="118dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+
+                <ProgressBar
+                    android:id="@+id/timerProgressBar"
+                    style="@style/CircularDeterminateProgressBar"
+                    android:layout_width="89dp"
+                    android:layout_height="82dp"
+                    android:layout_gravity="bottom|center"
+                    android:layout_weight="4"
+                    android:max="10"
+                    android:textAlignment="center"
+                    tools:progress="10" />
+
+                <TextView
+                    android:id="@+id/photofixationTimerText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="0:10"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/photoDescriptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Обзорная фотография. Должен быть виден автомобиль и окружающая его местность"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

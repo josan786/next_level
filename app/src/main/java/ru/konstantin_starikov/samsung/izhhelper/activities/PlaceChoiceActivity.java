@@ -50,6 +50,7 @@ import com.yandex.runtime.image.ImageProvider;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
+import ru.konstantin_starikov.samsung.izhhelper.models.Location;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class PlaceChoiceActivity extends AppCompatActivity implements UserLocationObjectListener, Session.SearchListener, CameraListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -74,51 +75,81 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //получаем переданный violationReport (с данными аккаунта пользователя)
-        violationReport = (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+        violationReport = getTransmittedViolationReport();
 
-        MapKitFactory.setApiKey(Helper.getConfigValue(this, "MAPKIT_API_KEY"));
-        MapKitFactory.setLocale("ru_RU");
-        MapKitFactory.initialize(this);
+        setupMapKitFactory();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_choice);
 
-        //ActionBar - настройка
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Выберете место нарушения");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        tuneActionBar();
 
         mapKit = MapKitFactory.getInstance();
 
-        mapView = (MapView) findViewById(R.id.mapview);
+        findAndSetViews();
 
         Map map = mapView.getMap();
 
-        //первоначальная настройка карты
+        tuneMap(map);
+
+        //обратное геокодирование для поиска улицы, находящейся в местоположении камеры
+        searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED);
+    }
+
+    private void setupMapKitFactory()
+    {
+        MapKitFactory.setApiKey(Helper.getConfigValue(this, "MAPKIT_API_KEY"));
+        MapKitFactory.setLocale("ru_RU");
+        MapKitFactory.initialize(this);
+    }
+
+    private void tuneMap(Map map)
+    {
         map.setRotateGesturesEnabled(false);
         map.move(new CameraPosition(new Point(56.85493198911832, 53.28836671702676), 18.0f, 0.0f, 0.0f));
         map.setZoomGesturesEnabled(false);
+        trackCameraChanges(map);
+        trackUserLocation();
+        setupLogoInLeftBottomPart(map);
+    }
 
-        //установка логотипа в левый нижний угол
-        map.getLogo().setAlignment(new Alignment(HorizontalAlignment.LEFT, VerticalAlignment.BOTTOM));
-
-        //в коде отслеживаются изменения положения камеры
+    private void trackCameraChanges(Map map)
+    {
         map.addCameraListener(this);
+    }
 
-        //слой для отслеживания местоположения пользователя
+    private void trackUserLocation()
+    {
         if (checkIfAlreadyHavePermission()) {
             userLocationLayer = mapKit.createUserLocationLayer(mapView.getMapWindow());
             userLocationLayer.setVisible(true);
             userLocationLayer.setHeadingEnabled(true);
             userLocationLayer.setObjectListener(this);
         }
+    }
 
-        //обратное геокодирование для поиска улицы, находящейся в местоположении камеры
-        searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED);
+    private void setupLogoInLeftBottomPart(Map map)
+    {
+        map.getLogo().setAlignment(new Alignment(HorizontalAlignment.LEFT, VerticalAlignment.BOTTOM));
+    }
 
+    private void findAndSetViews()
+    {
+        mapView = (MapView) findViewById(R.id.mapview);
         placeDescription = (TextView) findViewById(R.id.placeDescription);
+    }
+
+    private ViolationReport getTransmittedViolationReport()
+    {
+        return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
+    }
+
+    private void tuneActionBar()
+    {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Выберете место нарушения");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -231,7 +262,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
             if(i < addressDepth - 1) violationPlace += ", ";
         }
         placeDescription.setText(violationPlace);
-        violationReport.place = violationPlace;
+        violationReport.location.setPlace(violationPlace);
     }
 
     @Override
@@ -243,6 +274,8 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     public void onCameraPositionChanged(@NonNull Map map, @NonNull CameraPosition cameraPosition, @NonNull CameraUpdateReason cameraUpdateReason, boolean b) {
         SearchOptions searchOptions = new SearchOptions();
         searchOptions.setSearchTypes(SearchType.GEO.value);
-        searchManager.submit(mapView.getMap().getCameraPosition().getTarget(), 20, searchOptions, this);
+        Point cameraTarget = mapView.getMap().getCameraPosition().getTarget();
+        violationReport.location = new Location(cameraTarget.getLatitude(), cameraTarget.getLongitude());
+        searchManager.submit(cameraTarget, 20, searchOptions, this);
     }
 }

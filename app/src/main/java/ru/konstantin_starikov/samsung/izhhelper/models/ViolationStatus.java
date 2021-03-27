@@ -7,5 +7,6 @@ public enum ViolationStatus implements Serializable {
     Sent,
     Received,
     Accepted,
-    Rejected
+    Rejected,
+    Saved
 }

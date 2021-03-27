@@ -33,7 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
     {
         ViolationReport violationReport = new ViolationReport();
         violationReport.senderAccount = userAccount;
-        Log.i("Report ID: ", violationReport.GetID());
+        Log.i("Report ID: ", violationReport.getID());
 
         Intent choosePlaceIntent = new Intent(MainMenuActivity.this, PlaceChoiceActivity.class);
         choosePlaceIntent.putExtra(VIOLATION_REPORT, violationReport);
