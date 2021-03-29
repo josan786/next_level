@@ -51,7 +51,7 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
 
         photosDescriptions = new ArrayList<String>();
         photosDescriptions.add("Обзорная фотография. Должен быть виден автомобиль и окружающая его местность");
-        photosDescriptions.add("Машина должны быть на общем плане");
+        photosDescriptions.add("Машина должна быть на общем плане");
         photosDescriptions.add("Машина и её номер должны быть полностью видны");
         photofixationSequence = new PhotofixationSequence(cameraView, this,10, progressBar, timerText, photoDescriptionText, photosDescriptions);
         photofixationSequence.start();

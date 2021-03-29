@@ -7,6 +7,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "ru.konstantin_starikov.samsung.izhhelper"
         minSdkVersion 18
         targetSdkVersion 30
@@ -32,9 +33,15 @@ repositories {
     maven {
         url "http://maven.google.com/"
     }
+    maven{
+        url 'https://raw.github.com/zeeshanejaz/unirest-android/mvn-repo'
+    }
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
+    compile 'com.mashape.unirest:unirest-android:1.0+'
+    implementation 'com.loopj.android:android-async-http:1.4.9'
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.github.SandroMachado:openalpr-android:1.1.2'

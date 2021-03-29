@@ -67,24 +67,25 @@
 
     <FrameLayout
         android:id="@+id/informationLayout"
-        android:background="@drawable/layout_round_background"
-        android:layout_width="209dp"
-        android:layout_height="81dp"
+        android:layout_width="230dp"
+        android:layout_height="92dp"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="100dp"
+        android:background="@drawable/layout_round_background"
         android:visibility="visible">
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:layout_width="203dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:autoText="true"
             android:background="#FFFFFF"
-            android:gravity="right|left"
+            android:gravity="center|left"
             android:singleLine="false"
-            android:text="Номер машины должен  \nбыть в центре экрана"
+            android:text="Встаньте на расстояние 3 метров от машины \nНа экране должен быть виден номер"
             android:textColor="#1B1A1A" />
+
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -24,6 +24,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 
 import org.openalpr.OpenALPR;
 import org.openalpr.model.Result;
@@ -83,28 +88,22 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
 
         //Проверяем, есть ли доступ к камере и памяти устройства
         //Если разрешения отсутсвуют, спрашиваем их у пользователя
-        if(checkIfAlreadyHaveStoragePermission())
-        {
-            if(checkIfAlreadyHaveCameraPermission())
-            {
+        if (checkIfAlreadyHaveStoragePermission()) {
+            if (checkIfAlreadyHaveCameraPermission()) {
                 carNumberRecognizeTimer = new Timer();
-                carNumberRecognizeTimer.schedule(new CarNumberRecognizeUpdateTimerTask(), 3500, 3500);
-            }
-            else requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
-        }
-        else requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                carNumberRecognizeTimer.schedule(new CarNumberRecognizeUpdateTimerTask(), 3500, recognitionPeriod);
+            } else requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+        } else requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
         ANDROID_DATA_DIR = this.getApplicationInfo().dataDir;
         setupALPR();
     }
 
-    private ViolationReport getTransmittedViolationReport()
-    {
+    private ViolationReport getTransmittedViolationReport() {
         return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
     }
 
-    private void findAndSetViews()
-    {
+    private void findAndSetViews() {
         cameraView = findViewById(R.id.cameraView);
         foreground = findViewById(R.id.foreground);
         cancelButton = findViewById(R.id.cancelButton);
@@ -113,23 +112,30 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         carNumberText = findViewById(R.id.carNumberText);
     }
 
-    private void tuneCamera()
-    {
+    private void tuneCamera() {
         cameraView.setFocusable(true);
     }
 
-    private void tuneActionBar()
-    {
+    private void tuneActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Определение номера");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setupALPR()
-    {
+    private void setupALPR() {
         openAlprConfFile = ANDROID_DATA_DIR + File.separatorChar + "runtime_data" + File.separatorChar + "openalpr.conf";
         alpr = OpenALPR.Factory.create(CarNumberDetectionActivity.this, ANDROID_DATA_DIR);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -159,8 +165,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                     if (checkIfAlreadyHaveCameraPermission()) {
                         carNumberRecognizeTimer = new Timer();
                         carNumberRecognizeTimer.schedule(new CarNumberRecognizeUpdateTimerTask(), 3500, recognitionPeriod);
-                    }
-                    else requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+                    } else requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
                 } else {
                     Toast.makeText(this, "Нет разрешения на чтение файлов", Toast.LENGTH_LONG).show();
                 }
@@ -173,7 +178,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                     Toast.makeText(this, "Доступ к камере получен", Toast.LENGTH_LONG).show();
                     cameraView.refreshCamera();
                     cameraView.ini();
-                    if(checkIfAlreadyHaveStoragePermission()) {
+                    if (checkIfAlreadyHaveStoragePermission()) {
                         carNumberRecognizeTimer = new Timer();
                         carNumberRecognizeTimer.schedule(new CarNumberRecognizeUpdateTimerTask(), 3500, recognitionPeriod);
                     }
@@ -190,8 +195,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         public void run() {
             try {
                 cameraView.takePicture(this);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 Log.e("Taking picture exception", "не удаётся сделать снимок : " + e.getMessage());
             }
         }
@@ -226,8 +230,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         }
     }
 
-    public void cancelResults(View v)
-    {
+    public void cancelResults(View v) {
         carNumberText.setVisibility(View.INVISIBLE);
         informationLayout.setVisibility(View.VISIBLE);
         foreground.setVisibility(View.INVISIBLE);
@@ -253,8 +256,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
             rotatedPicture.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
         } catch (IOException exception) {
             exception.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 fileOutputStream.close();
             } catch (IOException exception) {
@@ -266,103 +268,179 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
     }
 
     @SuppressLint("LongLogTag")
-    private void deleteImageByPath(String imagePath)
-    {
+    private void deleteImageByPath(String imagePath) {
         Log.i("Image deleted, path was - ", imagePath);
         new File(imagePath).delete();
     }
 
+    private void setRecognizedPanelVisible(String plate) {
+        carNumberText.setVisibility(View.VISIBLE);
+        carNumberText.setText(plate);
+        informationLayout.setVisibility(View.INVISIBLE);
+        foreground.setVisibility(View.VISIBLE);
+        foreground.setAlpha(0.2f);
+        cancelButton.setVisibility(View.VISIBLE);
+        timerSecondsCountText.setVisibility(View.VISIBLE);
+    }
+
+    private void createAndStartCancelTimer(String picturePath) {
+        cancelTimer = new CountDownTimer(10 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        timerSecondsCountText.setText("0:" + Long.toString(millisUntilFinished / 1000));
+                    }
+                });
+            }
+
+            @Override
+            public void onFinish() {
+                cancelTimer.cancel();
+                violationReport.carNumberPhotoName = picturePath.substring(picturePath.lastIndexOf('/') + 1);
+                Log.i("CarNumberPhotoName", violationReport.carNumberPhotoName);
+                goToNextActivity();
+            }
+        };
+        cancelTimer.start();
+    }
+
+    //Todo: отрефакторить этот ужас
     private void recognizeNumber(String picturePath) {
         AsyncTask.execute(new Runnable() {
             @SuppressLint("LongLogTag")
             @Override
             public void run() {
-                Log.i("Recognizing picture path", picturePath);
-                String result = alpr.recognizeWithCountryRegionNConfig("eu", "", picturePath, openAlprConfFile, 10);
-                Log.i("OpenALPR result", result);
-                //Результаты представлены в JSON Формате, поэтому парсим их с помощью GSON
-                final Results results = new Gson().fromJson(result, Results.class);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (results != null && results.getResults() != null && results.getResults().size() != 0) {
-                            List<Result> resultsList = results.getResults();
-                            boolean isRecognizedCorrectly = false;
-                            for (int i = 0; i < resultsList.size(); ++i) {
-                                {
-                                    Result result = resultsList.get(i);
-                                    String plate = result.getPlate();
-                                    //Длина распознанного номера должны быть не меньше 6, но может распознать ещё и регион, тогда ещё плюс 2 или 3 (8 или 9 соответственно)
-                                    if (result.getConfidence() > 82 && plate.length() >= 6) {
-                                        String carNumberSeries = "";
-                                        //Серия номера машины - это первый, пятый и шестой символы (это  буквы)
-                                        carNumberSeries += plate.charAt(0);
-                                        carNumberSeries += plate.charAt(4);
-                                        carNumberSeries += plate.charAt(5);
-                                        //Регистрационный номер машины - второй, третий и четвёртый символы (это цифры)
-                                        String carNumberRegistrationNumber = "";
-                                        carNumberRegistrationNumber += plate.charAt(1);
-                                        carNumberRegistrationNumber += plate.charAt(2);
-                                        carNumberRegistrationNumber += plate.charAt(3);
-                                        //Проверяем, действительно ли регистрационный номер представляет из себя число
+                boolean isPlateRecognizerWork = false;
+                try {
+                    HttpResponse<String> response = Unirest.get("https://api.platerecognizer.com/v1/statistics/")
+                            .header("Authorization", "Token " + Helper.getConfigValue(CarNumberDetectionActivity.this, "PLATE_RECOGNIZER_TOKEN"))
+                            .asString();
+                    Log.i("Usage", response.getBody());
+                    JsonParser parser = new JsonParser();
+                    JsonElement jsonTree = parser.parse(response.getBody());
+                    if (jsonTree.isJsonObject()) {
+                        JsonObject jsonObject = null;
+                        int totalCalls;
+                        int callsUsage;
+                        try {
+                            jsonObject = jsonTree.getAsJsonObject();
+                            totalCalls = jsonObject.getAsJsonPrimitive("total_calls").getAsInt();
+                            callsUsage = jsonObject.getAsJsonObject("usage").getAsJsonPrimitive("calls").getAsInt();
+                        } catch (Exception e) {
+                            Log.e("JSON exception", e.getMessage());
+                            return;
+                        }
+                        if (totalCalls > callsUsage) isPlateRecognizerWork = true;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (Helper.isOnline(CarNumberDetectionActivity.this) && isPlateRecognizerWork) {
+                    AsyncTask.execute(new Runnable() {
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public void run() {
+                            try {
+                                HttpResponse<String> response = Unirest.post("https://api.platerecognizer.com/v1/plate-reader/")
+                                        .header("Authorization", "Token " + Helper.getConfigValue(CarNumberDetectionActivity.this, "PLATE_RECOGNIZER_TOKEN"))
+                                        .field("upload", new File(picturePath))
+                                        .asString();
+                                Log.i("Recognize: ", response.getBody());
+                                JsonParser parser = new JsonParser();
+                                JsonElement jsonTree = parser.parse(response.getBody());
+                                if (jsonTree.isJsonObject()) {
+                                    JsonObject jsonObject = null;
+                                    String plate = "";
+                                    JsonElement score = null;
+                                    JsonElement countryCode = null;
+                                    try {
+                                        jsonObject = jsonTree.getAsJsonObject();
+                                        plate = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("plate").getAsString();
+                                        score = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("score");
+                                        countryCode = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonObject("region").getAsJsonPrimitive("code");
+                                    } catch (Exception e) {
+                                        deleteImageByPath(picturePath);
+                                        Log.e("JSON exception", e.getMessage());
+                                        return;
+                                    }
+                                    if (countryCode.getAsString().equals("ru") && score.getAsDouble() > 0.85) {
+                                        violationReport.carNumber = new CarNumber(plate);
                                         try {
-                                            Integer.parseInt(carNumberRegistrationNumber);
-                                        }
-                                        catch (NumberFormatException exception)
-                                        {
+                                            Integer.parseInt(violationReport.carNumber.getRegistrationNumber());
+                                        } catch (NumberFormatException exception) {
                                             Log.e("RegistrationNumber parsing exception", exception.getMessage());
-                                            continue;
+                                            return;
                                         }
-                                        violationReport.carNumber = new CarNumber(carNumberSeries, carNumberRegistrationNumber);
-
-                                        //проверяем, не распознал ли номер уже другой процесс
-                                        if(carNumberText.getVisibility() == View.VISIBLE)
-                                        {
+                                        if (carNumberText.getVisibility() == View.VISIBLE) {
                                             deleteImageByPath(picturePath);
                                             return;
                                         }
-                                        //Если все условия пройдены, работаем с UI и устанавливаем 10-секундный таймер
                                         CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
                                             public void run() {
-                                                carNumberText.setVisibility(View.VISIBLE);
-                                                carNumberText.setText(plate);
-                                                informationLayout.setVisibility(View.INVISIBLE);
-                                                foreground.setVisibility(View.VISIBLE);
-                                                foreground.setAlpha(0.2f);
-                                                cancelButton.setVisibility(View.VISIBLE);
-                                                timerSecondsCountText.setVisibility(View.VISIBLE);
+                                                setRecognizedPanelVisible(violationReport.carNumber.toString());
+                                                carNumberRecognizeTimer.cancel();
+                                                createAndStartCancelTimer(picturePath);
                                             }
                                         });
-                                        carNumberRecognizeTimer.cancel();
-                                        cancelTimer = new CountDownTimer(15 * 1000, 1000) {
-                                            @Override
-                                            public void onTick(long millisUntilFinished) {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        timerSecondsCountText.setText("0:" + Long.toString(millisUntilFinished / 1000));
-                                                    }
-                                                });
-                                            }
+                                    } else deleteImageByPath(picturePath);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
-                                            @Override
-                                            public void onFinish() {
-                                                cancelTimer.cancel();
-                                                violationReport.carNumberPhotoName = picturePath.substring(picturePath.lastIndexOf('/') + 1);
-                                                Log.i("CarNumberPhotoName", violationReport.carNumberPhotoName);
-                                                goToNextActivity();
+                        }
+                    });
+                } else {
+                    AsyncTask.execute(new Runnable() {
+                        @SuppressLint("LongLogTag")
+                        @Override
+                        public void run() {
+                            Log.i("Recognizing picture path", picturePath);
+                            //хотел использовать 'ru', но не работает(
+                            String recognizingResult = alpr.recognizeWithCountryRegionNConfig("eu", "", picturePath, openAlprConfFile, 10);
+                            Log.i("OpenALPR result", recognizingResult);
+                            //Результаты представлены в JSON Формате, поэтому парсим их с помощью GSON
+                            final Results results = new Gson().fromJson(recognizingResult, Results.class);
+                            if (results != null && results.getResults() != null && results.getResults().size() != 0) {
+                                List<Result> resultsList = results.getResults();
+                                boolean isRecognizedCorrectly = false;
+                                for (int i = 0; i < resultsList.size(); ++i) {
+                                    {
+                                        Result result = resultsList.get(i);
+                                        String plate = result.getPlate();
+                                        //Длина распознанного номера должны быть не меньше 6, но может распознать ещё и регион, тогда ещё плюс 2 или 3 (8 или 9 соответственно)
+                                        if (result.getConfidence() > 82 && plate.length() >= 6) {
+                                            violationReport.carNumber = new CarNumber(plate);
+                                            try {
+                                                Integer.parseInt(violationReport.carNumber.getRegistrationNumber());
+                                            } catch (NumberFormatException exception) {
+                                                Log.e("RegistrationNumber parsing exception", exception.getMessage());
+                                                continue;
                                             }
-                                        };
-                                        cancelTimer.start();
-                                        return;
+                                            //проверяем, не распознал ли номер уже другой процесс
+                                            if (carNumberText.getVisibility() == View.VISIBLE) {
+                                                deleteImageByPath(picturePath);
+                                                return;
+                                            }
+                                            //Если все условия пройдены, работаем с UI и устанавливаем 10-секундный таймер
+                                            CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    setRecognizedPanelVisible(violationReport.carNumber.toString());
+                                                    carNumberRecognizeTimer.cancel();
+                                                    createAndStartCancelTimer(picturePath);
+                                                }
+                                            });
+                                            return;
+                                        }
                                     }
                                 }
-                            }
-                            deleteImageByPath(picturePath);
+                                deleteImageByPath(picturePath);
+                            } else deleteImageByPath(picturePath);
                         }
-                        else deleteImageByPath(picturePath);
-                    }
-                });
+                    });
+                }
             }
         });
     }
