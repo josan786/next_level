@@ -144,6 +144,11 @@ public class ViolationReport implements Serializable {
         senderAccount.addViolationReport(this);
     }
 
+    private void setID(String ID)
+    {
+        this.ID = ID;
+    }
+
     private void generateID()
     {
         UUID uuid = UUID.randomUUID();
