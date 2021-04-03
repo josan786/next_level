@@ -1,17 +1,18 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import ru.konstantin_starikov.samsung.izhhelper.R;
-import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Address;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -19,17 +20,35 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public final static String VIOLATION_REPORT = "violation_report";
 
+    private ListView violationReportsList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //строчка оставлена закоментированной потому что часто приходится удалять старую базу данных
+        //this.deleteDatabase( "violations.db");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        findAndSetViews();
         long accountID = getIntent().getLongExtra(LoginActivity.ACCOUNT_ID, 0);
-        userAccount = GetUserAccountByID(accountID);
-        GetUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
-        GetUserIDTextView().setText("\u0040" + Long.toString(userAccount.ID));
+        userAccount = getUserAccountByID(accountID);
+        userAccount.loadViolations(this);
+        fillViolationReports();
+        getUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
+        getUserIDTextView().setText("\u0040" + Long.toString(userAccount.ID));
     }
 
-    public void CreateViolationReport(View v)
+    private void findAndSetViews()
+    {
+        violationReportsList = findViewById(R.id.violationReports);
+    }
+
+    private void fillViolationReports()
+    {
+        ViolationReportsListAdapter violationReportsListAdapter = new ViolationReportsListAdapter(this, R.layout.violation_report_item, userAccount.getViolationReports());
+        violationReportsList.setAdapter(violationReportsListAdapter);
+    }
+
+    public void createViolationReport(View v)
     {
         ViolationReport violationReport = new ViolationReport();
         violationReport.senderAccount = userAccount;
@@ -40,17 +59,17 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(choosePlaceIntent);
     }
 
-    private TextView GetUserNameTextView()
+    private TextView getUserNameTextView()
     {
         return (TextView) findViewById(R.id.userName);
     }
 
-    private TextView GetUserIDTextView()
+    private TextView getUserIDTextView()
     {
         return (TextView) findViewById(R.id.userID);
     }
 
-    private Account GetUserAccountByID(long accountID)
+    private Account getUserAccountByID(long accountID)
     {
         Account result = new Account();
         result.firstName = "Иван";

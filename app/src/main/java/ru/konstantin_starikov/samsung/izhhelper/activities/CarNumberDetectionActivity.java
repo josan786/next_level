@@ -365,7 +365,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                         Log.e("JSON exception", e.getMessage());
                                         return;
                                     }
-                                    if (countryCode.getAsString().equals("ru") && score.getAsDouble() > 0.85) {
+                                    if (countryCode.getAsString().equals("ru") && score.getAsDouble() > 0.8) {
                                         violationReport.carNumber = new CarNumber(plate);
                                         try {
                                             Integer.parseInt(violationReport.carNumber.getRegistrationNumber());

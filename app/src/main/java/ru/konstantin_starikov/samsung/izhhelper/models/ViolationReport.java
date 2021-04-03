@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ViolationReport implements Serializable {
@@ -141,7 +142,7 @@ public class ViolationReport implements Serializable {
         } else {
             status = ViolationStatus.Saved;
         }
-        senderAccount.addViolationReport(this);
+        senderAccount.addViolationReport(this, context);
     }
 
     private void setID(String ID)
@@ -163,5 +164,9 @@ public class ViolationReport implements Serializable {
     public ViolationStatus getStatus()
     {
         return status;
+    }
+
+    public void setPhotosNames(List<String> photosNames) {
+        this.photosNames = new ArrayList<String>(photosNames);
     }
 }

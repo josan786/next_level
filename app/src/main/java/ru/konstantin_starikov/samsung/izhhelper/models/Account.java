@@ -39,15 +39,28 @@ public class Account implements Serializable {
         return true;
     }
 
-    public void addViolationReport(ViolationReport violationReport)
+    public void addViolationReport(ViolationReport violationReport, Context context)
     {
         violationReports.add(violationReport);
-        saveViolationReports();
+        saveViolationReport(violationReport, context);
     }
 
-    private void saveViolationReports()
+    private void saveViolationReport(ViolationReport violationReport, Context context)
     {
-        //
+        ViolationsDatabase violationsDatabase;
+        violationsDatabase = new ViolationsDatabase(context);
+        violationsDatabase.insert(violationReport);
+    }
+
+    public void loadViolations(Context context)
+    {
+        ViolationsDatabase violationsDatabase;
+        violationsDatabase = new ViolationsDatabase(context);
+        ArrayList<ViolationReport> allReports = violationsDatabase.selectAll();
+        for (ViolationReport violationReport : allReports)
+        {
+            if(violationReport.senderAccount.ID == this.ID) violationReports.add(violationReport);
+        }
     }
 
     private ViolationReport FindViolationReportByID(String ID)
@@ -57,5 +70,10 @@ public class Account implements Serializable {
             if(violationReport.getID().equals(ID)) return violationReport;
         }
         return null;
+    }
+
+    public ArrayList<ViolationReport> getViolationReports()
+    {
+        return violationReports;
     }
 }

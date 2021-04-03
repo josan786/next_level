@@ -10,6 +10,21 @@ public class ViolationType implements Serializable {
     {
         this.violationType = violationType;
     }
+    public ViolationType(String violationTypeName)
+    {
+        switch (violationTypeName) {
+            case "Стоянка на тротуаре":
+                violationType = ViolationTypeEnum.Pavement;
+            case "Стоянка на газоне":
+                violationType = ViolationTypeEnum.Lawn;
+            case "Стоянка у знака \"Стоянка запрещена\"":
+                violationType = ViolationTypeEnum.ParkingProhibited;
+            case "Стоянка на пешеходном переходе":
+                violationType = ViolationTypeEnum.PedestrianCrossing;
+            case "Стоянка в зоне действия знака \"Остановка запрещена\"":
+                violationType = ViolationTypeEnum.StoppingProhibited;
+        }
+    }
 
     @Override
     public String toString() {

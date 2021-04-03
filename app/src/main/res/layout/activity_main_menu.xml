@@ -13,7 +13,7 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="10dp"
         android:clickable="true"
-        android:onClick="CreateViolationReport"
+        android:onClick="createViolationReport"
         android:src="@drawable/plus_without_background"
         app:backgroundTint="#28ABB9"
         app:backgroundTintMode="add"
@@ -27,7 +27,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="178dp"
+            android:layout_gravity="top"
             android:layout_weight="0.3"
             android:background="#A8DDA8"
             android:orientation="horizontal">
@@ -125,8 +126,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="10"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:background="#00FFFFFF"
                 android:orientation="vertical">
 
@@ -192,10 +193,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:theme="@style/Theme.IzhHelper" />
+                android:theme="@style/Theme.IzhHelper">
+
+                <ListView
+                    android:id="@+id/violationReports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
 
         </LinearLayout>
 
