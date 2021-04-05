@@ -57,6 +57,21 @@ public final class Helper {
         return rotatedImg;
     }
 
+    public static String cropText(String inputText, int size)
+    {
+        String result;
+        if(size <= inputText.length())
+            result = inputText.substring(0, size);
+        else result = inputText;
+        return result;
+    }
+
+    public static String getFullPathFromDataDirectory(String fileName, Context context)
+    {
+        String ANDROID_DATA_DIR = context.getApplicationInfo().dataDir;
+        return ANDROID_DATA_DIR + File.separatorChar + fileName;
+    }
+
     public static Bitmap getBitmapFromPath(String imagePath) {
 
         File imgFile = new  File(imagePath);

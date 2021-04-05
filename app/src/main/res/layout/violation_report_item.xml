@@ -1,89 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="100dp"
+    android:layout_gravity="top"
     android:orientation="horizontal">
 
-    <FrameLayout
-        android:layout_width="155dp"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/violationReportPreview"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            tools:srcCompat="@tools:sample/avatars" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="13dp" />
-
-        <TextView
-            android:id="@+id/violationReportTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Парковка на газоне"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/violationReportPlace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Татьяны Барамзиной, 74А" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="17dp" />
+            android:cropToPadding="true"
+            android:scaleType="fitXY"
+            tools:srcCompat="@drawable/test_car_parking_photo" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="13dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/violationReportTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Парковка на газоне"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/violationReportStatusIndicator"
-                    android:layout_width="10dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:text="Button"
-                    app:cornerRadius="25dp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/violationReportPlace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Татьяны Барамзиной, 74А" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/violationReportStatus"
+                <LinearLayout
+                    android:layout_width="13dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/violationReportStatusIndicator"
+                        android:layout_width="10dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:text="Button"
+                        app:cornerRadius="25dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="left"
-                    android:text="Потверждено"
-                    android:textColor="#000000" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/violationReportStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="left"
+                        android:text="Потверждено"
+                        android:textColor="#000000" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+</FrameLayout>

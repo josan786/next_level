@@ -15,14 +15,19 @@ public class ViolationType implements Serializable {
         switch (violationTypeName) {
             case "Стоянка на тротуаре":
                 violationType = ViolationTypeEnum.Pavement;
+                break;
             case "Стоянка на газоне":
                 violationType = ViolationTypeEnum.Lawn;
+                break;
             case "Стоянка у знака \"Стоянка запрещена\"":
                 violationType = ViolationTypeEnum.ParkingProhibited;
+                break;
             case "Стоянка на пешеходном переходе":
                 violationType = ViolationTypeEnum.PedestrianCrossing;
+                break;
             case "Стоянка в зоне действия знака \"Остановка запрещена\"":
                 violationType = ViolationTypeEnum.StoppingProhibited;
+                break;
         }
     }
 

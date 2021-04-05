@@ -200,7 +200,10 @@
                 <ListView
                     android:id="@+id/violationReports"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:divider="@color/white"
+                    android:dividerHeight="15dp" />
             </LinearLayout>
 
         </LinearLayout>
