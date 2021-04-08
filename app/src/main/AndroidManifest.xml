@@ -22,43 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IzhHelperGreen">
-
-        <activity
-            android:name=".activities.SuccessfullySentActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar">
-        </activity>
-
-        <activity
-            android:name=".activities.SendViolationActivity"
-            android:theme="@style/Theme.IzhHelperBlue">
-        </activity>
-
-        <activity
-            android:name=".activities.PhotofixationActivity"
-            android:theme="@style/Theme.IzhHelperBlue">
-        </activity>
-
-        <activity
-            android:name=".activities.CarNumberDetectionActivity"
-            android:theme="@style/Theme.IzhHelperBlue">
-        </activity>
-
-        <activity
-            android:name=".activities.ViolationTypeSelectionActivity"
-            android:theme="@style/Theme.IzhHelperBlue">
-        </activity>
-
-        <activity
-            android:name=".activities.PlaceChoiceActivity"
-            android:theme="@style/Theme.IzhHelperBlue">
-        </activity>
-
-        <activity
-            android:name=".activities.RegistrationActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" />
-        <activity android:name=".activities.MainMenuActivity" />
-        <activity
-            android:name=".activities.LoginActivity"
+        <activity android:name=".activities.EnterSMSCodeActivity"
             android:theme="@style/Theme.IzhHelper.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,6 +30,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.LoginWithPhoneNumberActivity"
+            android:theme="@style/Theme.IzhHelper.NoActionBar">
+        </activity>
+        <activity
+            android:name=".activities.SuccessfullySentActivity"
+            android:theme="@style/Theme.IzhHelper.NoActionBar" />
+        <activity
+            android:name=".activities.SendViolationActivity"
+            android:theme="@style/Theme.IzhHelperBlue" />
+        <activity
+            android:name=".activities.PhotofixationActivity"
+            android:theme="@style/Theme.IzhHelperBlue" />
+        <activity
+            android:name=".activities.CarNumberDetectionActivity"
+            android:theme="@style/Theme.IzhHelperBlue" />
+        <activity
+            android:name=".activities.ViolationTypeSelectionActivity"
+            android:theme="@style/Theme.IzhHelperBlue" />
+        <activity
+            android:name=".activities.PlaceChoiceActivity"
+            android:theme="@style/Theme.IzhHelperBlue" />
+        <activity
+            android:name=".activities.RegistrationActivity"
+            android:theme="@style/Theme.IzhHelper.NoActionBar" />
+        <activity android:name=".activities.MainMenuActivity" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/Theme.IzhHelper.NoActionBar"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

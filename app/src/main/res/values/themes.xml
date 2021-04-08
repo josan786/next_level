@@ -49,6 +49,8 @@
     </style>
 
     <style name="Theme.IzhHelper.NoActionBar">
+        <item name="colorPrimary">#EFFAD3</item>
+        <item name="colorAccent">@color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
