@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.activities;
+package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,8 +18,6 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
-import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
-import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
     List<ViolationReport> violationReportsList;
@@ -44,12 +43,16 @@ public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
 
         TextView violationReportTitle = view.findViewById(R.id.violationReportTitle);
         TextView violationReportPlace = view.findViewById(R.id.violationReportPlace);
+        TextView violationReportStatus = view.findViewById(R.id.violationReportStatus);
+        Button violationReportStatusIndicator = view.findViewById(R.id.violationReportStatusIndicator);
         ImageView violationReportPreview = view.findViewById(R.id.violationReportPreview);
 
         ViolationReport violationReport = violationReportsList.get(position);
 
         violationReportTitle.setText(violationReport.violationType.toString());
         violationReportPlace.setText(Helper.cropText(violationReport.location.getPlace(), 27) + "...");
+        violationReportStatus.setText(violationReport.getStatus().toString());
+        violationReportStatusIndicator.setBackgroundColor(violationReport.getStatus().getStatusColor());
         violationReportPreview.setImageDrawable(Drawable.createFromPath((Helper.getFullPathFromDataDirectory(violationReport.photosNames.get(0), context))));
 
         return view;

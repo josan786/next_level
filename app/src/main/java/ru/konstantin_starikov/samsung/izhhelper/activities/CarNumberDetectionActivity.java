@@ -246,7 +246,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         //вращаем исходное изображение, если его ширина больше высоты
         Bitmap rotatedPicture = Helper.rotateImageIfRequired(Helper.getBitmapFromPath(picturePath));
         //удаляем исходное изображение
-        deleteImageByPath(picturePath);
+        Helper.deleteImageByPath(picturePath);
         //дальше получаем путь корректного изображения
         String rotatedPicturePath = "";
         FileOutputStream fileOutputStream = null;
@@ -265,12 +265,6 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         }
         //передаём изображение на распознавание
         recognizeNumber(rotatedPicturePath);
-    }
-
-    @SuppressLint("LongLogTag")
-    private void deleteImageByPath(String imagePath) {
-        Log.i("Image deleted, path was - ", imagePath);
-        new File(imagePath).delete();
     }
 
     private void setRecognizedPanelVisible(String plate) {
@@ -361,7 +355,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                         score = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("score");
                                         countryCode = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonObject("region").getAsJsonPrimitive("code");
                                     } catch (Exception e) {
-                                        deleteImageByPath(picturePath);
+                                        Helper.deleteImageByPath(picturePath);
                                         Log.e("JSON exception", e.getMessage());
                                         return;
                                     }
@@ -374,7 +368,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             return;
                                         }
                                         if (carNumberText.getVisibility() == View.VISIBLE) {
-                                            deleteImageByPath(picturePath);
+                                            Helper.deleteImageByPath(picturePath);
                                             return;
                                         }
                                         CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
@@ -384,7 +378,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                                 createAndStartCancelTimer(picturePath);
                                             }
                                         });
-                                    } else deleteImageByPath(picturePath);
+                                    } else Helper.deleteImageByPath(picturePath);
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -421,7 +415,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                             }
                                             //проверяем, не распознал ли номер уже другой процесс
                                             if (carNumberText.getVisibility() == View.VISIBLE) {
-                                                deleteImageByPath(picturePath);
+                                                Helper.deleteImageByPath(picturePath);
                                                 return;
                                             }
                                             //Если все условия пройдены, работаем с UI и устанавливаем 10-секундный таймер
@@ -436,8 +430,8 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-                                deleteImageByPath(picturePath);
-                            } else deleteImageByPath(picturePath);
+                                Helper.deleteImageByPath(picturePath);
+                            } else Helper.deleteImageByPath(picturePath);
                         }
                     });
                 }

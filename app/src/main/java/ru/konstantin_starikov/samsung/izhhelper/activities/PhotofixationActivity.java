@@ -2,6 +2,7 @@ package ru.konstantin_starikov.samsung.izhhelper.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
@@ -10,10 +11,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.CarViewpointFragment;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.PhotofixationPictureTakingListener;
 import ru.konstantin_starikov.samsung.izhhelper.models.PhotofixationSequence;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
@@ -93,7 +98,24 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
     public void saveTakedPicture(String picturePath) {
         cameraView.refreshCamera();
         cameraView.ini();
-        violationReport.addPhoto(picturePath.substring(picturePath.lastIndexOf('/') + 1));
+        Bitmap rotatedPicture = Helper.rotateImageIfRequired(Helper.getBitmapFromPath(picturePath));
+        Helper.deleteImageByPath(picturePath);
+        String rotatedPicturePath = "";
+        FileOutputStream fileOutputStream = null;
+        try {
+            rotatedPicturePath = String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis());
+            fileOutputStream = new FileOutputStream(rotatedPicturePath);
+            rotatedPicture.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            try {
+                fileOutputStream.close();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        violationReport.addPhoto(rotatedPicturePath.substring(rotatedPicturePath.lastIndexOf('/') + 1));
     }
 
     @Override

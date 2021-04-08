@@ -39,7 +39,7 @@ public class ViolationReport implements Serializable {
     public ViolationReport()
     {
         generateID();
-        status = ViolationStatus.Created;
+        status = new ViolationStatus(ViolationStatusEnum.Created);
         photosNames = new ArrayList<String>();
     }
 
@@ -138,9 +138,11 @@ public class ViolationReport implements Serializable {
                 storageReference = firebaseStorage.getReferenceFromUrl("gs://izh-helper.appspot.com/" + ID + "/Photos/" + photosNames.get(i));
                 UploadTask photoUploadTask = storageReference.putFile(Uri.fromFile(photoFile));
             }
-            status = ViolationStatus.Sent;
+            status = new ViolationStatus(ViolationStatusEnum.Sent);
+            databaseReference = firebaseDatabase.getReference(ID).child("Status");
+            databaseReference.setValue(status.toString());
         } else {
-            status = ViolationStatus.Saved;
+            status = new ViolationStatus(ViolationStatusEnum.Saved);
         }
         senderAccount.addViolationReport(this, context);
     }
@@ -164,6 +166,10 @@ public class ViolationReport implements Serializable {
     public ViolationStatus getStatus()
     {
         return status;
+    }
+
+    public void setStatus(ViolationStatus status) {
+        this.status = status;
     }
 
     public void setPhotosNames(List<String> photosNames) {

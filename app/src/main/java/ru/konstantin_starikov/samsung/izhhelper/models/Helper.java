@@ -1,5 +1,6 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -55,6 +56,12 @@ public final class Helper {
         Bitmap rotatedImg = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
         image.recycle();
         return rotatedImg;
+    }
+
+    @SuppressLint("LongLogTag")
+    public static void deleteImageByPath(String imagePath) {
+        Log.i("Image deleted, path was - ", imagePath);
+        new File(imagePath).delete();
     }
 
     public static String cropText(String inputText, int size)

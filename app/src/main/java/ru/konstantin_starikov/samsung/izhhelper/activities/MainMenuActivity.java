@@ -13,6 +13,7 @@ import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Address;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReportsListAdapter;
 
 public class MainMenuActivity extends AppCompatActivity {
 

@@ -2,6 +2,8 @@ package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,8 +45,14 @@ public class PhotofixationSequence implements CameraView.SaveImageListener{
         timer = new CountDownTimer(photofixationInterval * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                timerText.setText(Long.toString(millisUntilFinished / 1000));
-                progressBar.setProgress((int) millisUntilFinished / 1000);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        timerText.setText(Long.toString(millisUntilFinished / 1000));
+                        progressBar.setProgress((int) millisUntilFinished / 1000);
+                    }
+                });
             }
 
             @SuppressLint("LongLogTag")

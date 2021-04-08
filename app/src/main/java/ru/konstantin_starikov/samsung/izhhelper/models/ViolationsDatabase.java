@@ -26,6 +26,7 @@ public class ViolationsDatabase implements Serializable {
     private static final String COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN = "SenderAccountAddressTown";
     private static final String COLUMN_CAR_NUMBER = "CarNumber";
     private static final String COLUMN_TYPE = "Type";
+    private static final String COLUMN_STATUS = "Status";
     private static final String COLUMN_LOCATION_LATITUDE = "locationLatitude";
     private static final String COLUMN_LOCATION_LONGITUDE = "locationLongitude";
     private static final String COLUMN_LOCATION_PLACE = "locationPlace";
@@ -43,11 +44,12 @@ public class ViolationsDatabase implements Serializable {
     private static final int NUM_COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN = 8;
     private static final int NUM_COLUMN_CAR_NUMBER = 9;
     private static final int NUM_COLUMN_TYPE = 10;
-    private static final int NUM_COLUMN_LOCATION_LATITUDE = 11;
-    private static final int NUM_COLUMN_LOCATION_LONGITUDE  = 12;
-    private static final int NUM_COLUMN_LOCATION_PLACE = 13;
-    private static final int NUM_COLUMN_CAR_NUMBER_PHOTO  = 14;
-    private static final int NUM_COLUMN_PHOTOS = 15;
+    private static final int NUM_COLUMN_STATUS = 11;
+    private static final int NUM_COLUMN_LOCATION_LATITUDE = 12;
+    private static final int NUM_COLUMN_LOCATION_LONGITUDE  = 13;
+    private static final int NUM_COLUMN_LOCATION_PLACE = 14;
+    private static final int NUM_COLUMN_CAR_NUMBER_PHOTO  = 15;
+    private static final int NUM_COLUMN_PHOTOS = 16;
 
     private SQLiteDatabase database;
 
@@ -64,6 +66,7 @@ public class ViolationsDatabase implements Serializable {
                     COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN + " TEXT," +
                     COLUMN_CAR_NUMBER + " TEXT," +
                     COLUMN_TYPE + " TEXT," +
+                    COLUMN_STATUS + " TEXT," +
                     COLUMN_LOCATION_LATITUDE + " REAL," +
                     COLUMN_LOCATION_LONGITUDE + " REAL," +
                     COLUMN_LOCATION_PLACE + " TEXT," +
@@ -86,6 +89,7 @@ public class ViolationsDatabase implements Serializable {
                        String senderAccountAddressTown,
                        String carNumber,
                        String type,
+                       String status,
                        long locationLatitude,
                        long locationLongitude,
                        String locationPlace,
@@ -102,6 +106,7 @@ public class ViolationsDatabase implements Serializable {
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN, senderAccountAddressTown);
         contentValues.put(COLUMN_CAR_NUMBER, carNumber);
         contentValues.put(COLUMN_TYPE, type);
+        contentValues.put(COLUMN_STATUS, status);
         contentValues.put(COLUMN_LOCATION_LATITUDE, locationLatitude);
         contentValues.put(COLUMN_LOCATION_LONGITUDE, locationLongitude);
         contentValues.put(COLUMN_LOCATION_PLACE, locationPlace);
@@ -123,6 +128,7 @@ public class ViolationsDatabase implements Serializable {
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN, violationReport.senderAccount.address.town);
         contentValues.put(COLUMN_CAR_NUMBER, violationReport.carNumber.toString());
         contentValues.put(COLUMN_TYPE, violationReport.violationType.toString());
+        contentValues.put(COLUMN_STATUS, violationReport.getStatus().toString());
         contentValues.put(COLUMN_LOCATION_LATITUDE, violationReport.location.getLatitude());
         contentValues.put(COLUMN_LOCATION_LONGITUDE, violationReport.location.getLongitude());
         contentValues.put(COLUMN_LOCATION_PLACE, violationReport.location.getPlace());
@@ -144,6 +150,7 @@ public class ViolationsDatabase implements Serializable {
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN, violationReport.senderAccount.address.town);
         contentValues.put(COLUMN_CAR_NUMBER, violationReport.carNumber.toString());
         contentValues.put(COLUMN_TYPE, violationReport.violationType.toString());
+        contentValues.put(COLUMN_STATUS, violationReport.getStatus().toString());
         contentValues.put(COLUMN_LOCATION_LATITUDE, violationReport.location.getLatitude());
         contentValues.put(COLUMN_LOCATION_LONGITUDE, violationReport.location.getLongitude());
         contentValues.put(COLUMN_LOCATION_PLACE, violationReport.location.getPlace());
@@ -189,6 +196,7 @@ public class ViolationsDatabase implements Serializable {
         violationReport.carNumber = new CarNumber(carNumber);
         violationReport.ID = id;
         violationReport.violationType = new ViolationType(cursor.getString(NUM_COLUMN_TYPE));
+        violationReport.setStatus(new ViolationStatus(cursor.getString(NUM_COLUMN_STATUS)));
         violationReport.carNumberPhotoName = carNumberPhoto;
         violationReport.setPhotosNames(PhotosNamesCompressor.deCompress(photosNames));
         return violationReport;
@@ -224,6 +232,7 @@ public class ViolationsDatabase implements Serializable {
                 violationReport.carNumber = new CarNumber(carNumber);
                 violationReport.ID = id;
                 violationReport.violationType = new ViolationType(cursor.getString(NUM_COLUMN_TYPE));
+                violationReport.setStatus(new ViolationStatus(cursor.getString(NUM_COLUMN_STATUS)));
                 violationReport.carNumberPhotoName = carNumberPhoto;
                 violationReport.setPhotosNames(PhotosNamesCompressor.deCompress(photosNames));
                 arrayList.add(violationReport);
