@@ -92,7 +92,9 @@
                         android:layout_height="53dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:background="@drawable/edit" />
+                        android:background="@drawable/edit"
+                        android:clickable="true"
+                        android:onClick="editProfile" />
 
                     <TextView
                         android:id="@+id/textView6"
@@ -101,8 +103,10 @@
                         android:layout_marginStart="9dp"
                         android:layout_marginLeft="9dp"
                         android:layout_weight="3"
+                        android:clickable="true"
                         android:fontFamily="sans-serif"
                         android:gravity="center_vertical"
+                        android:onClick="editProfile"
                         android:text="Отредактировать профиль"
                         android:textColor="#000000"
                         android:typeface="normal" />

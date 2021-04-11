@@ -56,7 +56,7 @@ public class ViolationsDatabase implements Serializable {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " STRING PRIMARY KEY," +
-                    COLUMN_SENDER_ACCOUNT_ID + " INTEGER," +
+                    COLUMN_SENDER_ACCOUNT_ID + " TEXT," +
                     COLUMN_SENDER_ACCOUNT_FIRST_NAME + " TEXT," +
                     COLUMN_SENDER_ACCOUNT_lAST_NAME + " TEXT," +
                     COLUMN_SENDER_ACCOUNT_PHONE_NUMBER + " TEXT," +
@@ -79,7 +79,7 @@ public class ViolationsDatabase implements Serializable {
         database = openHelper.getWritableDatabase();
     }
 
-    public long insert(int senderAccountID,
+    public long insert(String senderAccountID,
                        String senderAccountFirstName,
                        String senderAccountLastName,
                        String senderAccountPhoneNumber,
@@ -174,7 +174,7 @@ public class ViolationsDatabase implements Serializable {
         Cursor cursor = database.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
 
         cursor.moveToFirst();
-        int senderAccountID = cursor.getInt(NUM_SENDER_ACCOUNT_ID);
+        String senderAccountID = cursor.getString(NUM_SENDER_ACCOUNT_ID);
         String senderAccountFirstName = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_FIRST_NAME);
         String senderAccountLastName = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_lAST_NAME);
         String senderAccountPhoneNumber = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_PHONE_NUMBER);
@@ -210,7 +210,7 @@ public class ViolationsDatabase implements Serializable {
         if (!cursor.isAfterLast()) {
             do {
                 String id = cursor.getString(NUM_COLUMN_ID);
-                int senderAccountID = cursor.getInt(NUM_SENDER_ACCOUNT_ID);
+                String senderAccountID = cursor.getString(NUM_SENDER_ACCOUNT_ID);
                 String senderAccountFirstName = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_FIRST_NAME);
                 String senderAccountLastName = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_lAST_NAME);
                 String senderAccountPhoneNumber = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_PHONE_NUMBER);
@@ -246,7 +246,6 @@ public class ViolationsDatabase implements Serializable {
         OpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
-        //Todo: onCreate метод
 
         @Override
         public void onCreate(SQLiteDatabase db) {

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
-import ru.konstantin_starikov.samsung.izhhelper.models.Address;
+import ru.konstantin_starikov.samsung.izhhelper.models.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReportsListAdapter;
 
@@ -29,13 +29,15 @@ public class MainMenuActivity extends AppCompatActivity {
         //this.deleteDatabase( "violations.db");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        findAndSetViews();
-        long accountID = getIntent().getLongExtra(LoginActivity.ACCOUNT_ID, 0);
-        userAccount = getUserAccountByID(accountID);
+
+        userAccount = new Account();
+        loadUserData();
         userAccount.loadViolations(this);
+
+        findAndSetViews();
         fillViolationReports();
         getUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
-        getUserIDTextView().setText("\u0040" + Long.toString(userAccount.ID));
+        getUserIDTextView().setText(userAccount.ID);
     }
 
     private void findAndSetViews()
@@ -49,6 +51,13 @@ public class MainMenuActivity extends AppCompatActivity {
         violationReportsList.setAdapter(violationReportsListAdapter);
     }
 
+    private void loadUserData()
+    {
+        UsersDatabase usersDatabase = new UsersDatabase(this);
+        Account userData = usersDatabase.select(userAccount.ID);
+        if(userData != null) userAccount = userData;
+    }
+
     public void createViolationReport(View v)
     {
         ViolationReport violationReport = new ViolationReport();
@@ -60,6 +69,13 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(choosePlaceIntent);
     }
 
+    public void editProfile(View view)
+    {
+        Intent editProfileIntent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
+        editProfileIntent.putExtra(AccountCreationActivity.USER_ACCOUNT, userAccount);
+        startActivity(editProfileIntent);
+    }
+
     private TextView getUserNameTextView()
     {
         return (TextView) findViewById(R.id.userName);
@@ -68,15 +84,5 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextView getUserIDTextView()
     {
         return (TextView) findViewById(R.id.userID);
-    }
-
-    private Account getUserAccountByID(long accountID)
-    {
-        Account result = new Account();
-        result.firstName = "Иван";
-        result.lastName = "Иванов";
-        result.phoneNumber = "89513406702";
-        result.address = new Address("106", "Ленина", 53, "Ижевск");
-        return  result;
     }
 }

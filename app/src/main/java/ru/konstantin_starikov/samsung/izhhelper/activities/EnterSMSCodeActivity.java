@@ -23,16 +23,19 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 
 public class EnterSMSCodeActivity extends AppCompatActivity {
 
     private static final String TAG = "EnterSMSCodeActivity";
+    public final static String USER_ACCOUNT = "user_account";
 
     private VerifyCodeView verifyCodeView;
 
     private String verificationId;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private FirebaseAuth firebaseAuth;
+    String phoneNumber;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     @Override
@@ -42,7 +45,7 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
 
         verifyCodeView = findViewById(R.id.verifyCodeView);
 
-        String phoneNumber = getIntent().getStringExtra(LoginWithPhoneNumberActivity.PHONE_NUMBER);
+        phoneNumber = getIntent().getStringExtra(LoginWithPhoneNumberActivity.PHONE_NUMBER);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -133,7 +136,12 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
-                            Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                            Account userAccount = new Account(user);
+                            Intent intent = null;
+                            if(userAccount.isUserHasDataInDatabase(getApplicationContext()))
+                                intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                            else
+                                intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         } else {

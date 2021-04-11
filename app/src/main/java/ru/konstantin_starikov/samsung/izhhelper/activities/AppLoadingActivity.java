@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 
 public class AppLoadingActivity extends AppCompatActivity {
 
@@ -29,17 +30,24 @@ public class AppLoadingActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                //getApplicationContext().deleteDatabase( "users.db");
                 firebaseAuth = FirebaseAuth.getInstance();
                 FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                 Intent intent = null;
-                if(currentUser != null)
-                    intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                if(currentUser != null) {
+                    Account userAccount = new Account(currentUser);
+                    if (userAccount.isUserHasDataInDatabase(getApplicationContext()))
+                        intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    else
+                        intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+                }
                 else
                     intent = new Intent(getApplicationContext(), LoginWithPhoneNumberActivity.class);
 
                 startActivity(intent);
             }
         };
+
         timer.start();
     }
 }

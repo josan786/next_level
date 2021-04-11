@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.AccountCreationActivity">
+
+    <FrameLayout
+        android:id="@+id/frameLayout2"
+        android:layout_width="327dp"
+        android:layout_height="544dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="17dp"
+        app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Создание\nаккаунта"
+                android:textColor="#000000"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="123dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="183dp"
+                        android:layout_height="match_parent"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/firstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="Имя"
+                            android:inputType="textPersonName" />
+
+                        <EditText
+                            android:id="@+id/lastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="Фамилия"
+                            android:inputType="textPersonName" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="123dp"
+                        android:layout_height="123dp"
+                        android:layout_marginLeft="17dp">
+
+                        <cn.carbs.android.avatarimageview.library.AvatarImageView
+                            android:id="@+id/item_avatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:clickable="true"
+                            android:padding="5dp"
+                            android:src="@drawable/change_avatar"
+                            app:aiv_BoarderWidth="2dp"
+                            app:aiv_ShowBoarder="false"
+                            app:aiv_TextColor="#000000"
+                            app:aiv_TextSizeRatio="0.4" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/userEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Email"
+                    android:inputType="textWebEmailAddress" />
+
+                <EditText
+                    android:id="@+id/userFlat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Квартира"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/userHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Дом"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/userStreet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Улица"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/userTown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Город"
+                    android:inputType="text" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/createAccountButton"
+        android:layout_width="186dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="113dp"
+        android:layout_marginBottom="75dp"
+        android:onClick="createAccount"
+        android:text="Создать аккаунт"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
+</androidx.constraintlayout.widget.ConstraintLayout>

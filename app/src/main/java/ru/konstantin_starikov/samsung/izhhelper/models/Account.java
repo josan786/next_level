@@ -2,23 +2,39 @@ package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.content.Context;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Account implements Serializable {
-    public long ID;
+    public String ID;
     public String firstName;
     public String lastName;
     public String phoneNumber;
     public Address address;
+    public String email;
     private ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
 
     public Account()
     {
-        ID = 0;
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if(currentUser != null) ID = currentUser.getUid();
+        address = new Address();
     }
 
-    public Account(long ID, String firstName, String lastName, String phoneNumber, Address address)
+    public Account(FirebaseUser firebaseUser)
+    {
+        this();
+        this.phoneNumber = firebaseUser.getPhoneNumber();
+        this.email = firebaseUser.getEmail();
+    }
+
+    public Account(String ID, String firstName, String lastName, String phoneNumber, Address address)
     {
         this();
         this.ID = ID;
@@ -37,6 +53,48 @@ public class Account implements Serializable {
     {
         FindViolationReportByID(ID).submitViolationToAuthorizedBody(context);
         return true;
+    }
+
+    public void updateUserData(Context context)
+    {
+        UsersDatabase usersDatabase;
+        usersDatabase = new UsersDatabase(context);
+        usersDatabase.update(this);
+    }
+
+    public void saveAccount(Context context)
+    {
+        UsersDatabase usersDatabase;
+        usersDatabase = new UsersDatabase(context);
+        usersDatabase.insert(this);
+    }
+
+    public boolean isUserHasDataInDatabase(Context context)
+    {
+        UsersDatabase usersDatabase;
+        usersDatabase = new UsersDatabase(context);
+        Account accountDataInDatabase = usersDatabase.select(ID);
+        if(accountDataInDatabase == null) return false;
+        return true;
+    }
+
+    public void updateUserDataOnFirebase()
+    {
+        FirebaseDatabase firebaseDatabase;
+        DatabaseReference databaseReference;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("FirstName");
+        databaseReference.setValue(firstName);
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("LastName");
+        databaseReference.setValue(lastName);
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Address").child("Flat");
+        databaseReference.setValue(address.flat);
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Address").child("Home");
+        databaseReference.setValue(address.home);
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Address").child("Street");
+        databaseReference.setValue(address.street);
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Address").child("Town");
+        databaseReference.setValue(address.town);
     }
 
     public void addViolationReport(ViolationReport violationReport, Context context)
@@ -59,7 +117,7 @@ public class Account implements Serializable {
         ArrayList<ViolationReport> allReports = violationsDatabase.selectAll();
         for (ViolationReport violationReport : allReports)
         {
-            if(violationReport.senderAccount.ID == this.ID) violationReports.add(violationReport);
+            if(violationReport.senderAccount.ID.equals(this.ID)) violationReports.add(violationReport);
         }
     }
 
