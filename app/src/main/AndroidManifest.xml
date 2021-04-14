@@ -22,25 +22,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IzhHelperGreen">
-
         <activity
-            android:name=".activities.EditProfileActivity"
-            android:theme="@style/Theme.IzhHelperGreen">
-        </activity>
-
-        <activity
-            android:name=".activities.AccountCreationActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBarBlue"></activity>
-        <activity
-            android:name=".activities.AppLoadingActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar">
+            android:name=".activities.SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".activities.EditProfileActivity"
+            android:theme="@style/Theme.IzhHelperGreen"></activity>
+        <activity
+            android:name=".activities.AccountCreationActivity"
+            android:theme="@style/Theme.IzhHelper.NoActionBarBlue" />
         <activity
             android:name=".activities.EnterSMSCodeActivity"
             android:theme="@style/Theme.IzhHelper.NoActionBar" />

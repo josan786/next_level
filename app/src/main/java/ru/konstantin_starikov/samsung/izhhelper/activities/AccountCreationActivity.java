@@ -7,6 +7,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 
@@ -28,7 +30,7 @@ public class AccountCreationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_creation);
 
-        userAccount = (Account) getIntent().getSerializableExtra(EnterSMSCodeActivity.USER_ACCOUNT);
+        userAccount = new Account(FirebaseAuth.getInstance().getCurrentUser());
 
         firstNameEditText = findViewById(R.id.firstName);
         lastNameEditText = findViewById(R.id.lastName);

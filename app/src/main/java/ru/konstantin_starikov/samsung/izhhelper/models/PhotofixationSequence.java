@@ -1,6 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
@@ -76,8 +77,14 @@ public class PhotofixationSequence implements CameraView.SaveImageListener{
 
     @Override
     public void saveFile(String path) {
-        if(nowTimerIndex >= photosDescriptions.size()) pictureTakingListener.onPhotofixationFinished(path);
-        else pictureTakingListener.saveTakedPicture(path);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (nowTimerIndex >= photosDescriptions.size())
+                    pictureTakingListener.onPhotofixationFinished(path);
+                else pictureTakingListener.saveTakedPicture(path);
+            }
+        });
     }
 
     @Override

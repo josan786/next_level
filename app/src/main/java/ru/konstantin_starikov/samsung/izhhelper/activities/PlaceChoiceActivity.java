@@ -1,12 +1,5 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +11,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.yandex.mapkit.GeoObjectCollection;
 import com.yandex.mapkit.MapKit;
 import com.yandex.mapkit.MapKitFactory;
@@ -28,7 +28,6 @@ import com.yandex.mapkit.logo.HorizontalAlignment;
 import com.yandex.mapkit.logo.VerticalAlignment;
 import com.yandex.mapkit.map.CameraListener;
 import com.yandex.mapkit.map.CameraPosition;
-
 import com.yandex.mapkit.map.CameraUpdateReason;
 import com.yandex.mapkit.map.CompositeIcon;
 import com.yandex.mapkit.map.IconStyle;
@@ -58,6 +57,8 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     public final static String VIOLATION_REPORT = "violation_report";
 
     private static final int PERMISSION_REQUEST_LOCATION = 1;
+
+    private static boolean isMapKitFactoryInitialized = false;
 
     //счётчик, сколько раз камера перемещалась в местоположение пльзователя
     private int userLocationUsagesCount = 0;
@@ -96,11 +97,29 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         searchManager = SearchFactory.getInstance().createSearchManager(SearchManagerType.COMBINED);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mapView.onStop();
+        MapKitFactory.getInstance().onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mapView.onStart();
+        MapKitFactory.getInstance().onStart();
+    }
+
+
     private void setupMapKitFactory()
     {
-        MapKitFactory.setApiKey(Helper.getConfigValue(this, "MAPKIT_API_KEY"));
-        MapKitFactory.setLocale("ru_RU");
+        if (!isMapKitFactoryInitialized) {
+            MapKitFactory.setApiKey(Helper.getConfigValue(this, "MAPKIT_API_KEY"));
+            MapKitFactory.setLocale("ru_RU");
+        }
         MapKitFactory.initialize(this);
+        isMapKitFactoryInitialized = true;
     }
 
     private void tuneMap(Map map)
@@ -150,20 +169,6 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         actionBar.setTitle("Выберете место нарушения");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mapView.onStop();
-        MapKitFactory.getInstance().onStop();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mapView.onStart();
-        MapKitFactory.getInstance().onStart();
     }
 
     @Override
