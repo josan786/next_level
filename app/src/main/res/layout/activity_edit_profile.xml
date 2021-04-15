@@ -41,163 +41,189 @@
     </LinearLayout>
 
     <FrameLayout
+        android:layout_height="wrap_content"
         android:layout_width="343dp"
-        android:layout_height="384dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="344dp"
-            android:layout_gravity="bottom">
-
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Имя"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView18"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Фамилия"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Телефон"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView20"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Email"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView21"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Квартира"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView22"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Дом"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView23"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Улица"
-                    android:textStyle="normal" />
-
-                <TextView
-                    android:id="@+id/textView24"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|left"
-                    android:text="Город"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="344dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="10dp">
 
-                <EditText
-                    android:id="@+id/editFirstName"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/editLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Имя"
+                        android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/editPhoneNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="phone"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Фамилия"
+                        android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/editEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textEmailAddress"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView19"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Телефон"
+                        android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/editFlat"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Email"
+                        android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/editHome"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Квартира"
+                        android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/editStreet"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Дом"
+                        android:textStyle="normal" />
 
-                <EditText
-                    android:id="@+id/editTown"
+                    <TextView
+                        android:id="@+id/textView23"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Улица"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center|left"
+                        android:text="Город"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:textSize="14sp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/editFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="phone"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="textEmailAddress"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editFlat"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editHome"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/editTown"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/warningTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:text="Заполните все поля!"
+                android:textAlignment="center"
+                android:textColor="#F44336"
+                android:textSize="14sp"
+                android:visibility="invisible" />
+
         </LinearLayout>
+
     </FrameLayout>
 
     <Button
         android:id="@+id/saveProfileButton"
         android:layout_width="151dp"
         android:layout_height="58dp"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="25dp"
+        android:onClick="saveChanges"
         android:text="Сохранить"
         android:textColor="#000000"
         app:backgroundTint="@color/soft_yellow" />

@@ -17,6 +17,7 @@ public class Account implements Serializable {
     public String phoneNumber;
     public Address address;
     public String email;
+    private String avatarPath;
     private ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
 
     public Account()
@@ -133,5 +134,13 @@ public class Account implements Serializable {
     public ArrayList<ViolationReport> getViolationReports()
     {
         return violationReports;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
     }
 }

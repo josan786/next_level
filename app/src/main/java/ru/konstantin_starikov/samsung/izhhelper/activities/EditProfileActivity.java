@@ -2,6 +2,7 @@ package ru.konstantin_starikov.samsung.izhhelper.activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText streetEditText;
     private EditText townEditText;
 
+    private TextView warningText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         tuneActionBar();
 
-        userAccount = (Account) getIntent().getSerializableExtra(AccountCreationActivity.USER_ACCOUNT);
+        userAccount = (Account) getIntent().getSerializableExtra(MainMenuActivity.USER_ACCOUNT);
 
         findAndSetViews();
 
@@ -59,6 +62,7 @@ public class EditProfileActivity extends AppCompatActivity {
         homeEditText = findViewById(R.id.editHome);
         streetEditText = findViewById(R.id.editStreet);
         townEditText = findViewById(R.id.editTown);
+        warningText = findViewById(R.id.warningAccountCreationTextView);
     }
 
     private void tuneActionBar()
@@ -67,6 +71,56 @@ public class EditProfileActivity extends AppCompatActivity {
         actionBar.setTitle("Редактировать профиль");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void saveChanges(View v)
+    {
+        String firstName = firstNameEditText.getText().toString();
+        String lastName = lastNameEditText.getText().toString();
+        String phoneNumber = phoneEditText.getText().toString();
+        String email = emailEditText.getText().toString();
+        String flat = flatEditText.getText().toString();
+        String home = homeEditText.getText().toString();
+        String street = streetEditText.getText().toString();
+        String town = townEditText.getText().toString();
+
+        if(isAllFieldsFilled())
+        {
+            userAccount.firstName = firstName;
+            userAccount.lastName = lastName;
+            userAccount.email = email;
+            userAccount.address.flat = Integer.parseInt(flat);
+            userAccount.address.home = home;
+            userAccount.address.street = street;
+            userAccount.address.town = town;
+            userAccount.updateUserData(this);
+            userAccount.updateUserDataOnFirebase();
+        }
+        else showWarningText();
+    }
+
+    private void showWarningText()
+    {
+        warningText.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isAllFieldsFilled()
+    {
+        String firstName = firstNameEditText.getText().toString();
+        String lastName = lastNameEditText.getText().toString();
+        String phoneNumber = phoneEditText.getText().toString();
+        String email = emailEditText.getText().toString();
+        String flat = flatEditText.getText().toString();
+        String home = homeEditText.getText().toString();
+        String street = streetEditText.getText().toString();
+        String town = townEditText.getText().toString();
+
+        boolean result = true;
+        if(firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() ||
+                email.isEmpty() || flat.isEmpty() || home.isEmpty() ||
+                street.isEmpty() || town.isEmpty())
+            result = false;
+        return result;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

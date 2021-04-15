@@ -19,6 +19,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private Account userAccount = null;
 
+    public final static String USER_ACCOUNT = "user_account";
     public final static String VIOLATION_REPORT = "violation_report";
 
     private ListView violationReportsList;
@@ -72,7 +73,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public void editProfile(View view)
     {
         Intent editProfileIntent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
-        editProfileIntent.putExtra(AccountCreationActivity.USER_ACCOUNT, userAccount);
+        editProfileIntent.putExtra(USER_ACCOUNT, userAccount);
         startActivity(editProfileIntent);
     }
 

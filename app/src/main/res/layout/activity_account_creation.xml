@@ -78,11 +78,12 @@
                         android:layout_marginLeft="17dp">
 
                         <cn.carbs.android.avatarimageview.library.AvatarImageView
-                            android:id="@+id/item_avatar"
+                            android:id="@+id/user_avatar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="right"
                             android:clickable="true"
+                            android:onClick="changeAvatar"
                             android:padding="5dp"
                             android:src="@drawable/change_avatar"
                             app:aiv_BoarderWidth="2dp"
@@ -160,6 +161,20 @@
         android:text="Создать аккаунт"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
+
+    <TextView
+        android:id="@+id/warningAccountCreationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="138dp"
+        android:text="Заполните все поля!"
+        android:textColor="#F44336"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout2" />
