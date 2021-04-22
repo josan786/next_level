@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,7 +58,7 @@ public class AccountCreationActivity extends AppCompatActivity {
         userHomeEditText = findViewById(R.id.userHome);
         userStreetEditText = findViewById(R.id.userStreet);
         userTownEditText = findViewById(R.id.userTown);
-        warningText = findViewById(R.id.warningTextView);
+        warningText = findViewById(R.id.warningAccountCreationTextView);
         userAvatarImageView = findViewById(R.id.user_avatar);
     }
 
@@ -76,6 +74,7 @@ public class AccountCreationActivity extends AppCompatActivity {
             userAccount.address.town = userTownEditText.getText().toString();
             userAccount.updateUserDataOnFirebase();
             userAccount.saveAccount(this);
+            Log.i("AVATAR_PATH", userAccount.getAvatarPath());
             Intent intent = new Intent(this, MainMenuActivity.class);
             startActivity(intent);
         }
@@ -93,7 +92,9 @@ public class AccountCreationActivity extends AppCompatActivity {
                 String avatarPath = null;
                 FileOutputStream fileOutputStream = null;
                 try {
-                    avatarPath = String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", userAccount.ID);
+                    Log.i("USER_ACCOUNT_ID", userAccount.ID);
+                    avatarPath = String.format(getApplicationInfo().dataDir + File.separator + userAccount.ID + ".jpg");
+                    Log.i("AVATAR_PATH", avatarPath);
                     fileOutputStream = new FileOutputStream(avatarPath);
                     avatar.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
                     userAccount.setAvatarPath(avatarPath.substring(avatarPath.lastIndexOf('/') + 1));
@@ -101,7 +102,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                     exception.printStackTrace();
                 } finally {
                     try {
-                        fileOutputStream.close();
+                        if(fileOutputStream != null) fileOutputStream.close();
                     } catch (IOException exception) {
                         exception.printStackTrace();
                     }

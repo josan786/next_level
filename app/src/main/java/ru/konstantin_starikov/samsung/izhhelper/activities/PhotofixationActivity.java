@@ -59,6 +59,12 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         photosDescriptions.add("Машина должна быть на общем плане");
         photosDescriptions.add("Машина и её номер должны быть полностью видны");
         photofixationSequence = new PhotofixationSequence(cameraView, this,10, progressBar, timerText, photoDescriptionText, photosDescriptions);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         photofixationSequence.start();
     }
 

@@ -1,11 +1,17 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,6 +76,13 @@ public class Account implements Serializable {
         usersDatabase.insert(this);
     }
 
+    public boolean isHasData()
+    {
+        if(firstName == null || lastName == null)
+            return false;
+        return true;
+    }
+
     public boolean isUserHasDataInDatabase(Context context)
     {
         UsersDatabase usersDatabase;
@@ -96,6 +109,33 @@ public class Account implements Serializable {
         databaseReference.setValue(address.street);
         databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Address").child("Town");
         databaseReference.setValue(address.town);
+    }
+
+    public void retrieveUserDataFromFirebase(Action dataReceivedAction, Action dataIsEmptyAction)
+    {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users accounts").child(ID);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    firstName = snapshot.child("FirstName").getValue(String.class);
+                    Log.i("DataRetrieved", firstName);
+                    lastName = snapshot.child("LastName").getValue(String.class);
+                    Log.i("DataRetrieved", lastName);
+                    address.flat = snapshot.child("Address").child("Flat").getValue(Integer.class);
+                    address.home = snapshot.child("Address").child("Home").getValue(String.class);
+                    address.street = snapshot.child("Address").child("Street").getValue(String.class);
+                    address.town = snapshot.child("Address").child("Town").getValue(String.class);
+                    dataReceivedAction.run();
+                }
+                else dataIsEmptyAction.run();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void addViolationReport(ViolationReport violationReport, Context context)

@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Action;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -24,18 +25,30 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        Intent intent = null;
         if(currentUser != null) {
             Account userAccount = new Account(currentUser);
-            if (userAccount.isUserHasDataInDatabase(getApplicationContext()))
-                intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-            else
-                intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+            userAccount.retrieveUserDataFromFirebase(new Action() {
+                @Override
+                public void run() {
+                    if (userAccount.isUserHasDataInDatabase(SplashScreenActivity.this))
+                        userAccount.updateUserData(SplashScreenActivity.this);
+                    else userAccount.saveAccount(SplashScreenActivity.this);
+                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, new Action() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        } else {
+            Intent intent = new Intent(getApplicationContext(), LoginWithPhoneNumberActivity.class);
+            startActivity(intent);
+            finish();
         }
-        else
-            intent = new Intent(getApplicationContext(), LoginWithPhoneNumberActivity.class);
-
-        startActivity(intent);
-        finish();
     }
 }

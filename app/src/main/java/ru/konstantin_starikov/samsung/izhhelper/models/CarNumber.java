@@ -74,6 +74,7 @@ public class CarNumber implements Serializable {
         result += series.charAt(0);
         result += registrationNumber;
         result += series.substring(1,3);
+        result += region;
         return result;
     }
 

@@ -9,6 +9,7 @@ public class Address implements Serializable {
     public String town;
 
     public Address() {
+        flat = 0;
     }
 
     public Address(String home, String street, int flat, String town) {

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.concurrent.CountDownLatch;
+
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
@@ -74,8 +76,22 @@ public class SendViolationActivity extends AppCompatActivity {
 
     public void sendViolation(View v)
     {
-        violationReport.submitViolationToAuthorizedBody(this);
-        Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
-        startActivity(openSuccessfullySentIntent);
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        violationReport.setCountDownLatch(countDownLatch);
+        try {
+            Thread submitViolationThread = new Thread(){
+                @Override
+                public void run()
+                {
+                    violationReport.submitViolationToAuthorizedBody(SendViolationActivity.this);
+                }
+            };
+            submitViolationThread.start();
+            countDownLatch.await();
+            Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
+            startActivity(openSuccessfullySentIntent);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

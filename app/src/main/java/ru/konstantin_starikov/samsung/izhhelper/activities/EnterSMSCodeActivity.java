@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Action;
 
 public class EnterSMSCodeActivity extends AppCompatActivity {
 
@@ -137,13 +138,26 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
                             Account userAccount = new Account(user);
-                            Intent intent = null;
-                            if(userAccount.isUserHasDataInDatabase(getApplicationContext()))
-                                intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                            else
-                                intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            userAccount.retrieveUserDataFromFirebase(new Action() {
+                                @Override
+                                public void run() {
+                                    if (userAccount.isUserHasDataInDatabase(EnterSMSCodeActivity.this))
+                                        userAccount.updateUserData(EnterSMSCodeActivity.this);
+                                    else userAccount.saveAccount(EnterSMSCodeActivity.this);
+                                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }, new Action() {
+                                @Override
+                                public void run() {
+                                    Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

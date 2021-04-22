@@ -16,6 +16,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 public class ViolationReport implements Serializable {
     protected String ID;
@@ -35,6 +36,8 @@ public class ViolationReport implements Serializable {
 
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
+
+    private CountDownLatch countDownLatch;
 
     public ViolationReport()
     {
@@ -100,51 +103,36 @@ public class ViolationReport implements Serializable {
     {
         if (Helper.isOnline(context)) {
             firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference(ID);
-            databaseReference = firebaseDatabase.getReference(ID).child("Location").child("Place");
+            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Place");
             databaseReference.setValue(location.getPlace());
-            databaseReference = firebaseDatabase.getReference(ID).child("Location").child("Latitude");
+            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Latitude");
             databaseReference.setValue(location.getLatitude());
-            databaseReference = firebaseDatabase.getReference(ID).child("Location").child("Longitude");
+            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Longitude");
             databaseReference.setValue(location.getLongitude());
-            databaseReference = firebaseDatabase.getReference(ID).child("Type");
+            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Type");
             databaseReference.setValue(violationType.toString());
-            databaseReference = firebaseDatabase.getReference(ID).child("CarNumber");
+            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("CarNumber");
             databaseReference.setValue(carNumber.toString());
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("ID");
-            databaseReference.setValue(senderAccount.ID);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("FirstName");
-            databaseReference.setValue(senderAccount.firstName);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("LastName");
-            databaseReference.setValue(senderAccount.lastName);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("PhoneNumber");
-            databaseReference.setValue(senderAccount.phoneNumber);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("Address").child("Flat");
-            databaseReference.setValue(senderAccount.address.flat);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("Address").child("Home");
-            databaseReference.setValue(senderAccount.address.home);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("Address").child("Street");
-            databaseReference.setValue(senderAccount.address.street);
-            databaseReference = firebaseDatabase.getReference(ID).child("SenderAccount").child("Address").child("Town");
-            databaseReference.setValue(senderAccount.address.town);
 
             firebaseStorage = FirebaseStorage.getInstance();
-            storageReference = firebaseStorage.getReferenceFromUrl("gs://izh-helper.appspot.com/" + ID + "/CarNumberPhoto");
+            String violationReportStorageURL = "gs://izh-helper.appspot.com/" + senderAccount.ID + "/Violations reports/" + ID + "/";
+            storageReference = firebaseStorage.getReferenceFromUrl(violationReportStorageURL + "CarNumberPhoto");
             File file = new File(context.getApplicationInfo().dataDir + File.separator + carNumberPhotoName);
             UploadTask uploadTask = storageReference.putFile(Uri.fromFile(file));
             for(int i = 0 ; i < photosNames.size(); i++)
             {
                 File photoFile = new File(context.getApplicationInfo().dataDir + File.separator + photosNames.get(i));
-                storageReference = firebaseStorage.getReferenceFromUrl("gs://izh-helper.appspot.com/" + ID + "/Photos/" + photosNames.get(i));
+                storageReference = firebaseStorage.getReferenceFromUrl(violationReportStorageURL + "/Photos/" + photosNames.get(i));
                 UploadTask photoUploadTask = storageReference.putFile(Uri.fromFile(photoFile));
             }
             status = new ViolationStatus(ViolationStatusEnum.Sent);
-            databaseReference = firebaseDatabase.getReference(ID).child("Status");
+            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Status");
             databaseReference.setValue(status.toString());
         } else {
             status = new ViolationStatus(ViolationStatusEnum.Saved);
         }
         senderAccount.addViolationReport(this, context);
+        if(countDownLatch != null) countDownLatch.countDown();
     }
 
     private void setID(String ID)
@@ -174,5 +162,9 @@ public class ViolationReport implements Serializable {
 
     public void setPhotosNames(List<String> photosNames) {
         this.photosNames = new ArrayList<String>(photosNames);
+    }
+
+    public void setCountDownLatch(CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
     }
 }

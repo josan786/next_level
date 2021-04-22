@@ -41,11 +41,11 @@ public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
 
         View view = layoutInflater.inflate(resource, null, false);
 
-        TextView violationReportTitle = view.findViewById(R.id.violationReportTitle);
+        TextView violationReportTitle = view.findViewById(R.id.violationTypeTitle);
         TextView violationReportPlace = view.findViewById(R.id.violationReportPlace);
         TextView violationReportStatus = view.findViewById(R.id.violationReportStatus);
         Button violationReportStatusIndicator = view.findViewById(R.id.violationReportStatusIndicator);
-        ImageView violationReportPreview = view.findViewById(R.id.violationReportPreview);
+        ImageView violationReportPreview = view.findViewById(R.id.violationTypeItemIcon);
 
         ViolationReport violationReport = violationReportsList.get(position);
 

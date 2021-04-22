@@ -1,9 +1,11 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReportsListAdapter;
@@ -21,6 +24,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public final static String USER_ACCOUNT = "user_account";
     public final static String VIOLATION_REPORT = "violation_report";
+
+    private ImageView avatarImageView;
 
     private ListView violationReportsList;
 
@@ -36,6 +41,7 @@ public class MainMenuActivity extends AppCompatActivity {
         userAccount.loadViolations(this);
 
         findAndSetViews();
+        setUserAvatar();
         fillViolationReports();
         getUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
         getUserIDTextView().setText(userAccount.ID);
@@ -44,6 +50,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private void findAndSetViews()
     {
         violationReportsList = findViewById(R.id.violationReports);
+        avatarImageView = findViewById(R.id.avatar);
     }
 
     private void fillViolationReports()
@@ -57,6 +64,12 @@ public class MainMenuActivity extends AppCompatActivity {
         UsersDatabase usersDatabase = new UsersDatabase(this);
         Account userData = usersDatabase.select(userAccount.ID);
         if(userData != null) userAccount = userData;
+    }
+
+    private void setUserAvatar()
+    {
+        Log.i("AVATAR_PATH", Helper.getFullPathFromDataDirectory(userAccount.getAvatarPath(), this));
+        avatarImageView.setImageDrawable(Drawable.createFromPath((Helper.getFullPathFromDataDirectory(userAccount.getAvatarPath(), this))));
     }
 
     public void createViolationReport(View v)

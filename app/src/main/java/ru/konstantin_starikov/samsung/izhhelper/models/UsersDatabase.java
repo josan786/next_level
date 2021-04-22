@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class UsersDatabase {
     private static final String COLUMN_ADDRESS_HOME = "addressHome";
     private static final String COLUMN_ADDRESS_STREET = "addressStreet";
     private static final String COLUMN_ADDRESS_TOWN = "addressTown";
+    private static final String COLUMN_AVATAR_PATH = "avatarPath";
 
     private static final int NUM_COLUMN_ID = 0;
     private static final int NUM_COLUMN_FIRST_NAME = 1;
@@ -33,6 +35,7 @@ public class UsersDatabase {
     private static final int NUM_COLUMN_ADDRESS_HOME= 6;
     private static final int NUM_COLUMN_ADDRESS_STREET = 7;
     private static final int NUM_COLUMN_ADDRESS_TOWN = 8;
+    private static final int NUM_COLUMN_AVATAR_PATH = 9;
 
     private SQLiteDatabase database;
 
@@ -46,7 +49,8 @@ public class UsersDatabase {
                     COLUMN_ADDRESS_FLAT + " INTEGER," +
                     COLUMN_ADDRESS_HOME + " TEXT," +
                     COLUMN_ADDRESS_STREET + " TEXT," +
-                    COLUMN_ADDRESS_TOWN + " TEXT)";
+                    COLUMN_ADDRESS_TOWN + " TEXT," +
+                    COLUMN_AVATAR_PATH + " TEXT)";
 
     public UsersDatabase(Context context)
     {
@@ -65,6 +69,7 @@ public class UsersDatabase {
         contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
         contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
         contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
+        contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
 
         return database.insert(TABLE_NAME, null, contentValues);
     }
@@ -80,8 +85,11 @@ public class UsersDatabase {
         contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
         contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
         contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
+        contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
 
-        return database.update(TABLE_NAME, contentValues, COLUMN_ID + " = ?",new String[] { String.valueOf(userAccount.ID)});
+        int result = database.update(TABLE_NAME, contentValues, COLUMN_ID + " = ?",new String[] { String.valueOf(userAccount.ID)});
+        Log.i("SQL_UPDATE", Integer.toString(result));
+        return result;
     }
 
     public void deleteAll() {
@@ -106,9 +114,11 @@ public class UsersDatabase {
         String addressHome = cursor.getString(NUM_COLUMN_ADDRESS_HOME);
         String addressStreet = cursor.getString(NUM_COLUMN_ADDRESS_STREET);
         String addressTown = cursor.getString(NUM_COLUMN_ADDRESS_TOWN);
+        String avatarPath = cursor.getString(NUM_COLUMN_AVATAR_PATH);
         Address accountAddress = new Address(addressHome, addressStreet, addressFlat, addressTown);
         Account account = new Account(ID, firstName, lastName, phoneNumber, accountAddress);
         account.email = email;
+        account.setAvatarPath(avatarPath);
         return account;
     }
 
@@ -128,9 +138,11 @@ public class UsersDatabase {
                 String addressHome = cursor.getString(NUM_COLUMN_ADDRESS_HOME);
                 String addressStreet = cursor.getString(NUM_COLUMN_ADDRESS_STREET);
                 String addressTown = cursor.getString(NUM_COLUMN_ADDRESS_TOWN);
+                String avatarPath = cursor.getString(NUM_COLUMN_AVATAR_PATH);
                 Address accountAddress = new Address(addressHome, addressStreet, addressFlat, addressTown);
                 Account account = new Account(ID, firstName, lastName, phoneNumber, accountAddress);
                 account.email = email;
+                account.setAvatarPath(avatarPath);
                 arrayList.add(account);
             } while (cursor.moveToNext());
         }
