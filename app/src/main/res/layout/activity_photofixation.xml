@@ -16,7 +16,7 @@
         android:id="@+id/carViewpointFragment"
         android:name="ru.konstantin_starikov.samsung.izhhelper.fragments.CarViewpointFragment"
         android:layout_width="match_parent"
-        android:layout_height="142dp"
+        android:layout_height="150dp"
         android:background="#FFFFFF"
         tools:layout="@layout/fragment_car_viewpoint" />
 

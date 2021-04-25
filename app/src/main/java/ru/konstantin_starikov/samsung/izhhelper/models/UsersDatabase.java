@@ -77,15 +77,15 @@ public class UsersDatabase {
     public int update(Account userAccount) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_ID, userAccount.ID);
-        contentValues.put(COLUMN_FIRST_NAME, userAccount.firstName);
-        contentValues.put(COLUMN_lAST_NAME, userAccount.lastName);
-        contentValues.put(COLUMN_PHONE_NUMBER, userAccount.phoneNumber);
-        contentValues.put(COLUMN_EMAIL, userAccount.email);
+        if (userAccount.firstName != null && !userAccount.firstName.isEmpty()) contentValues.put(COLUMN_FIRST_NAME, userAccount.firstName);
+        if (userAccount.lastName != null && !userAccount.lastName.isEmpty()) contentValues.put(COLUMN_lAST_NAME, userAccount.lastName);
+        if (userAccount.phoneNumber != null && !userAccount.phoneNumber.isEmpty()) contentValues.put(COLUMN_PHONE_NUMBER, userAccount.phoneNumber);
+        if (userAccount.email != null && !userAccount.email.isEmpty()) contentValues.put(COLUMN_EMAIL, userAccount.email);
         contentValues.put(COLUMN_ADDRESS_FLAT, userAccount.address.flat);
-        contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
-        contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
-        contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
-        contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
+        if (userAccount.address.home != null && !userAccount.address.home.isEmpty()) contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
+        if (userAccount.address.street != null && !userAccount.address.street.isEmpty()) contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
+        if (userAccount.address.town != null && !userAccount.address.town.isEmpty()) contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
+        if (userAccount.getAvatarPath() != null && !userAccount.getAvatarPath().isEmpty()) contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
 
         int result = database.update(TABLE_NAME, contentValues, COLUMN_ID + " = ?",new String[] { String.valueOf(userAccount.ID)});
         Log.i("SQL_UPDATE", Integer.toString(result));

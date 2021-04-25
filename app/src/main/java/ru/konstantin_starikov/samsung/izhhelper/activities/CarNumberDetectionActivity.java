@@ -379,6 +379,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                                         });
                                     } else Helper.deleteImageByPath(picturePath);
                                 }
+                                else Helper.deleteImageByPath(picturePath);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

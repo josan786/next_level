@@ -4,12 +4,19 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
@@ -41,7 +48,10 @@ public class MainMenuActivity extends AppCompatActivity {
         userAccount.loadViolations(this);
 
         findAndSetViews();
-        setUserAvatar();
+
+        if(userAccount.getAvatarPath() != null)
+            setUserAvatar();
+
         fillViolationReports();
         getUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
         getUserIDTextView().setText(userAccount.ID);
@@ -53,6 +63,43 @@ public class MainMenuActivity extends AppCompatActivity {
         avatarImageView = findViewById(R.id.avatar);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.signOut : {
+                FirebaseAuth firebaseAuth;
+                FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+                    @Override
+                    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                        if (firebaseAuth.getCurrentUser() == null)
+                            signOutComplete();
+                        else {
+                        }
+                    }
+                };
+                firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.addAuthStateListener(authStateListener);
+                firebaseAuth.signOut();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void signOutComplete()
+    {
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void fillViolationReports()
     {
         ViolationReportsListAdapter violationReportsListAdapter = new ViolationReportsListAdapter(this, R.layout.violation_report_item, userAccount.getViolationReports());
@@ -62,8 +109,10 @@ public class MainMenuActivity extends AppCompatActivity {
     private void loadUserData()
     {
         UsersDatabase usersDatabase = new UsersDatabase(this);
+        Log.i("userAccount.ID", userAccount.ID);
         Account userData = usersDatabase.select(userAccount.ID);
-        if(userData != null) userAccount = userData;
+        if (userData != null)
+            userAccount = userData;
     }
 
     private void setUserAvatar()

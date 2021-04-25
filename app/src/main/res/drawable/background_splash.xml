@@ -2,12 +2,6 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
-    <item
-        android:drawable="@color/blueAppBarColor"/>
-
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/logo_small"/>
-    </item>
+    <item android:drawable="@color/blueAppBarColor"/>
+    <item android:drawable="@drawable/ic_izhhelper_logo" android:gravity="center" />
 </layer-list>

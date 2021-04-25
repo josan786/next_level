@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,13 +12,15 @@
         android:background="#FFFFFF"
         android:orientation="horizontal">
 
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
+        <ImageView
+            android:id="@+id/viewpointImageView"
+            android:layout_width="240dp"
+            android:layout_height="150dp"
+            android:layout_weight="1"
+            android:src="@drawable/blue_square" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/readinessTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"

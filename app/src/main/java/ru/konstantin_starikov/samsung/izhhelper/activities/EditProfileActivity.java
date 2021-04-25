@@ -57,7 +57,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         findAndSetViews();
 
-        setUserAvatar();
+        if(userAccount.getAvatarPath() != null)
+            setUserAvatar();
 
         displayText.setText(userAccount.firstName + " " + userAccount.lastName);
         firstNameEditText.setText(userAccount.firstName);

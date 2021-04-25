@@ -15,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.List;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
@@ -53,8 +56,8 @@ public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
         violationReportPlace.setText(Helper.cropText(violationReport.location.getPlace(), 27) + "...");
         violationReportStatus.setText(violationReport.getStatus().toString());
         violationReportStatusIndicator.setBackgroundColor(violationReport.getStatus().getStatusColor());
-        violationReportPreview.setImageDrawable(Drawable.createFromPath((Helper.getFullPathFromDataDirectory(violationReport.photosNames.get(0), context))));
-
+        File previewFile = new File(Helper.getFullPathFromDataDirectory(violationReport.photosNames.get(0), context));
+        Picasso.get().load(previewFile).transform(new CropSquareTransformation()).into(violationReportPreview);
         return view;
     }
 

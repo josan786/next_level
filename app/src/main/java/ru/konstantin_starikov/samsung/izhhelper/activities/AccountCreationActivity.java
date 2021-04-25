@@ -74,7 +74,6 @@ public class AccountCreationActivity extends AppCompatActivity {
             userAccount.address.town = userTownEditText.getText().toString();
             userAccount.updateUserDataOnFirebase();
             userAccount.saveAccount(this);
-            Log.i("AVATAR_PATH", userAccount.getAvatarPath());
             Intent intent = new Intent(this, MainMenuActivity.class);
             startActivity(intent);
         }

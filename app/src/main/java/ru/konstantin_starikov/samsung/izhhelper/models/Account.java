@@ -31,6 +31,8 @@ public class Account implements Serializable {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(currentUser != null) ID = currentUser.getUid();
+        email = null;
+        avatarPath = null;
         address = new Address();
     }
 
@@ -133,7 +135,7 @@ public class Account implements Serializable {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                dataIsEmptyAction.run();
             }
         });
     }

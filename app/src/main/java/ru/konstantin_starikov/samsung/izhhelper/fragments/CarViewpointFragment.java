@@ -1,5 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.fragments;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
 
@@ -8,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -28,11 +32,12 @@ public class CarViewpointFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private Stack<Image> photos;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ImageView viewpointImageView;
+    TextView readinessTextView;
 
     public CarViewpointFragment() {
         // Required empty public constructor
@@ -63,26 +68,26 @@ public class CarViewpointFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        photos = new Stack<Image>();
     }
 
-    public void addPhotoToProcessing(Image photo)
+
+    public void setImage(Drawable drawable)
     {
-        photos.push(photo);
+        viewpointImageView.setImageDrawable(drawable);
     }
 
-    public void updateUserPosition()
+    public void setReadiness(int readiness)
     {
-        Image processedPhoto;
-        if(!photos.empty()) processedPhoto = photos.pop();
-        //здесь будем менять положение положение пользователя относительно автомобиля
+        readinessTextView.setText(Integer.toString(readiness) + "%");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_car_viewpoint, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_car_viewpoint, container, false);
+        viewpointImageView = rootView.findViewById(R.id.viewpointImageView);
+        readinessTextView = rootView.findViewById(R.id.readinessTextView);
+        return rootView;
     }
 }

@@ -98,7 +98,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream = null;
                 try {
-
                     String Path = String.format(android.os.Environment.getExternalStorageDirectory() + File.separator + "%d.jpg", System.currentTimeMillis());
                     outStream = new FileOutputStream(Path);
                     outStream.write(data);
@@ -113,10 +112,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
                 Toast.makeText(getContext(), "Picture Saved", Toast.LENGTH_LONG).show();
                 refreshCamera();
             }
-
         };
-
-
     }
 
     @Override
