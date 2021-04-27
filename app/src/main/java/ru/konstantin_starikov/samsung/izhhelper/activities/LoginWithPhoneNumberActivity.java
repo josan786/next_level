@@ -31,6 +31,7 @@ import ru.konstantin_starikov.samsung.izhhelper.models.Action;
 
 public class LoginWithPhoneNumberActivity extends AppCompatActivity {
 
+    public static final String PHONE_NUMBER = "phone_number";
     public static final String VERIFICATION_ID = "verification_ID";
     public static final String RESEND_TOKEN = "resend_token";
 
@@ -98,6 +99,7 @@ public class LoginWithPhoneNumberActivity extends AppCompatActivity {
 
                 // Save verification ID and resending token so we can use them later
                 Intent intent = new Intent(getApplicationContext(), EnterSMSCodeActivity.class);
+                intent.putExtra(PHONE_NUMBER, phoneInputView.getFormatedNumber());
                 intent.putExtra(VERIFICATION_ID, verificationId);
                 intent.putExtra(RESEND_TOKEN, token);
                 startActivity(intent);
@@ -123,12 +125,26 @@ public class LoginWithPhoneNumberActivity extends AppCompatActivity {
     public void verifyNumber(View view)
     {
         String phoneNumber = phoneInputView.getFormatedNumber();
+        Log.i("Trim", trimPhoneNumber(phoneNumber));
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,        // Phone number to verify
+                trimPhoneNumber(phoneNumber),        // Phone number to verify
                 60,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 this, // Activity (for callback binding)
                 mCallbacks);        // OnVerificationStateChangedCallbacks
+    }
+
+    private String trimPhoneNumber(String phone)
+    {
+        String result = "";
+        for(int i = 0 ; i < phone.length(); i++)
+        {
+            if(phone.charAt(i) > 47 && phone.charAt(i) < 58 || phone.charAt(i) == 43)
+            {
+                result += phone.charAt(i);
+            }
+        }
+        return result;
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {

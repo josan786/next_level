@@ -113,6 +113,45 @@ public class Account implements Serializable {
         databaseReference.setValue(address.town);
     }
 
+    public void doIfUserPhoneAndPasswordRight(String phoneNumber, String password, Action rightAction, Action falseAction)
+    {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users accounts").child(ID);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String realPhoneNumber = snapshot.child("Phone number").getValue(String.class);
+                    String realPassword = snapshot.child("Password").getValue(String.class);
+                    if(realPhoneNumber.equals(phoneNumber) && realPassword.equals(password))
+                        rightAction.run();
+                    else falseAction.run();
+                }
+                else falseAction.run();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                falseAction.run();
+            }
+        });
+    }
+
+    public void setUserPhone(String phone)
+    {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference;
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Phone number");
+        databaseReference.setValue(phone);
+    }
+
+    public void setUserPassword(String password)
+    {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference;
+        databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Password");
+        databaseReference.setValue(password);
+    }
+
     public void retrieveUserDataFromFirebase(Action dataReceivedAction, Action dataIsEmptyAction)
     {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users accounts").child(ID);
@@ -120,9 +159,15 @@ public class Account implements Serializable {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    if(!snapshot.hasChild("FirstName") || !snapshot.hasChild("LastName")
+                    || !snapshot.hasChild("Address"))
+                    {
+                        dataIsEmptyAction.run();
+                        return;
+                    }
                     firstName = snapshot.child("FirstName").getValue(String.class);
-                    Log.i("DataRetrieved", firstName);
                     lastName = snapshot.child("LastName").getValue(String.class);
+                    Log.i("DataRetrieved", firstName);
                     Log.i("DataRetrieved", lastName);
                     address.flat = snapshot.child("Address").child("Flat").getValue(Integer.class);
                     address.home = snapshot.child("Address").child("Home").getValue(String.class);

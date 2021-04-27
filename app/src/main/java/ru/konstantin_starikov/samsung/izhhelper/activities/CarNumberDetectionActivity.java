@@ -331,7 +331,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 if (Helper.isOnline(CarNumberDetectionActivity.this) && isPlateRecognizerWork) {
-                    AsyncTask.execute(new Runnable() {
+                    new Thread(new Runnable() {
                         @SuppressLint("LongLogTag")
                         @Override
                         public void run() {

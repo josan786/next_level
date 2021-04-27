@@ -20,27 +20,27 @@ public class LoginActivity extends AppCompatActivity {
 
     public final static String ACCOUNT_ID = "accountID";
 
-    private TextView loginText;
+    private TextView phoneNumberText;
     private TextView passwordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginText = (TextView) findViewById(R.id.loginText);
+        phoneNumberText = (TextView) findViewById(R.id.loginText);
         passwordText = (TextView) findViewById(R.id.passwordText);
     }
 
     public void LogIntoAccount(View view)
     {
-        String inputLogin = loginText.getText().toString();
+        String inputPhoneNumber = phoneNumberText.getText().toString();
         String inputPassword = passwordText.getText().toString();
 
         TextView isRightText = (TextView) findViewById(R.id.isRightText);
 
-        if(isInputDataRight(inputLogin, inputPassword)) {
+        if(isInputDataRight(inputPhoneNumber, inputPassword)) {
             Intent loginIntent = new Intent(this, MainMenuActivity.class);
-            loginIntent.putExtra(ACCOUNT_ID, GetAccountID(inputLogin, inputPassword));
+            loginIntent.putExtra(ACCOUNT_ID, GetAccountID(inputPhoneNumber, inputPassword));
             startActivity(loginIntent);
         }
         else
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                 isRightText.setText(R.string.false_input_text);
                 isRightText.setTextColor(Color.RED);
 
-                loginText.setText("");
+                phoneNumberText.setText("");
                 passwordText.setText("");
             }
     }
@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         if(requestCode == REGISTRATION_REQUEST_CODE) {
             switch (resultCode) {
                 case RESULT_OK:
-                    loginText.setText(data.getStringExtra(RegistrationActivity.REGISTERED_LOGIN_KEY));
+                    phoneNumberText.setText(data.getStringExtra(RegistrationActivity.REGISTERED_LOGIN_KEY));
                     passwordText.setText(data.getStringExtra(RegistrationActivity.REGISTERED_PASSWORD_KEY));
                     break;
             }

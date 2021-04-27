@@ -29,6 +29,7 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
 
     private VerifyCodeView verifyCodeView;
 
+    private String phoneNumber;
     private String verificationId;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private FirebaseAuth firebaseAuth;
@@ -40,6 +41,7 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
 
         verifyCodeView = findViewById(R.id.verifyCodeView);
 
+        phoneNumber = getIntent().getStringExtra(LoginWithPhoneNumberActivity.PHONE_NUMBER);
         verificationId = getIntent().getStringExtra(LoginWithPhoneNumberActivity.VERIFICATION_ID);
         resendToken = getIntent().getParcelableExtra(LoginWithPhoneNumberActivity.RESEND_TOKEN);
 
@@ -85,6 +87,7 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
                             }, new Action() {
                                 @Override
                                 public void run() {
+                                    userAccount.setUserPhone(phoneNumber);
                                     Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);

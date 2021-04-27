@@ -53,7 +53,7 @@ public class AccountCreationActivity extends AppCompatActivity {
     private void findAndSetViews() {
         firstNameEditText = findViewById(R.id.firstName);
         lastNameEditText = findViewById(R.id.lastName);
-        userEmailEditText = findViewById(R.id.userEmail);
+        userEmailEditText = findViewById(R.id.enterPasswordEditText);
         userFlatEditText = findViewById(R.id.userFlat);
         userHomeEditText = findViewById(R.id.userHome);
         userStreetEditText = findViewById(R.id.userStreet);
