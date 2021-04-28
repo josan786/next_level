@@ -16,12 +16,13 @@ import java.io.IOException;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
-    Camera camera;
+    public Camera camera;
     SurfaceHolder surfaceHolder;
 
     Camera.PictureCallback rawCallback;
     Camera.ShutterCallback shutterCallback;
     Camera.PictureCallback jpegCallback;
+    public Camera.PreviewCallback previewCallback;
     public int defaultCamera = Camera.CameraInfo.CAMERA_FACING_BACK;
     public CameraView(Context context) {
         super(context);
@@ -136,6 +137,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
             //camera = Camera.open();
             camera = Camera.open(currentCameraId);
+            camera.setPreviewCallback(previewCallback);
 
         } catch (RuntimeException e) {
             System.err.println(e);
@@ -180,6 +182,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         try {
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
+            camera.setPreviewCallback(previewCallback);
         } catch (Exception e) {
 
         }

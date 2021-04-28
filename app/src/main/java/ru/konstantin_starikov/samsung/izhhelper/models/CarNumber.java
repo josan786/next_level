@@ -38,7 +38,7 @@ public class CarNumber implements Serializable {
         if(plate.length() == 9)
         {
             try {
-                region = Integer.parseInt(Character.toString(plate.charAt(6))) * 100 + Integer.parseInt(Character.toString(plate.charAt(7))) * 10 + Integer.parseInt(Character.toString(plate.charAt(6)));
+                region = Integer.parseInt(Character.toString(plate.charAt(6))) * 100 + Integer.parseInt(Character.toString(plate.charAt(7))) * 10 + Integer.parseInt(Character.toString(plate.charAt(8)));
             }
             catch (NumberFormatException exception)
             {
