@@ -166,7 +166,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     private void tuneActionBar()
     {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Выберете место нарушения");
+        actionBar.setTitle(getString(R.string.PlaceChoiceActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

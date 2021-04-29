@@ -56,22 +56,19 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         carViewpointFragment = (CarViewpointFragment) getSupportFragmentManager().findFragmentById(R.id.carViewpointFragment);
 
         tuneActionBar();
-
         Resources resources = getResources();
-
         photosDescriptions = new ArrayList<PhotoDescription>();
-        photosDescriptions.add(new PhotoDescription("Обзорная фотография. Должен быть виден автомобиль и окружающая его местность", resources.getDrawable(R.drawable.overview)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.Lawn)
-            photosDescriptions.add(new PhotoDescription("Должен быть виден контакт колеса с газоном", resources.getDrawable(R.drawable.lawn_contact)));
+            photosDescriptions.add(new PhotoDescription(getString(R.string.LawnPhotoDescription), resources.getDrawable(R.drawable.lawn_contact)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.ParkingProhibited)
-            photosDescriptions.add(new PhotoDescription("Должен быть виден знак \"Парковка запрещена\"", resources.getDrawable(R.drawable.parking_prohibited_view)));
+            photosDescriptions.add(new PhotoDescription(getString(R.string.ParkingProhibitedPhotoDescription), resources.getDrawable(R.drawable.parking_prohibited_view)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.StoppingProhibited)
-            photosDescriptions.add(new PhotoDescription("Должен быть виден знак \"Остановка запрещена\"", resources.getDrawable(R.drawable.stop_prohibited_view)));
+            photosDescriptions.add(new PhotoDescription(getString(R.string.StoppingProhibitedPhotoDescription), resources.getDrawable(R.drawable.stop_prohibited_view)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.Pavement)
-            photosDescriptions.add(new PhotoDescription("Должен быть виден контакт колеса с тротуаром", resources.getDrawable(R.drawable.pavement_contact)));
+            photosDescriptions.add(new PhotoDescription(getString(R.string.PavementPhotoDescription), resources.getDrawable(R.drawable.pavement_contact)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.PedestrianCrossing)
-            photosDescriptions.add(new PhotoDescription("Должны быть видны машина и знак пешеходного перехода", resources.getDrawable(R.drawable.pedestrian_crossing_contact)));
-        photosDescriptions.add(new PhotoDescription("Машина должна быть на общем плане", resources.getDrawable(R.drawable.overall_plan)));
+            photosDescriptions.add(new PhotoDescription(getString(R.string.PedestrianCrossingPhotoDescription), resources.getDrawable(R.drawable.pedestrian_crossing_contact)));
+        photosDescriptions.add(new PhotoDescription(getString(R.string.OverallPlanPhotoDescription), resources.getDrawable(R.drawable.overall_plan)));
         photofixationSequence = new PhotofixationSequence(cameraView, this,15, progressBar, timerText, photoDescriptionTextView, carViewpointFragment, photosDescriptions);
     }
 
@@ -98,7 +95,7 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
     private void tuneActionBar()
     {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Фотофиксация");
+        actionBar.setTitle(getString(R.string.PhotofixationActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }

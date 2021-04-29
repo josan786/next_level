@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,17 +41,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
+import fr.bmartel.speedtest.SpeedTestReport;
+import fr.bmartel.speedtest.SpeedTestSocket;
+import fr.bmartel.speedtest.inter.ISpeedTestListener;
+import fr.bmartel.speedtest.model.SpeedTestError;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -69,12 +65,18 @@ import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
 
-public class CarNumberDetectionActivity extends AppCompatActivity {
+public class CarNumberDetectionActivity extends AppCompatActivity{
 
     public final static String VIOLATION_REPORT = "violation_report";
 
+    private static final int SOCKET_TIMEOUT = 5000;
+    private static final String SPEED_TEST_SERVER_URI_UL = "http://ipv4.ikoula.testdebit.info/";
+    private static final int FILE_SIZE = 10000000;
+
     private static final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private static final int PERMISSION_REQUEST_CAMERA = 2;
+
+    private static String PLATE_RECOGNIZER_TOKEN;
 
     private ViolationReport violationReport;
 
@@ -95,64 +97,95 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
 
     boolean isRecognized;
 
-    ExecutorService recognizingTasksService;
+    double internetSpeed;
+    SpeedTestSocket speedTestSocket;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         violationReport = getTransmittedViolationReport();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_number_detection);
-
-        isRecognized = false;
-
-        Camera.PreviewCallback previewCallback = new Camera.PreviewCallback() {
-            @Override
-            public void onPreviewFrame(byte[] data, Camera camera) {
-                if(isRecognized) return;
-                Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = parameters.getPreviewSize();
-                YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
-                        size.width, size.height, null);
-                File file = new File( String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis()));
-                FileOutputStream filecon = null;
-                try {
-                    filecon = new FileOutputStream(file);
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
-                }
-                image.compressToJpeg(
-                        new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
-                        filecon);
-                processPicture(file.getPath());
-            }
-        };
-
+        setStartsValues();
+        setupSpeedTest();
+        testInternetConnection();
         findAndSetViews();
-
         tuneCamera();
-
         tuneActionBar();
-
-        //Проверяем, есть ли доступ к камере и памяти устройства
-        //Если разрешения отсутсвуют, спрашиваем их у пользователя
-        if (checkIfAlreadyHaveStoragePermission()) {
-            if (checkIfAlreadyHaveCameraPermission()) {
-                organizeRecognizingThreadsPool();
-            } else requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
-        } else requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-
-        ANDROID_DATA_DIR = this.getApplicationInfo().dataDir;
+        if (!checkIfAlreadyHaveStoragePermission()) requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_READ_EXTERNAL_STORAGE );
+        if (!checkIfAlreadyHaveCameraPermission()) requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
         setupALPR();
-
-        cameraView.previewCallback  = previewCallback;
     }
 
-    private void organizeRecognizingThreadsPool()
+    private void setStartsValues()
+    {
+        PLATE_RECOGNIZER_TOKEN = Helper.getConfigValue(CarNumberDetectionActivity.this, "PLATE_RECOGNIZER_TOKEN");
+        ANDROID_DATA_DIR = this.getApplicationInfo().dataDir;
+        isRecognized = false;
+        internetSpeed = 0;
+    }
+
+    private void setupSpeedTest()
+    {
+        speedTestSocket = new SpeedTestSocket();
+        speedTestSocket.setSocketTimeout(SOCKET_TIMEOUT);
+        speedTestSocket.addSpeedTestListener(new SpeedTestListener());
+    }
+
+    private void testInternetConnection()
+    {
+        AsyncTask.execute(() ->
+        {
+            speedTestSocket.startUpload(SPEED_TEST_SERVER_URI_UL, FILE_SIZE);
+        });
+    }
+
+    class PreviewCallback implements Camera.PreviewCallback {
+
+        @Override
+        public void onPreviewFrame(byte[] data, Camera camera) {
+            if(isRecognized) return;
+            Camera.Parameters parameters = camera.getParameters();
+            Camera.Size size = parameters.getPreviewSize();
+            YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
+                    size.width, size.height, null);
+            File file = new File( String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis()));
+            FileOutputStream filecon = null;
+            try {
+                filecon = new FileOutputStream(file);
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+            image.compressToJpeg(
+                    new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
+                    filecon);
+            processPicture(file.getPath());
+        }
+    }
+
+    class SpeedTestListener implements ISpeedTestListener
     {
 
+        @Override
+        public void onCompletion(SpeedTestReport report) {
+            internetSpeed = bytesToKilobytes(report.getTransferRateOctet());
+            Log.i("internetSpeed", Double.toString(internetSpeed));
+        }
+
+        @Override
+        public void onProgress(float percent, SpeedTestReport report) {
+
+        }
+
+        @Override
+        public void onError(SpeedTestError speedTestError, String errorMessage) {
+
+        }
+    }
+
+    private double bytesToKilobytes(BigDecimal bytes)
+    {
+        return bytes.doubleValue() / 1024;
     }
 
     private ViolationReport getTransmittedViolationReport() {
@@ -169,12 +202,14 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
     }
 
     private void tuneCamera() {
+        Camera.PreviewCallback previewCallback = new PreviewCallback();
         cameraView.setFocusable(true);
+        cameraView.previewCallback  = previewCallback;
     }
 
     private void tuneActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Определение номера");
+        actionBar.setTitle(getString(R.string.CarNumberDetectionActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -218,9 +253,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Разрешение на чтение файлов получено", Toast.LENGTH_LONG).show();
-                    if (checkIfAlreadyHaveCameraPermission()) {
-                        organizeRecognizingThreadsPool();
-                    } else requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+                    if (!checkIfAlreadyHaveCameraPermission()) requestPermissions(new String[]{Manifest.permission.CAMERA}, 2);
                 } else {
                     Toast.makeText(this, "Нет разрешения на чтение файлов", Toast.LENGTH_LONG).show();
                 }
@@ -232,10 +265,9 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "Доступ к камере получен", Toast.LENGTH_LONG).show();
                     cameraView.surfaceCreated(cameraView.getHolder());
-                    if (checkIfAlreadyHaveStoragePermission()) {
-                        organizeRecognizingThreadsPool();
-                    }
-                } else {
+                    if (!checkIfAlreadyHaveStoragePermission()) requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                }
+                else {
                     Toast.makeText(this, "Нет доступа к камере", Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -326,14 +358,21 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
     }
 
     private void recognizeNumber(String picturePath) {
+
         AsyncTask.execute(() ->
         {
-            if (Helper.isOnline(CarNumberDetectionActivity.this) && isPlateRecognizerWork())
+            if (Helper.isOnline(CarNumberDetectionActivity.this) && isInternetWorks() && isPlateRecognizerWork())
                 recognizeNumberByPlateRecognizer(picturePath);
             else {
                 recognizeNumberByOpenALPR(picturePath);
             }
         });
+    }
+
+    private boolean isInternetWorks()
+    {
+        if(internetSpeed > 300) return true;
+        else return false;
     }
 
     private boolean isPlateRecognizerWork()
@@ -375,59 +414,12 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload",
                 file.getName(), reqFile);
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
-        String token = Helper.getConfigValue(CarNumberDetectionActivity.this, "PLATE_RECOGNIZER_TOKEN");
-        Call<ResponseBody> req = apiService.postImage(body, name, "Token " + token);
+        Call<ResponseBody> req = apiService.postImage(body, name, "Token " + PLATE_RECOGNIZER_TOKEN);
         req.enqueue(new Callback<ResponseBody>() {
-            @SuppressLint("LongLogTag")
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Toast.makeText(getApplication(), response.code() + " ", Toast.LENGTH_SHORT).show();
-                try {
-                    String resp = response.body().string();
-                    JsonParser parser = new JsonParser();
-                    JsonElement jsonTree = parser.parse(resp);
-                    if (jsonTree.isJsonObject()) {
-                        JsonObject jsonObject = null;
-                        String plate = "";
-                        JsonElement score = null;
-                        JsonElement countryCode = null;
-                        try {
-                            jsonObject = jsonTree.getAsJsonObject();
-                            plate = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("plate").getAsString();
-                            score = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("score");
-                            countryCode = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonObject("region").getAsJsonPrimitive("code");
-                        } catch (Exception e) {
-                            Helper.deleteImageByPath(picturePath);
-                            Log.e("JSON exception", e.getMessage());
-                            return;
-                        }
-                        if (countryCode.getAsString().equals("ru") && score.getAsDouble() > 0.8) {
-                            violationReport.carNumber = new CarNumber(plate);
-                            try {
-                                Integer.parseInt(violationReport.carNumber.getRegistrationNumber());
-                            } catch (NumberFormatException exception) {
-                                Helper.deleteImageByPath(picturePath);
-                                Log.e("RegistrationNumber parsing exception", exception.getMessage());
-                                return;
-                            }
-                            if (carNumberText.getVisibility() == View.VISIBLE) {
-                                Helper.deleteImageByPath(picturePath);
-                                return;
-                            }
-                            CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
-                                public void run() {
-                                    isRecognized = true;
-                                    cameraView.camera.stopPreview();
-                                    setRecognizedPanelVisible(violationReport.carNumber.toString());
-                                    createAndStartCancelTimer(picturePath);
-                                }
-                            });
-                        } else Helper.deleteImageByPath(picturePath);
-                    } else Helper.deleteImageByPath(picturePath);
-                } catch (Exception e) {
-                    Helper.deleteImageByPath(picturePath);
-                    e.printStackTrace();
-                }
+                recognizeFromPlateRecognizerResponse(response, picturePath);
             }
 
             @Override
@@ -437,6 +429,55 @@ public class CarNumberDetectionActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    private void recognizeFromPlateRecognizerResponse(Response<ResponseBody> bodyResponse, String picturePath)
+    {
+        try {
+            String response = bodyResponse.body().string();
+            JsonElement jsonTree = new JsonParser().parse(response);
+            if (!jsonTree.isJsonObject()) {
+                Helper.deleteImageByPath(picturePath);
+                return;
+            }
+            JsonObject jsonObject = null;
+            String plate = "";
+            JsonElement score = null;
+            JsonElement countryCode = null;
+            jsonObject = jsonTree.getAsJsonObject();
+            plate = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("plate").getAsString();
+            score = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonPrimitive("score");
+            countryCode = jsonObject.getAsJsonArray("results").get(0).getAsJsonObject().getAsJsonObject("region").getAsJsonPrimitive("code");
+            if (countryCode.getAsString().equals("ru") && score.getAsDouble() > 0.8) {
+                violationReport.carNumber = new CarNumber(plate);
+                if (!isRegistrationNumber(violationReport.carNumber.getRegistrationNumber()) || carNumberText.getVisibility() == View.VISIBLE) {
+                    Helper.deleteImageByPath(picturePath);
+                    return;
+                }
+                isRecognized = true;
+                CarNumberDetectionActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        cameraView.camera.stopPreview();
+                        setRecognizedPanelVisible(violationReport.carNumber.toString());
+                        createAndStartCancelTimer(picturePath);
+                    }
+                });
+            } else Helper.deleteImageByPath(picturePath);
+        } catch (Exception e) {
+            Helper.deleteImageByPath(picturePath);
+            e.printStackTrace();
+        }
+    }
+
+    private boolean isRegistrationNumber(String registrationNumber)
+    {
+        boolean result = true;
+        try {
+            Integer.parseInt(violationReport.carNumber.getRegistrationNumber());
+        } catch (NumberFormatException exception) {
+            result = false;
+        }
+        return result;
     }
 
     @SuppressLint("LongLogTag")

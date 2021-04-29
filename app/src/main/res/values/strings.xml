@@ -5,5 +5,18 @@
     <string name="right_input_text">Верно</string>
     <string name="false_input_text">Вы ошиблись в логине или пароле</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="PlaceChoiceActivityTitle">Выберете место нарушения</string>
+    <string name="CarNumberDetectionActivityTitle">Определение номера</string>
+    <string name="PhotofixationActivityTitle">Фотофиксация</string>
+    <string name="SendViolationActivityTitle">Отправка нарушения</string>
+    <string name="Place">Место</string>
+    <string name="ViolationType">Тип нарушения</string>
+    <string name="CarNumber">Номер машины</string>
+    <string name="OverviewPhotoDescription">Обзорная фотография. Должен быть виден автомобиль и окружающая его местность</string>
+    <string name="LawnPhotoDescription">Должен быть виден контакт колеса с газоном</string>
+    <string name="ParkingProhibitedPhotoDescription">Должен быть виден знак "Парковка запрещена"</string>
+    <string name="StoppingProhibitedPhotoDescription">Должен быть виден знак "Остановка запрещена"</string>
+    <string name="PavementPhotoDescription">Должен быть виден контакт колеса с тротуаром</string>
+    <string name="PedestrianCrossingPhotoDescription">Должны быть видны машина и знак пешеходного перехода</string>
+    <string name="OverallPlanPhotoDescription">Машина должна быть на общем плане</string>
 </resources>

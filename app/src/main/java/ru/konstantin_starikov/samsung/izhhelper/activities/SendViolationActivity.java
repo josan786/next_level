@@ -24,7 +24,6 @@ public class SendViolationActivity extends AppCompatActivity {
     private TextView violationTypeText;
     private TextView violationCarNumberText;
 
-    @SuppressLint("LongLogTag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -37,16 +36,9 @@ public class SendViolationActivity extends AppCompatActivity {
         violationTypeText = findViewById(R.id.violationTypeText);
         violationCarNumberText = findViewById(R.id.violationCarNumberText);
 
-        //установка полученных значений
-        //установка места нарушения
-        violationPlaceText.setText("Место: " + violationReport.location.getPlace());
-        //установка типа нарушения
-        violationTypeText.setText("Тип нарушения: " + violationReport.violationType.toString());
-
-        //установка номера машины
-        Log.i("CarNumber series", violationReport.carNumber.getSeries());
-        Log.i("CarNumber registration number", violationReport.carNumber.getRegistrationNumber());
-        violationCarNumberText.setText("Номер машины: " + violationReport.carNumber.toString());
+        violationPlaceText.setText(getString(R.string.Place) + ": " + violationReport.location.getPlace());
+        violationTypeText.setText(getString(R.string.ViolationType) + ": " + violationReport.violationType.toString());
+        violationCarNumberText.setText(getString(R.string.CarNumber) + ": " + violationReport.carNumber.toString());
 
         tuneActionBar();
     }
@@ -59,7 +51,7 @@ public class SendViolationActivity extends AppCompatActivity {
     private void tuneActionBar()
     {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Отправка нарушения");
+        actionBar.setTitle(getString(R.string.SendViolationActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
