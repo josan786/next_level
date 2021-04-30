@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.models;
+package ru.konstantin_starikov.samsung.izhhelper.models.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Address;
+import ru.konstantin_starikov.samsung.izhhelper.models.CarNumber;
+import ru.konstantin_starikov.samsung.izhhelper.models.Location;
+import ru.konstantin_starikov.samsung.izhhelper.models.PhotosNamesCompressor;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationStatus;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationType;
 
 public class ViolationsDatabase implements Serializable {
 

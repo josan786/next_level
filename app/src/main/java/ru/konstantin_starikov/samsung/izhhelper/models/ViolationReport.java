@@ -18,8 +18,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
+
 public class ViolationReport implements Serializable {
-    protected String ID;
+    public String ID;
+
     private ViolationStatus status;
 
     public Location location;

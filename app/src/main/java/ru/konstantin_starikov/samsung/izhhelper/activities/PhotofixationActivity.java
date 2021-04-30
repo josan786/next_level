@@ -21,10 +21,10 @@ import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.CarViewpointFragment;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.PhotoDescription;
-import ru.konstantin_starikov.samsung.izhhelper.models.PhotofixationPictureTakingListener;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.PhotofixationPictureTakingListener;
 import ru.konstantin_starikov.samsung.izhhelper.models.PhotofixationSequence;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
-import ru.konstantin_starikov.samsung.izhhelper.models.ViolationTypeEnum;
+import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationTypeEnum;
 import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
 
 public class PhotofixationActivity extends AppCompatActivity implements PhotofixationPictureTakingListener {
@@ -39,7 +39,6 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
 
     private ProgressBar progressBar;
     private TextView timerText;
-    private ArrayList<PhotoDescription> photosDescriptions;
     private TextView photoDescriptionTextView;
 
     private PhotofixationSequence photofixationSequence;
@@ -56,8 +55,15 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         carViewpointFragment = (CarViewpointFragment) getSupportFragmentManager().findFragmentById(R.id.carViewpointFragment);
 
         tuneActionBar();
+        ArrayList<PhotoDescription> photosDescriptions = fillAndGetPhotosDescriptions();
+        photofixationSequence = new PhotofixationSequence(cameraView, this,15,
+                progressBar, timerText, photoDescriptionTextView, carViewpointFragment, photosDescriptions);
+    }
+
+    private ArrayList<PhotoDescription> fillAndGetPhotosDescriptions()
+    {
+        ArrayList<PhotoDescription> photosDescriptions = new ArrayList<PhotoDescription>();
         Resources resources = getResources();
-        photosDescriptions = new ArrayList<PhotoDescription>();
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.Lawn)
             photosDescriptions.add(new PhotoDescription(getString(R.string.LawnPhotoDescription), resources.getDrawable(R.drawable.lawn_contact)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.ParkingProhibited)
@@ -69,7 +75,7 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.PedestrianCrossing)
             photosDescriptions.add(new PhotoDescription(getString(R.string.PedestrianCrossingPhotoDescription), resources.getDrawable(R.drawable.pedestrian_crossing_contact)));
         photosDescriptions.add(new PhotoDescription(getString(R.string.OverallPlanPhotoDescription), resources.getDrawable(R.drawable.overall_plan)));
-        photofixationSequence = new PhotofixationSequence(cameraView, this,15, progressBar, timerText, photoDescriptionTextView, carViewpointFragment, photosDescriptions);
+        return photosDescriptions;
     }
 
 

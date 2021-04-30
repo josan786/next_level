@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationType;
-import ru.konstantin_starikov.samsung.izhhelper.models.ViolationTypeEnum;
-import ru.konstantin_starikov.samsung.izhhelper.models.ViolationTypesListAdapter;
+import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationTypeEnum;
+import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationTypesListAdapter;
 
 public class ViolationTypeSelectionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 

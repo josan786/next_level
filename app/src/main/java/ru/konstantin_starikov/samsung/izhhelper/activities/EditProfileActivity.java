@@ -42,9 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText homeEditText;
     private EditText streetEditText;
     private EditText townEditText;
-
     private TextView warningText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +54,12 @@ public class EditProfileActivity extends AppCompatActivity {
         userAccount = (Account) getIntent().getSerializableExtra(MainMenuActivity.USER_ACCOUNT);
 
         findAndSetViews();
+        setGotDataInViews();
+    }
 
-        if(userAccount.getAvatarPath() != null)
-            setUserAvatar();
+    private void setGotDataInViews()
+    {
+        if(userAccount.getAvatarPath() != null) setUserAvatar();
 
         displayText.setText(userAccount.firstName + " " + userAccount.lastName);
         firstNameEditText.setText(userAccount.firstName);
@@ -94,7 +95,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private void tuneActionBar()
     {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Редактировать профиль");
+        actionBar.setTitle(getString(R.string.EditProfileActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -110,31 +111,14 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK) {
-            Bitmap avatar = null;
             try {
-                avatar = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                Bitmap avatar = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                 avatarImageView.setImageBitmap(avatar);
-                FileOutputStream fileOutputStream = null;
-                try {
-                    Log.i("USER_ACCOUNT_ID", userAccount.ID);
-                    avatarPath = String.format(getApplicationInfo().dataDir + File.separator + userAccount.ID + ".jpg");
-                    Log.i("AVATAR_PATH", avatarPath);
-                    fileOutputStream = new FileOutputStream(avatarPath);
-                    avatar.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-                    avatarPath = avatarPath.substring(avatarPath.lastIndexOf('/') + 1);
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                } finally {
-                    try {
-                        if(fileOutputStream != null) fileOutputStream.close();
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
-                }
+                avatarPath = Helper.saveAvatarFromBitmap(avatar, userAccount.ID, this);
+                avatarPath = avatarPath.substring(avatarPath.lastIndexOf('/') + 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -161,10 +145,15 @@ public class EditProfileActivity extends AppCompatActivity {
             if(avatarPath != null) userAccount.setAvatarPath(avatarPath);
             userAccount.updateUserData(this);
             userAccount.updateUserDataOnFirebase();
-            Intent intent = new Intent(this, MainMenuActivity.class);
-            startActivity(intent);
+            goToNextActivity();
         }
         else showWarningText();
+    }
+
+    private void goToNextActivity()
+    {
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        startActivity(intent);
     }
 
     private void showWarningText()

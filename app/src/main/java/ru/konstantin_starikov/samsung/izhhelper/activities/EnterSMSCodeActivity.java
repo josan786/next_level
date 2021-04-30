@@ -20,7 +20,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
-import ru.konstantin_starikov.samsung.izhhelper.models.Action;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class EnterSMSCodeActivity extends AppCompatActivity {
 

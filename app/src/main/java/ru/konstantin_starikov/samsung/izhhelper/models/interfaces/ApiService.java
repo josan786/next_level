@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.models;
+package ru.konstantin_starikov.samsung.izhhelper.models.interfaces;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

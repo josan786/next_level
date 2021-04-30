@@ -14,16 +14,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
-import ru.konstantin_starikov.samsung.izhhelper.models.UsersDatabase;
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
-import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReportsListAdapter;
+import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationReportsListAdapter;
 
 public class MainMenuActivity extends AppCompatActivity {
 

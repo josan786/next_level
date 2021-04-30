@@ -4,6 +4,8 @@ import android.graphics.Color;
 
 import java.io.Serializable;
 
+import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
+
 public class ViolationStatus implements Serializable {
     private ViolationStatusEnum violationStatusEnum;
 

@@ -11,8 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
-import ru.konstantin_starikov.samsung.izhhelper.models.Action;
-import ru.konstantin_starikov.samsung.izhhelper.models.UsersDatabase;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

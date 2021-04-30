@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.fragments.CarViewpointFragment;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.PhotofixationPictureTakingListener;
 import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
 
 public class PhotofixationSequence implements CameraView.SaveImageListener{

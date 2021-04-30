@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.models;
+package ru.konstantin_starikov.samsung.izhhelper.models.enumerators;
 
 import java.io.Serializable;
 

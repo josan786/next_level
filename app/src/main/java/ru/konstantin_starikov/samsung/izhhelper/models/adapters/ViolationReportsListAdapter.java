@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.models;
+package ru.konstantin_starikov.samsung.izhhelper.models.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,6 +21,9 @@ import java.io.File;
 import java.util.List;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.CropSquareTransformation;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
     List<ViolationReport> violationReportsList;

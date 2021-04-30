@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.models;
+package ru.konstantin_starikov.samsung.izhhelper.models.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Address;
 
 public class UsersDatabase {
     private static final String DATABASE_NAME = "users.db";

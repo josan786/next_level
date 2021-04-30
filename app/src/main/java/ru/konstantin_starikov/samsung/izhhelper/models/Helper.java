@@ -2,19 +2,23 @@ package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import ru.konstantin_starikov.samsung.izhhelper.R;
 
 public final class Helper {
@@ -62,6 +66,21 @@ public final class Helper {
     public static void deleteImageByPath(String imagePath) {
         Log.i("Image deleted, path was - ", imagePath);
         new File(imagePath).delete();
+    }
+
+    public static String saveAvatarFromBitmap(Bitmap avatar, String userAccountID, Context context)
+    {
+        String avatarPath = null;
+        try {
+            FileOutputStream fileOutputStream = null;
+            avatarPath = String.format(context.getApplicationInfo().dataDir + File.separator + userAccountID + ".jpg");
+            fileOutputStream = new FileOutputStream(avatarPath);
+            avatar.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
+            if (fileOutputStream != null) fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return avatarPath;
     }
 
     public static String cropText(String inputText, int size)

@@ -16,6 +16,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.UsersDatabase;
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.ViolationsDatabase;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
+
 public class Account implements Serializable {
     public String ID;
     public String firstName;

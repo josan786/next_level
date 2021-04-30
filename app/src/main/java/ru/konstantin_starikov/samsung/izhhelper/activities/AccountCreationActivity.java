@@ -15,12 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 
 public class AccountCreationActivity extends AppCompatActivity {
 
@@ -84,32 +86,16 @@ public class AccountCreationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_FILE && resultCode == Activity.RESULT_OK) {
-            Bitmap avatar = null;
             try {
-                avatar = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                Bitmap avatar = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                 userAvatarImageView.setBitmap(avatar);
-                String avatarPath = null;
-                FileOutputStream fileOutputStream = null;
-                try {
-                    Log.i("USER_ACCOUNT_ID", userAccount.ID);
-                    avatarPath = String.format(getApplicationInfo().dataDir + File.separator + userAccount.ID + ".jpg");
-                    Log.i("AVATAR_PATH", avatarPath);
-                    fileOutputStream = new FileOutputStream(avatarPath);
-                    avatar.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-                    userAccount.setAvatarPath(avatarPath.substring(avatarPath.lastIndexOf('/') + 1));
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                } finally {
-                    try {
-                        if(fileOutputStream != null) fileOutputStream.close();
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+                String avatarPath = Helper.saveAvatarFromBitmap(avatar, userAccount.ID, this);
+                userAccount.setAvatarPath(avatarPath.substring(avatarPath.lastIndexOf('/') + 1));
             }
-
+            catch (IOException exception)
+            {
+                exception.printStackTrace();
+            }
         }
     }
 
@@ -127,6 +113,8 @@ public class AccountCreationActivity extends AppCompatActivity {
 
     private boolean isAllFieldsFilled()
     {
+        boolean result = true;
+
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
         String email = userEmailEditText.getText().toString();
@@ -135,10 +123,9 @@ public class AccountCreationActivity extends AppCompatActivity {
         String street = userStreetEditText.getText().toString();
         String town = userTownEditText.getText().toString();
 
-        boolean result = true;
         if(firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || flat.isEmpty() ||
-                home.isEmpty() || street.isEmpty() || town.isEmpty())
-            result = false;
+                home.isEmpty() || street.isEmpty() || town.isEmpty()) result = false;
+
         return result;
     }
 }

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PhotosNamesCompressor {
-    static String compress(List<String> photosNames)
+    public static String compress(List<String> photosNames)
     {
         String result ="";
         for(int i = 0; i < photosNames.size() - 1; i++)
@@ -16,7 +16,7 @@ public class PhotosNamesCompressor {
         return result;
     }
 
-    static List<String> deCompress(String compressedPhotosNames)
+    public static List<String> deCompress(String compressedPhotosNames)
     {
         List<String> result = Arrays.asList(compressedPhotosNames.split(" "));
         return result;

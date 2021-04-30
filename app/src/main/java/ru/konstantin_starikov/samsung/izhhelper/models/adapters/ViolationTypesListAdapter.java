@@ -1,4 +1,4 @@
-package ru.konstantin_starikov.samsung.izhhelper.models;
+package ru.konstantin_starikov.samsung.izhhelper.models.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.ViolationType;
 
 public class ViolationTypesListAdapter extends ArrayAdapter<ViolationType> {
     List<ViolationType> violationTypesList;

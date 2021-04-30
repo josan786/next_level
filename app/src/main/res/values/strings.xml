@@ -5,6 +5,7 @@
     <string name="right_input_text">Верно</string>
     <string name="false_input_text">Вы ошиблись в логине или пароле</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="EditProfileActivityTitle">Редактировать профиль</string>
     <string name="PlaceChoiceActivityTitle">Выберете место нарушения</string>
     <string name="CarNumberDetectionActivityTitle">Определение номера</string>
     <string name="PhotofixationActivityTitle">Фотофиксация</string>

@@ -2,6 +2,8 @@ package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import java.io.Serializable;
 
+import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationTypeEnum;
+
 public class ViolationType implements Serializable {
 
     private ViolationTypeEnum violationType;
