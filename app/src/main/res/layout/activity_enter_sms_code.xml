@@ -21,10 +21,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/enterSMSCode"
             android:layout_width="match_parent"
             android:layout_height="91dp"
-            android:text="Введите\nполученный код"
+            android:text="@string/EnterCode"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -43,11 +43,24 @@
             app:vcWrapperStrokeWidth="2dp" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/CheckSMSCodeButton"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:onClick="verifySentCode"
             android:text="Проверить" />
+
+        <TextView
+            android:id="@+id/incorrectSMSCodeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center"
+            android:text="@string/IncorrectSMSCodeText"
+            android:textAllCaps="false"
+            android:textColor="#F44336"
+            android:typeface="normal"
+            android:visibility="invisible" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

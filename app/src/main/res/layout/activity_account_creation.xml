@@ -28,7 +28,7 @@
                 android:id="@+id/textView10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Создание\nаккаунта"
+                android:text="@string/AccountCreation"
                 android:textColor="#000000"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -59,7 +59,7 @@
                             android:layout_height="20dp"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Имя"
+                            android:hint="@string/NameText"
                             android:inputType="textPersonName" />
 
                         <EditText
@@ -68,7 +68,7 @@
                             android:layout_height="20dp"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:hint="Фамилия"
+                            android:hint="@string/LastNameText"
                             android:inputType="textPersonName" />
                     </LinearLayout>
 
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Квартира"
+                    android:hint="@string/FlatText"
                     android:inputType="number" />
 
                 <EditText
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Дом"
+                    android:hint="@string/HomeText"
                     android:inputType="text" />
 
                 <EditText
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Улица"
+                    android:hint="@string/StreetText"
                     android:inputType="text" />
 
                 <EditText
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="Город"
+                    android:hint="@string/TownText"
                     android:inputType="text" />
             </LinearLayout>
         </LinearLayout>
@@ -172,7 +172,7 @@
         android:layout_marginStart="138dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="138dp"
-        android:text="Заполните все поля!"
+        android:text="@string/WarningText"
         android:textColor="#F44336"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"

@@ -47,7 +47,7 @@ public class ViolationTypesListAdapter extends ArrayAdapter<ViolationType> {
 
         ViolationType violationType = violationTypesList.get(position);
 
-        violationTypeTitle.setText(violationType.toString());
+        violationTypeTitle.setText(violationType.toString(context));
 
         Resources resources = getContext().getResources();
         Drawable icon = null;

@@ -6,11 +6,17 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,6 +74,21 @@ public final class Helper {
         new File(imagePath).delete();
     }
 
+    public static String savePictureFromBitmap(Bitmap picture, Context context)
+    {
+        String picturePath = "";
+        FileOutputStream fileOutputStream = null;
+        try {
+            picturePath = String.format(context.getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis());
+            fileOutputStream = new FileOutputStream(picturePath);
+            picture.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
+            fileOutputStream.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return picturePath;
+    }
+
     public static String saveAvatarFromBitmap(Bitmap avatar, String userAccountID, Context context)
     {
         String avatarPath = null;
@@ -108,5 +129,21 @@ public final class Helper {
         }
 
         return result;
+    }
+
+    public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = (DrawableCompat.wrap(drawable)).mutate();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
     }
 }

@@ -1,7 +1,10 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
+import android.content.Context;
+
 import java.io.Serializable;
 
+import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationTypeEnum;
 
 public class ViolationType implements Serializable {
@@ -12,6 +15,7 @@ public class ViolationType implements Serializable {
     {
         this.violationType = violationType;
     }
+
     public ViolationType(String violationTypeName)
     {
         switch (violationTypeName) {
@@ -33,6 +37,22 @@ public class ViolationType implements Serializable {
         }
     }
 
+    public static ViolationType getViolationTypeFromTranslatedName(String violationTypeName, Context context)
+    {
+        ViolationType result = null;
+        if(violationTypeName.equals(context.getString(R.string.PavementViolationType)))
+            result = new ViolationType("Стоянка на тротуаре");
+        if(violationTypeName.equals(context.getString(R.string.LawnViolationType)))
+            result = new ViolationType("Стоянка на газоне");
+        if(violationTypeName.equals(context.getString(R.string.ParkingProhibitedViolationType)))
+            result = new ViolationType("Стоянка у знака \"Стоянка запрещена\"");
+        if(violationTypeName.equals(context.getString(R.string.PedestrianCrossingViolationType)))
+            result = new ViolationType("Стоянка на пешеходном переходе");
+        if(violationTypeName.equals(context.getString(R.string.StoppingProhibitedViolationType)))
+            result = new ViolationType("Стоянка в зоне действия знака \"Остановка запрещена\"");
+        return result;
+    }
+
     @Override
     public String toString() {
         switch (violationType) {
@@ -47,7 +67,23 @@ public class ViolationType implements Serializable {
             case StoppingProhibited:
                 return "Стоянка в зоне действия знака \"Остановка запрещена\"";
         }
-        return "Неизвестное нарушение";
+        return "Другое нарушение";
+    }
+
+    public String toString(Context context) {
+        switch (violationType) {
+            case Pavement:
+                return context.getString(R.string.PavementViolationType);
+            case Lawn:
+                return context.getString(R.string.LawnViolationType);
+            case ParkingProhibited:
+                return context.getString(R.string.ParkingProhibitedViolationType);
+            case PedestrianCrossing:
+                return context.getString(R.string.PedestrianCrossingViolationType);
+            case StoppingProhibited:
+                return context.getString(R.string.StoppingProhibitedViolationType);
+        }
+        return context.getString(R.string.OtherViolationType);
     }
 
     public ViolationTypeEnum getViolationType() {

@@ -1,11 +1,13 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -47,6 +49,8 @@ import com.yandex.mapkit.user_location.UserLocationView;
 import com.yandex.runtime.Error;
 import com.yandex.runtime.image.ImageProvider;
 
+import javax.xml.transform.sax.TemplatesHandler;
+
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.Location;
@@ -54,11 +58,20 @@ import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class PlaceChoiceActivity extends AppCompatActivity implements UserLocationObjectListener, Session.SearchListener, CameraListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
+    public final static String TAG = "PlaceChoiceActivity";
+
+    public final static String MAPKIT_API_KEY_NAME = "MAPKIT_API_KEY";
+
+    public final static String PIN_ICON_NAME = "pin";
+
     public final static String VIOLATION_REPORT = "violation_report";
 
-    private static final int PERMISSION_REQUEST_LOCATION = 1;
+    private static final Point ITCUBE_LOCATION = new Point(56.856417, 53.285774);
+    private static final float ITCUBE_ZOOM = 18.0f;
+    private static final float ITCUBE_AZIMUTH = 0.0f;
+    private static final float ITCUBE_TILT = 0.0f;
 
-    private static boolean isMapKitFactoryInitialized = false;
+    private static final int PERMISSION_REQUEST_LOCATION = 1;
 
     //счётчик, сколько раз камера перемещалась в местоположение пльзователя
     private int userLocationUsagesCount = 0;
@@ -111,21 +124,22 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         MapKitFactory.getInstance().onStart();
     }
 
-
-    private void setupMapKitFactory()
-    {
-        if (!isMapKitFactoryInitialized) {
-            MapKitFactory.setApiKey(Helper.getConfigValue(this, "MAPKIT_API_KEY"));
+    private void setupMapKitFactory() {
+        try {
+            MapKitFactory.setApiKey(Helper.getConfigValue(this, MAPKIT_API_KEY_NAME));
             MapKitFactory.setLocale("ru_RU");
         }
+        catch (AssertionError assertionError)
+        {
+            Log.w(TAG , "setApiKey() should be called before initialize()!");
+        }
         MapKitFactory.initialize(this);
-        isMapKitFactoryInitialized = true;
     }
 
     private void tuneMap(Map map)
     {
         map.setRotateGesturesEnabled(false);
-        map.move(new CameraPosition(new Point(56.85493198911832, 53.28836671702676), 18.0f, 0.0f, 0.0f));
+        map.move(new CameraPosition(ITCUBE_LOCATION, ITCUBE_ZOOM, ITCUBE_AZIMUTH, ITCUBE_TILT));
         map.setZoomGesturesEnabled(false);
         trackCameraChanges(map);
         trackUserLocation();
@@ -154,7 +168,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
 
     private void findAndSetViews()
     {
-        mapView = (MapView) findViewById(R.id.mapview);
+        mapView = (MapView) findViewById(R.id.mapFragmentView);
         placeDescription = (TextView) findViewById(R.id.placeDescription);
     }
 
@@ -190,7 +204,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         CompositeIcon pinIcon = userLocationView.getPin().useCompositeIcon();
 
         pinIcon.setIcon(
-                "pin",
+                PIN_ICON_NAME,
                 ImageProvider.fromResource(this, R.drawable.search_result),
                 new IconStyle().setAnchor(new PointF(0.5f, 0.5f))
                         .setRotationType(RotationType.ROTATE)

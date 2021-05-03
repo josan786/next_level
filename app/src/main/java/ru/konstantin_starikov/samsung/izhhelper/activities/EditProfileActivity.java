@@ -57,9 +57,8 @@ public class EditProfileActivity extends AppCompatActivity {
         setGotDataInViews();
     }
 
-    private void setGotDataInViews()
-    {
-        if(userAccount.getAvatarPath() != null) setUserAvatar();
+    private void setGotDataInViews() {
+        if (userAccount.getAvatarPath() != null) setUserAvatar();
 
         displayText.setText(userAccount.firstName + " " + userAccount.lastName);
         firstNameEditText.setText(userAccount.firstName);
@@ -72,8 +71,7 @@ public class EditProfileActivity extends AppCompatActivity {
         townEditText.setText(userAccount.address.town);
     }
 
-    private void findAndSetViews()
-    {
+    private void findAndSetViews() {
         displayText = findViewById(R.id.displayName);
         firstNameEditText = findViewById(R.id.editFirstName);
         lastNameEditText = findViewById(R.id.editLastName);
@@ -87,13 +85,11 @@ public class EditProfileActivity extends AppCompatActivity {
         avatarImageView = findViewById(R.id.change_avatar);
     }
 
-    private void setUserAvatar()
-    {
+    private void setUserAvatar() {
         avatarImageView.setImageDrawable(Drawable.createFromPath((Helper.getFullPathFromDataDirectory(userAccount.getAvatarPath(), this))));
     }
 
-    private void tuneActionBar()
-    {
+    private void tuneActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.EditProfileActivityTitle));
         actionBar.setHomeButtonEnabled(true);

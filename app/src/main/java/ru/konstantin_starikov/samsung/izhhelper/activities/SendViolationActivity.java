@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.concurrent.CountDownLatch;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class SendViolationActivity extends AppCompatActivity {
@@ -32,24 +33,30 @@ public class SendViolationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_violation);
 
-        violationPlaceText = findViewById(R.id.violationPlaceText);
-        violationTypeText = findViewById(R.id.violationTypeText);
-        violationCarNumberText = findViewById(R.id.violationCarNumberText);
+        findAndSetViews();
 
-        violationPlaceText.setText(getString(R.string.Place) + ": " + violationReport.location.getPlace());
-        violationTypeText.setText(getString(R.string.ViolationType) + ": " + violationReport.violationType.toString());
-        violationCarNumberText.setText(getString(R.string.CarNumber) + ": " + violationReport.carNumber.toString());
+        setStartsValues();
 
         tuneActionBar();
     }
 
-    private ViolationReport getTransmittedViolationReport()
-    {
+    private ViolationReport getTransmittedViolationReport() {
         return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
     }
 
-    private void tuneActionBar()
-    {
+    private void findAndSetViews() {
+        violationPlaceText = findViewById(R.id.violationPlaceText);
+        violationTypeText = findViewById(R.id.violationTypeText);
+        violationCarNumberText = findViewById(R.id.violationCarNumberText);
+    }
+
+    private void setStartsValues() {
+        violationPlaceText.setText(getString(R.string.Place) + ": " + violationReport.location.getPlace());
+        violationTypeText.setText(getString(R.string.ViolationType) + ": " + violationReport.violationType.toString(this));
+        violationCarNumberText.setText(getString(R.string.CarNumber) + ": " + violationReport.carNumber.toString());
+    }
+
+    private void tuneActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(getString(R.string.SendViolationActivityTitle));
         actionBar.setHomeButtonEnabled(true);

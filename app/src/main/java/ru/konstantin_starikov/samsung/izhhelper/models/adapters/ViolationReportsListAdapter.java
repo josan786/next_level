@@ -55,7 +55,7 @@ public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
 
         ViolationReport violationReport = violationReportsList.get(position);
 
-        violationReportTitle.setText(violationReport.violationType.toString());
+        violationReportTitle.setText(violationReport.violationType.toString(context));
         violationReportPlace.setText(Helper.cropText(violationReport.location.getPlace(), 27) + "...");
         violationReportStatus.setText(violationReport.getStatus().toString());
         violationReportStatusIndicator.setBackgroundColor(violationReport.getStatus().getStatusColor());

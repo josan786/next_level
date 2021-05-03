@@ -1,23 +1,48 @@
 <resources>
-    <string name="app_name">Помощник Ижевска</string>
-    <string name="login_text">Логин</string>
-    <string name="password_text">Пароль</string>
-    <string name="right_input_text">Верно</string>
-    <string name="false_input_text">Вы ошиблись в логине или пароле</string>
+    <string name="app_name" translatable="false">Помощник Ижевска</string>
+    <string name="login_text" translatable="false">Логин</string>
+    <string name="password_text" translatable="false">Пароль</string>
+    <string name="right_input_text" translatable="false">Верно</string>
+    <string name="false_input_text" translatable="false">Вы ошиблись в логине или пароле</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="EditProfileActivityTitle">Редактировать профиль</string>
-    <string name="PlaceChoiceActivityTitle">Выберете место нарушения</string>
-    <string name="CarNumberDetectionActivityTitle">Определение номера</string>
-    <string name="PhotofixationActivityTitle">Фотофиксация</string>
-    <string name="SendViolationActivityTitle">Отправка нарушения</string>
-    <string name="Place">Место</string>
-    <string name="ViolationType">Тип нарушения</string>
-    <string name="CarNumber">Номер машины</string>
-    <string name="OverviewPhotoDescription">Обзорная фотография. Должен быть виден автомобиль и окружающая его местность</string>
-    <string name="LawnPhotoDescription">Должен быть виден контакт колеса с газоном</string>
-    <string name="ParkingProhibitedPhotoDescription">Должен быть виден знак "Парковка запрещена"</string>
-    <string name="StoppingProhibitedPhotoDescription">Должен быть виден знак "Остановка запрещена"</string>
-    <string name="PavementPhotoDescription">Должен быть виден контакт колеса с тротуаром</string>
-    <string name="PedestrianCrossingPhotoDescription">Должны быть видны машина и знак пешеходного перехода</string>
-    <string name="OverallPlanPhotoDescription">Машина должна быть на общем плане</string>
+    <string name="EditProfileActivityTitle" translatable="false">Редактировать профиль</string>
+    <string name="PlaceChoiceActivityTitle" translatable="false">Выберете место нарушения</string>
+    <string name="ViolationTypeSelectionActivityTitle" translatable="false">Выберете тип нарушения</string>
+    <string name="CarNumberDetectionActivityTitle" translatable="false">Определение номера</string>
+    <string name="PhotofixationActivityTitle" translatable="false">Фотофиксация</string>
+    <string name="SendViolationActivityTitle" translatable="false">Отправка нарушения</string>
+    <string name="Place" translatable="false">Место</string>
+    <string name="ViolationType" translatable="false">Тип нарушения</string>
+    <string name="CarNumber" translatable="false">Номер машины</string>
+    <string name="OverviewPhotoDescription" translatable="false">Обзорная фотография. Должен быть виден автомобиль и окружающая его местность</string>
+    <string name="LawnPhotoDescription" translatable="false">Должен быть виден контакт колеса с газоном</string>
+    <string name="ParkingProhibitedPhotoDescription" translatable="false">Должен быть виден знак "Парковка запрещена"</string>
+    <string name="StoppingProhibitedPhotoDescription" translatable="false">Должен быть виден знак "Остановка запрещена"</string>
+    <string name="PavementPhotoDescription" translatable="false">Должен быть виден контакт колеса с тротуаром</string>
+    <string name="PedestrianCrossingPhotoDescription" translatable="false">Должны быть видны машина и знак пешеходного перехода</string>
+    <string name="OverallPlanPhotoDescription" translatable="false">Машина должна быть на общем плане</string>
+    <string name="IncorrectSMSCodeText" translatable="false">Вы ввели неправильный код</string>
+    <string name="PavementViolationType" translatable="false">Стоянка на тротуаре</string>
+    <string name="LawnViolationType" translatable="false">Стоянка на газоне</string>
+    <string name="ParkingProhibitedViolationType" translatable="false">Стоянка у знака "Стоянка запрещена"</string>
+    <string name="PedestrianCrossingViolationType" translatable="false">Стоянка на пешеходном переходе</string>
+    <string name="StoppingProhibitedViolationType" translatable="false">Стоянка в зоне действия знака "Остановка запрещена"</string>
+    <string name="OtherViolationType" translatable="false">Другое нарушение</string>
+    <string name="NameText" translatable="false">Имя</string>
+    <string name="LastNameText" translatable="false">Фамилия</string>
+    <string name="PhoneText" translatable="false">Телефон</string>
+    <string name="FlatText" translatable="false">Квартира</string>
+    <string name="HomeText" translatable="false">Дом</string>
+    <string name="StreetText" translatable="false">Улица</string>
+    <string name="TownText" translatable="false">Город</string>
+    <string name="WarningText" translatable="false">Заполните все поля!</string>
+    <string name="AccountCreation" translatable="false">Создание\nаккаунта</string>
+    <string name="EnterCode" translatable="false">Введите\nполученный код</string>
+    <string name="EnterPhoneNumber" translatable="false">Введите номер\nтелефона</string>
+    <string name="SentViolations" translatable="false">Отправленные нарушения</string>
+    <string name="Achievements" translatable="false">Достижения</string>
+    <string name="Map" translatable="false">Карта</string>
+    <string name="CarNumberDetectionInformation" translatable="false">Встаньте на расстояние 3 метров от машины \nНа экране должен быть виден номер</string>
+    <string name="Cancel" translatable="false">Отмена</string>
+    <string name="EditProfileButton" translatable="false">Отредактировать профиль</string>
 </resources>

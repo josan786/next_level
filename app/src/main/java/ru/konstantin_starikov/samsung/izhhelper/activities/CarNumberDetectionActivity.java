@@ -67,6 +67,8 @@ import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
 
 public class CarNumberDetectionActivity extends AppCompatActivity implements RecognizingListener {
 
+    private final static String TAG = "CarNumberDetectionActivity";
+
     public final static String VIOLATION_REPORT = "violation_report";
 
     private static final int SOCKET_TIMEOUT = 5000;
@@ -77,6 +79,8 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
     private static final int PERMISSION_REQUEST_CAMERA = 2;
 
     private static String PLATE_RECOGNIZER_TOKEN;
+
+    private static String ANDROID_DATA_DIR;
 
     private ViolationReport violationReport;
 
@@ -89,7 +93,6 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
     private FrameLayout informationLayout;
 
     //Распознавание номера через OpenALPR
-    private String ANDROID_DATA_DIR;
     private String openAlprConfFile;
     private OpenALPR alpr;
 
@@ -165,11 +168,11 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
 
     class SpeedTestListener implements ISpeedTestListener
     {
-
+        @SuppressLint("LongLogTag")
         @Override
         public void onCompletion(SpeedTestReport report) {
             internetSpeed = bytesToKilobytes(report.getTransferRateOctet());
-            Log.i("internetSpeed", Double.toString(internetSpeed));
+            Log.i(CarNumberDetectionActivity.TAG, "Internet speed (kb): " + Double.toString(internetSpeed));
         }
 
         @Override
@@ -302,16 +305,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         //удаляем исходное изображение
         Helper.deleteImageByPath(picturePath);
         //дальше получаем путь корректного изображения
-        String rotatedPicturePath = "";
-        FileOutputStream fileOutputStream = null;
-        try {
-            rotatedPicturePath = String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis());
-            fileOutputStream = new FileOutputStream(rotatedPicturePath);
-            rotatedPicture.compress(Bitmap.CompressFormat.PNG, 80, fileOutputStream);
-            fileOutputStream.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+        String rotatedPicturePath = Helper.savePictureFromBitmap(rotatedPicture, this);
         //передаём изображение на распознавание
         recognizeNumber(rotatedPicturePath);
     }
@@ -333,11 +327,12 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
                 timerSecondsCountText.setText("0:" + Long.toString(millisUntilFinished / 1000));
             }
 
+            @SuppressLint("LongLogTag")
             @Override
             public void onFinish() {
                 cancelTimer.cancel();
                 violationReport.carNumberPhotoName = picturePath.substring(picturePath.lastIndexOf('/') + 1);
-                Log.i("CarNumberPhotoName", violationReport.carNumberPhotoName);
+                Log.i(CarNumberDetectionActivity.TAG, "Car's number photo name: " + violationReport.carNumberPhotoName);
                 goToNextActivity();
             }
         };
@@ -362,6 +357,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         else return false;
     }
 
+    @SuppressLint("LongLogTag")
     private boolean isPlateRecognizerWork()
     {
         boolean isPlateRecognizerWork = false;
@@ -369,7 +365,6 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
             HttpResponse<String> response = Unirest.get("https://api.platerecognizer.com/v1/statistics/")
                     .header("Authorization", "Token " + Helper.getConfigValue(CarNumberDetectionActivity.this, "PLATE_RECOGNIZER_TOKEN"))
                     .asString();
-            Log.i("Usage", response.getBody());
             JsonParser parser = new JsonParser();
             JsonElement jsonTree = parser.parse(response.getBody());
             if (jsonTree.isJsonObject()) {
@@ -381,7 +376,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
                     totalCalls = jsonObject.getAsJsonPrimitive("total_calls").getAsInt();
                     callsUsage = jsonObject.getAsJsonObject("usage").getAsJsonPrimitive("calls").getAsInt();
                 } catch (Exception e) {
-                    Log.e("JSON exception", e.getMessage());
+                    Log.e(TAG, e.getMessage());
                     isPlateRecognizerWork = false;
                 }
                 if (totalCalls > callsUsage) isPlateRecognizerWork = true;
@@ -490,10 +485,10 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
     @SuppressLint("LongLogTag")
     private void recognizeNumberByOpenALPR(String picturePath)
     {
-        Log.i("ALPR: Recognizing picture path", picturePath);
+        Log.i(TAG, "ALPR Recognizing picture path: " + picturePath);
         //хотел использовать 'ru', но не работает(
         String recognizingResult = alpr.recognizeWithCountryRegionNConfig("eu", "", picturePath, openAlprConfFile, 10);
-        Log.i("OpenALPR result", recognizingResult);
+        Log.i(TAG, "OpenALPR result: " + recognizingResult);
         //Результаты представлены в JSON Формате, поэтому парсим их с помощью GSON
         final Results results = new Gson().fromJson(recognizingResult, Results.class);
         if (results != null && results.getResults() != null && results.getResults().size() != 0) {
@@ -508,7 +503,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
                         try {
                             Integer.parseInt(violationReport.carNumber.getRegistrationNumber());
                         } catch (NumberFormatException exception) {
-                            Log.e("RegistrationNumber parsing exception", exception.getMessage());
+                            Log.e(TAG, "RegistrationNumber parsing exception: " + exception.getMessage());
                             continue;
                         }
                         //проверяем, не распознал ли номер уже другой процесс

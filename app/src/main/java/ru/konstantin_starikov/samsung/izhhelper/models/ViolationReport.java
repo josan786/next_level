@@ -3,6 +3,8 @@ package ru.konstantin_starikov.samsung.izhhelper.models;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -20,7 +22,7 @@ import java.util.concurrent.CountDownLatch;
 
 import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
 
-public class ViolationReport implements Serializable {
+public class ViolationReport implements Serializable{
     public String ID;
 
     private ViolationStatus status;

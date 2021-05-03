@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
     public final static String USER_ACCOUNT = "user_account";
 
     private VerifyCodeView verifyCodeView;
+    private TextView incorrectSMSCodeTextView;
 
     private String phoneNumber;
     private String verificationId;
@@ -37,9 +39,9 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enter_s_m_s_code);
+        setContentView(R.layout.activity_enter_sms_code);
 
-        verifyCodeView = findViewById(R.id.verifyCodeView);
+        findAndSetViews();
 
         phoneNumber = getIntent().getStringExtra(LoginWithPhoneNumberActivity.PHONE_NUMBER);
         verificationId = getIntent().getStringExtra(LoginWithPhoneNumberActivity.VERIFICATION_ID);
@@ -52,6 +54,12 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+    }
+
+    private void findAndSetViews()
+    {
+        verifyCodeView = findViewById(R.id.verifyCodeView);
+        incorrectSMSCodeTextView = findViewById(R.id.incorrectSMSCodeTextView);
     }
 
     public void verifySentCode(View view)
@@ -69,33 +77,26 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
                             Account userAccount = new Account(user);
                             userAccount.retrieveUserDataFromFirebase(new Action() {
                                 @Override
                                 public void run() {
-                                    if (userAccount.isUserHasDataInDatabase(EnterSMSCodeActivity.this))
+                                    if (userAccount.isUserHasDataInDatabase(EnterSMSCodeActivity.this)) {
                                         userAccount.updateUserData(EnterSMSCodeActivity.this);
-                                    else userAccount.saveAccount(EnterSMSCodeActivity.this);
-                                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                    } else userAccount.saveAccount(EnterSMSCodeActivity.this);
+                                    goToMainMenu();
                                 }
                             }, new Action() {
                                 @Override
                                 public void run() {
                                     userAccount.setUserPhone(phoneNumber);
-                                    Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                    goToAccountCreationActivity();
                                 }
                             });
                         } else {
-                            // Sign in failed, display a message and update the UI
+                            incorrectSMSCodeTextView.setVisibility(View.VISIBLE);
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
@@ -103,5 +104,21 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void goToMainMenu()
+    {
+        Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToAccountCreationActivity()
+    {
+        Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -55,15 +55,16 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         carViewpointFragment = (CarViewpointFragment) getSupportFragmentManager().findFragmentById(R.id.carViewpointFragment);
 
         tuneActionBar();
-        ArrayList<PhotoDescription> photosDescriptions = fillAndGetPhotosDescriptions();
+        ArrayList<PhotoDescription> photosDescriptions = getPhotosDescriptions();
         photofixationSequence = new PhotofixationSequence(cameraView, this,15,
                 progressBar, timerText, photoDescriptionTextView, carViewpointFragment, photosDescriptions);
     }
 
-    private ArrayList<PhotoDescription> fillAndGetPhotosDescriptions()
+    private ArrayList<PhotoDescription> getPhotosDescriptions()
     {
         ArrayList<PhotoDescription> photosDescriptions = new ArrayList<PhotoDescription>();
         Resources resources = getResources();
+        photosDescriptions.add(new PhotoDescription(getString(R.string.OverviewPhotoDescription), resources.getDrawable(R.drawable.overview)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.Lawn)
             photosDescriptions.add(new PhotoDescription(getString(R.string.LawnPhotoDescription), resources.getDrawable(R.drawable.lawn_contact)));
         if(violationReport.violationType.getViolationType() == ViolationTypeEnum.ParkingProhibited)
@@ -116,28 +117,13 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         }
     }
 
-    @SuppressLint("LongLogTag")
     @Override
     public void saveTakedPicture(String picturePath) {
         cameraView.refreshCamera();
         cameraView.ini();
         Bitmap rotatedPicture = Helper.rotateImageIfRequired(Helper.getBitmapFromPath(picturePath));
         Helper.deleteImageByPath(picturePath);
-        String rotatedPicturePath = "";
-        FileOutputStream fileOutputStream = null;
-        try {
-            rotatedPicturePath = String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis());
-            fileOutputStream = new FileOutputStream(rotatedPicturePath);
-            rotatedPicture.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        } finally {
-            try {
-                fileOutputStream.close();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
+        String rotatedPicturePath = Helper.savePictureFromBitmap(rotatedPicture, this);
         violationReport.addPhoto(rotatedPicturePath.substring(rotatedPicturePath.lastIndexOf('/') + 1));
     }
 

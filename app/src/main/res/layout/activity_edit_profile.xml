@@ -70,7 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Имя"
+                        android:text="@string/NameText"
                         android:textStyle="normal" />
 
                     <TextView
@@ -78,7 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Фамилия"
+                        android:text="@string/LastNameText"
                         android:textStyle="normal" />
 
                     <TextView
@@ -86,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Телефон"
+                        android:text="@string/PhoneText"
                         android:textStyle="normal" />
 
                     <TextView
@@ -102,7 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Квартира"
+                        android:text="@string/FlatText"
                         android:textStyle="normal" />
 
                     <TextView
@@ -110,7 +110,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Дом"
+                        android:text="@string/HomeText"
                         android:textStyle="normal" />
 
                     <TextView
@@ -118,7 +118,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Улица"
+                        android:text="@string/StreetText"
                         android:textStyle="normal" />
 
                     <TextView
@@ -126,7 +126,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="center|left"
-                        android:text="Город"
+                        android:text="@string/TownText"
                         android:textStyle="normal" />
 
                 </LinearLayout>
@@ -207,7 +207,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Заполните все поля!"
+                android:text="@string/WarningText"
                 android:textAlignment="center"
                 android:textColor="#F44336"
                 android:textSize="14sp"

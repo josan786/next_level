@@ -13,6 +13,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.yandex.mapkit.mapview.MapView;
+
 import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
@@ -24,8 +26,6 @@ import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationTypesLi
 public class ViolationTypeSelectionActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ViolationReport violationReport;
-    public final static String VIOLATION_REPORT = "violation_report";
-    private ArrayList<ViolationType> violationTypes;
     private ListView violationsTypesListView;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -40,14 +40,10 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity implements
 
         tuneActionBar();
 
-        violationTypes = new ArrayList<>();
-        violationTypes.add(new ViolationType(ViolationTypeEnum.Lawn));
-        violationTypes.add(new ViolationType(ViolationTypeEnum.PedestrianCrossing));
-        violationTypes.add(new ViolationType(ViolationTypeEnum.Pavement));
-        violationTypes.add(new ViolationType(ViolationTypeEnum.ParkingProhibited));
-        violationTypes.add(new ViolationType(ViolationTypeEnum.StoppingProhibited));
+        ArrayList<ViolationType> violationTypes = getViolationTypes();
 
-        violationsTypesListView = findViewById(R.id.violationsTypesListView);
+        findAndSetViews();
+
         ViolationTypesListAdapter violationTypesListAdapter = new ViolationTypesListAdapter(this, R.layout.violation_type_item, violationTypes);
         violationsTypesListView.setAdapter(violationTypesListAdapter);
         violationsTypesListView.setOnItemClickListener(this);
@@ -58,10 +54,26 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity implements
         return (ViolationReport) getIntent().getSerializableExtra(MainMenuActivity.VIOLATION_REPORT);
     }
 
+    private void findAndSetViews()
+    {
+        violationsTypesListView = findViewById(R.id.violationsTypesListView);
+    }
+
+    private ArrayList<ViolationType> getViolationTypes()
+    {
+        ArrayList<ViolationType> violationTypes = new ArrayList<>();
+        violationTypes.add(new ViolationType(ViolationTypeEnum.Lawn));
+        violationTypes.add(new ViolationType(ViolationTypeEnum.PedestrianCrossing));
+        violationTypes.add(new ViolationType(ViolationTypeEnum.Pavement));
+        violationTypes.add(new ViolationType(ViolationTypeEnum.ParkingProhibited));
+        violationTypes.add(new ViolationType(ViolationTypeEnum.StoppingProhibited));
+        return violationTypes;
+    }
+
     private void tuneActionBar()
     {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Выберете тип нарушения");
+        actionBar.setTitle(getString(R.string.ViolationTypeSelectionActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
@@ -79,10 +91,10 @@ public class ViolationTypeSelectionActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ViolationType violationType = new ViolationType(((TextView) view.findViewById(R.id.violationTypeTitle)).getText().toString());
+        ViolationType violationType = ViolationType.getViolationTypeFromTranslatedName(((TextView) view.findViewById(R.id.violationTypeTitle)).getText().toString(), this);
         violationReport.violationType = violationType;
         Intent carDetectionIntent = new Intent(ViolationTypeSelectionActivity.this, CarNumberDetectionActivity.class);
-        carDetectionIntent.putExtra(VIOLATION_REPORT, violationReport);
+        carDetectionIntent.putExtra(MainMenuActivity.VIOLATION_REPORT, violationReport);
         startActivity(carDetectionIntent);
     }
 }

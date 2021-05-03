@@ -25,30 +25,42 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if(currentUser != null) {
-            Account userAccount = new Account(currentUser);
-            userAccount.retrieveUserDataFromFirebase(new Action() {
-                @Override
-                public void run() {
-                    if (userAccount.isUserHasDataInDatabase(SplashScreenActivity.this))
-                        userAccount.updateUserData(SplashScreenActivity.this);
-                    else userAccount.saveAccount(SplashScreenActivity.this);
-                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, new Action() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        } else {
-            Intent intent = new Intent(getApplicationContext(), LoginWithPhoneNumberActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        if (currentUser != null) retrieveUserDataAndGoToNextActivity(currentUser);
+        else goToPhoneNumberLogin();
+    }
+
+    private void retrieveUserDataAndGoToNextActivity(FirebaseUser currentUser)
+    {
+        Account userAccount = new Account(currentUser);
+        userAccount.retrieveUserDataFromFirebase(() ->
+        {
+            if (userAccount.isUserHasDataInDatabase(SplashScreenActivity.this))
+                userAccount.updateUserData(SplashScreenActivity.this);
+            else userAccount.saveAccount(SplashScreenActivity.this);
+            goToMainMenu();
+        }, () -> {
+            goToAccountCreation();
+        });
+    }
+
+    private void goToMainMenu()
+    {
+        Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToAccountCreation()
+    {
+        Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToPhoneNumberLogin()
+    {
+        Intent intent = new Intent(getApplicationContext(), LoginWithPhoneNumberActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

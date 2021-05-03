@@ -158,21 +158,16 @@ public class LoginWithPhoneNumberActivity extends AppCompatActivity {
                             userAccount.retrieveUserDataFromFirebase(new Action() {
                                 @Override
                                 public void run() {
-                                    if (userAccount.isUserHasDataInDatabase(LoginWithPhoneNumberActivity.this))
+                                    if (userAccount.isUserHasDataInDatabase(LoginWithPhoneNumberActivity.this)) {
                                         userAccount.updateUserData(LoginWithPhoneNumberActivity.this);
+                                    }
                                     else userAccount.saveAccount(LoginWithPhoneNumberActivity.this);
-                                    Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                    goToMainMenu();
                                 }
                             }, new Action() {
                                 @Override
                                 public void run() {
-                                    Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    finish();
+                                    goToAccountCreation();
                                 }
                             });
                         } else {
@@ -184,5 +179,21 @@ public class LoginWithPhoneNumberActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void goToMainMenu()
+    {
+        Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToAccountCreation()
+    {
+        Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
