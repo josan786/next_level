@@ -224,7 +224,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="25dp"
         android:onClick="saveChanges"
-        android:text="Сохранить"
+        android:text="@string/SaveButton"
         android:textColor="#000000"
         app:backgroundTint="@color/soft_yellow" />
 </LinearLayout>

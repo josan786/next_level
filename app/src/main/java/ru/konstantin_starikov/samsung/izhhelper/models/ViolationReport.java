@@ -5,14 +5,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -20,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.ViolationsDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
 
 public class ViolationReport implements Serializable{
@@ -36,11 +47,8 @@ public class ViolationReport implements Serializable{
 
     public ArrayList<String> photosNames;
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     private CountDownLatch countDownLatch;
 
@@ -49,6 +57,31 @@ public class ViolationReport implements Serializable{
         generateID();
         status = new ViolationStatus(ViolationStatusEnum.Created);
         photosNames = new ArrayList<String>();
+    }
+
+    public ViolationReport(String ID)
+    {
+        setID(ID);
+        status = new ViolationStatus(ViolationStatusEnum.Created);
+        photosNames = new ArrayList<String>();
+    }
+
+    public ViolationReport(DataSnapshot dataSnapshot)
+    {
+        this();
+        ID = dataSnapshot.getKey();
+        if(dataSnapshot.hasChild("Location"))
+        {
+            DataSnapshot dataLocation = dataSnapshot.child("Location");
+            Location location = new Location();
+            if(dataLocation.hasChild("Latitude")) location.setLatitude(dataLocation.child("Latitude").getValue(Double.class));
+            if(dataLocation.hasChild("Longitude")) location.setLongitude(dataLocation.child("Longitude").getValue(Double.class));
+            if(dataLocation.hasChild("Place")) location.setPlace(dataLocation.child("Place").getValue(String.class));
+            this.location = location;
+        }
+        if(dataSnapshot.hasChild("Status")) setStatus(new ViolationStatus(dataSnapshot.child("Status").getValue(String.class)));
+        if(dataSnapshot.hasChild("Type")) violationType = new ViolationType(dataSnapshot.child("Type").getValue(String.class));
+        if(dataSnapshot.hasChild("CarNumber")) carNumber = new CarNumber(dataSnapshot.child("CarNumber").getValue(String.class));
     }
 
     public ViolationReport(Location location, Time departureTime, Account senderAccount, ViolationType violationType)
@@ -106,6 +139,8 @@ public class ViolationReport implements Serializable{
     @SuppressLint("LongLogTag")
     public void submitViolationToAuthorizedBody(Context context)
     {
+        FirebaseStorage firebaseStorage;
+        StorageReference storageReference;
         if (Helper.isOnline(context)) {
             firebaseDatabase = FirebaseDatabase.getInstance();
             databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Place");
@@ -138,6 +173,41 @@ public class ViolationReport implements Serializable{
         }
         senderAccount.addViolationReport(this, context);
         if(countDownLatch != null) countDownLatch.countDown();
+    }
+
+    public void loadPhotosFromFirebase(Context context)
+    {
+        FirebaseStorage firebaseStorage;
+        StorageReference storageReference;
+        firebaseStorage = FirebaseStorage.getInstance();
+        String violationReportPhotosStorageURL = "gs://izh-helper.appspot.com/" + senderAccount.ID + "/Violations reports/" + ID + "/Photos/";
+        storageReference = firebaseStorage.getReferenceFromUrl(violationReportPhotosStorageURL);
+        storageReference.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        for (StorageReference item : listResult.getItems()) {
+                            String destinationPath = String.format(context.getApplicationInfo().dataDir + File.separator + item.getName());
+                            File file = new File(destinationPath);
+                            FileDownloadTask downloadTask = item.getFile(file);
+                            downloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    photosNames.add(item.getName());
+                                    ViolationsDatabase violationsDatabase;
+                                    violationsDatabase = new ViolationsDatabase(context);
+                                    violationsDatabase.update(ViolationReport.this);
+                                }
+                            });
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     private void setID(String ID)

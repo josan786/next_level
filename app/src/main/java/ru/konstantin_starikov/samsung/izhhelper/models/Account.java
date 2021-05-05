@@ -32,6 +32,7 @@ public class Account implements Serializable {
 
     public Account()
     {
+        violationReports = new ArrayList<ViolationReport>();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(currentUser != null) ID = currentUser.getUid();
@@ -64,7 +65,7 @@ public class Account implements Serializable {
 
     public boolean SendViolationReport(String ID, Context context)
     {
-        FindViolationReportByID(ID).submitViolationToAuthorizedBody(context);
+        findViolationReportByID(ID).submitViolationToAuthorizedBody(context);
         return true;
     }
 
@@ -213,7 +214,42 @@ public class Account implements Serializable {
         }
     }
 
-    private ViolationReport FindViolationReportByID(String ID)
+    public void loadViolationsFromFirebase(Context context)
+    {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users accounts").child(ID).child("Violations reports");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for(DataSnapshot dataViolationReport : snapshot.getChildren())
+                    {
+                        ViolationReport violationReport = new ViolationReport(dataViolationReport);
+                        ViolationReport existViolationReport = findViolationReportByID(violationReport.ID);
+                        if(existViolationReport != null)
+                        {
+                            existViolationReport.setStatus(violationReport.getStatus());
+                            if (existViolationReport.photosNames == null || !existViolationReport.photosNames.isEmpty()) {
+                                existViolationReport.loadPhotosFromFirebase(context);
+                            }
+                        }
+                        else
+                        {
+                            violationReport.senderAccount = Account.this;
+                            violationReport.loadPhotosFromFirebase(context);
+                            violationReports.add(violationReport);
+                            saveViolationReport(violationReport, context);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private ViolationReport findViolationReportByID(String ID)
     {
         for (ViolationReport violationReport : violationReports)
         {

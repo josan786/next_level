@@ -1,9 +1,11 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
+import android.content.Context;
 import android.graphics.Color;
 
 import java.io.Serializable;
 
+import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
 
 public class ViolationStatus implements Serializable {
@@ -98,6 +100,32 @@ public class ViolationStatus implements Serializable {
                 break;
             case Saved:
                 result = "Сохранено";
+                break;
+        }
+        return result;
+    }
+
+    public String toString(Context context) {
+        String result = "";
+        switch (violationStatusEnum)
+        {
+            case Created:
+                result = context.getString(R.string.Created);
+                break;
+            case Sent:
+                result = context.getString(R.string.Sent);
+                break;
+            case Received:
+                result = context.getString(R.string.Received);
+                break;
+            case Accepted:
+                result = context.getString(R.string.Accepted);
+                break;
+            case Rejected:
+                result = context.getString(R.string.Rejected);
+                break;
+            case Saved:
+                result = context.getString(R.string.Saved);
                 break;
         }
         return result;

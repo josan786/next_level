@@ -3,6 +3,7 @@ package ru.konstantin_starikov.samsung.izhhelper.activities;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,6 +31,8 @@ import ru.konstantin_starikov.samsung.izhhelper.fragments.MapFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.UsersViolationsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
+import ru.konstantin_starikov.samsung.izhhelper.models.Settings;
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.SettingsDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationReportsListAdapter;
@@ -61,6 +65,8 @@ public class MainMenuActivity extends AppCompatActivity {
         findAndSetViews();
 
         fragmentManager = getSupportFragmentManager();
+
+        userAccount.loadViolationsFromFirebase(this);
 
         addViolationsFragment();
 
@@ -130,6 +136,9 @@ public class MainMenuActivity extends AppCompatActivity {
     {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
+        Settings settings = Settings.getInstance();
+        settings.setLocale(locale);
+        settings.save(this);
         Configuration configuration = new Configuration();
         configuration.locale = locale;
         getBaseContext().getResources().updateConfiguration(configuration, null);

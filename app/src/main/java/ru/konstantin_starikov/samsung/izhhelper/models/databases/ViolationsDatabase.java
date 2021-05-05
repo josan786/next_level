@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -127,6 +128,7 @@ public class ViolationsDatabase implements Serializable {
 
     public long insert(ViolationReport violationReport) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ID, violationReport.ID);
         contentValues.put(COLUMN_SENDER_ACCOUNT_ID, violationReport.senderAccount.ID);
         contentValues.put(COLUMN_SENDER_ACCOUNT_FIRST_NAME, violationReport.senderAccount.firstName);
         contentValues.put(COLUMN_SENDER_ACCOUNT_lAST_NAME, violationReport.senderAccount.lastName);
@@ -135,14 +137,14 @@ public class ViolationsDatabase implements Serializable {
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_HOME, violationReport.senderAccount.address.home);
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_STREET, violationReport.senderAccount.address.street);
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN, violationReport.senderAccount.address.town);
-        contentValues.put(COLUMN_CAR_NUMBER, violationReport.carNumber.toString());
+        if(violationReport.carNumber != null) contentValues.put(COLUMN_CAR_NUMBER, violationReport.carNumber.toString());
         contentValues.put(COLUMN_TYPE, violationReport.violationType.toString());
         contentValues.put(COLUMN_STATUS, violationReport.getStatus().toString());
         contentValues.put(COLUMN_LOCATION_LATITUDE, violationReport.location.getLatitude());
         contentValues.put(COLUMN_LOCATION_LONGITUDE, violationReport.location.getLongitude());
         contentValues.put(COLUMN_LOCATION_PLACE, violationReport.location.getPlace());
-        contentValues.put(COLUMN_CAR_NUMBER_PHOTO, violationReport.carNumberPhotoName);
-        contentValues.put(COLUMN_PHOTOS, PhotosNamesCompressor.compress(violationReport.photosNames));
+        if(violationReport.carNumberPhotoName != null) contentValues.put(COLUMN_CAR_NUMBER_PHOTO, violationReport.carNumberPhotoName);
+        if(violationReport.photosNames != null && !violationReport.photosNames.isEmpty()) contentValues.put(COLUMN_PHOTOS, PhotosNamesCompressor.compress(violationReport.photosNames));
 
         return database.insert(TABLE_NAME, null, contentValues);
     }
@@ -207,7 +209,7 @@ public class ViolationsDatabase implements Serializable {
         violationReport.violationType = new ViolationType(cursor.getString(NUM_COLUMN_TYPE));
         violationReport.setStatus(new ViolationStatus(cursor.getString(NUM_COLUMN_STATUS)));
         violationReport.carNumberPhotoName = carNumberPhoto;
-        violationReport.setPhotosNames(PhotosNamesCompressor.deCompress(photosNames));
+        if(photosNames != null && !photosNames.isEmpty()) violationReport.setPhotosNames(PhotosNamesCompressor.deCompress(photosNames));
         return violationReport;
     }
 
@@ -243,7 +245,7 @@ public class ViolationsDatabase implements Serializable {
                 violationReport.violationType = new ViolationType(cursor.getString(NUM_COLUMN_TYPE));
                 violationReport.setStatus(new ViolationStatus(cursor.getString(NUM_COLUMN_STATUS)));
                 violationReport.carNumberPhotoName = carNumberPhoto;
-                violationReport.setPhotosNames(PhotosNamesCompressor.deCompress(photosNames));
+                if(photosNames != null && !photosNames.isEmpty()) violationReport.setPhotosNames(PhotosNamesCompressor.deCompress(photosNames));
                 arrayList.add(violationReport);
             } while (cursor.moveToNext());
         }

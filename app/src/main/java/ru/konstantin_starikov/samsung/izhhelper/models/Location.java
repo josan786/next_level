@@ -7,6 +7,10 @@ public class Location implements Serializable {
     private double latitude;
     private double longitude;
 
+    public Location() {
+        this.place = "";
+    }
+
     public Location(String place) {
         this.place = place;
     }
@@ -26,15 +30,23 @@ public class Location implements Serializable {
         return place;
     }
 
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
     public double getLatitude() {
         return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public double getLongitude() {
         return longitude;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

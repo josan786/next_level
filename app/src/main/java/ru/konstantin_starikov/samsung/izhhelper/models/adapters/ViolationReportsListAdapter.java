@@ -57,10 +57,12 @@ public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
 
         violationReportTitle.setText(violationReport.violationType.toString(context));
         violationReportPlace.setText(Helper.cropText(violationReport.location.getPlace(), 27) + "...");
-        violationReportStatus.setText(violationReport.getStatus().toString());
+        violationReportStatus.setText(violationReport.getStatus().toString(context));
         violationReportStatusIndicator.setBackgroundColor(violationReport.getStatus().getStatusColor());
-        File previewFile = new File(Helper.getFullPathFromDataDirectory(violationReport.photosNames.get(0), context));
-        Picasso.get().load(previewFile).transform(new CropSquareTransformation()).into(violationReportPreview);
+        if(!violationReport.photosNames.isEmpty()) {
+            File previewFile = new File(Helper.getFullPathFromDataDirectory(violationReport.photosNames.get(0), context));
+            Picasso.get().load(previewFile).transform(new CropSquareTransformation()).into(violationReportPreview);
+        }
         return view;
     }
 

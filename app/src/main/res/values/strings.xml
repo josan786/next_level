@@ -45,4 +45,15 @@
     <string name="CarNumberDetectionInformation" translatable="false">Встаньте на расстояние 3 метров от машины \nНа экране должен быть виден номер</string>
     <string name="Cancel" translatable="false">Отмена</string>
     <string name="EditProfileButton" translatable="false">Отредактировать профиль</string>
+    <string name="SaveButton" translatable="false">Сохранить</string>
+    <string name="CreateAccountButton" translatable="false">Создать аккаунт</string>
+    <string name="CheckButton" translatable="false">Проверить</string>
+    <string name="FurtherButton" translatable="false">Далее</string>
+    <string name="Successfully" translatable="false">Успешно</string>
+    <string name="Created" translatable="false">Создано</string>
+    <string name="Sent" translatable="false">Отправлено</string>
+    <string name="Received" translatable="false">Получено</string>
+    <string name="Accepted" translatable="false">Подтверждено</string>
+    <string name="Rejected" translatable="false">Отклонено</string>
+    <string name="Saved" translatable="false">Сохранено</string>
 </resources>

@@ -45,4 +45,15 @@
     <string name="CarNumberDetectionInformation">Экран вылэ султыса адӟиське 3 метр\nкемын луыны кулэ машинаослэсь номерзэс</string>
     <string name="Cancel">Воштонъя</string>
     <string name="EditProfileButton">Профильзэс карыны</string>
+    <string name="SaveButton">Утьыны</string>
+    <string name="CreateAccountButton">Кылдэм аккаунт</string>
+    <string name="CheckButton">Эскерыны</string>
+    <string name="FurtherButton">Собере</string>
+    <string name="Successfully">Азинлыко</string>
+    <string name="Created">Кылдӥз</string>
+    <string name="Sent">Келяны</string>
+    <string name="Received">Басьты</string>
+    <string name="Accepted">Подтверждено</string>
+    <string name="Rejected">Палэнтыны</string>
+    <string name="Saved">Утьыны</string>
 </resources>

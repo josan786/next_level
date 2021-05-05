@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/layout_round_background"
             android:onClick="verifyNumber"
-            android:text="Далее" />
+            android:text="@string/FurtherButton" />
 
     </LinearLayout>
 

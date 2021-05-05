@@ -45,4 +45,15 @@
     <string name="CarNumberDetectionInformation">Встаньте на расстояние 3 метров от машины \nНа экране должен быть виден номер</string>
     <string name="Cancel">Отмена</string>
     <string name="EditProfileButton">Отредактировать профиль</string>
+    <string name="SaveButton">Сохранить</string>
+    <string name="CreateAccountButton">Создать аккаунт</string>
+    <string name="CheckButton">Проверить</string>
+    <string name="FurtherButton">Далее</string>
+    <string name="Successfully">Успешно</string>
+    <string name="Created">Создано</string>
+    <string name="Sent">Отправлено</string>
+    <string name="Received">Получено</string>
+    <string name="Accepted">Подтверждено</string>
+    <string name="Rejected">Отклонено</string>
+    <string name="Saved">Сохранено</string>
 </resources>
