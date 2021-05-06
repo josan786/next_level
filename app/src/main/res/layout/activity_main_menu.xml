@@ -17,7 +17,8 @@
         android:src="@drawable/plus_without_background"
         app:backgroundTint="#28ABB9"
         app:backgroundTintMode="add"
-        app:tint="@color/white" />
+        app:tint="@color/white">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -222,5 +223,10 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <!-- подключение нижнего экрана -->
+    <include
+        android:id="@+id/bottomViolationSheetMainMenu"
+        layout="@layout/bottom_sheet" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

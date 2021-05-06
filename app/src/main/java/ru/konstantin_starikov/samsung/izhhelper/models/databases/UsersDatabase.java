@@ -72,7 +72,7 @@ public class UsersDatabase {
         contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
         contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
         contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
-        contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
+        if(userAccount.getAvatarPath() != null && !userAccount.getAvatarPath().isEmpty()) contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
 
         return database.insert(TABLE_NAME, null, contentValues);
     }
@@ -121,7 +121,7 @@ public class UsersDatabase {
         Address accountAddress = new Address(addressHome, addressStreet, addressFlat, addressTown);
         Account account = new Account(ID, firstName, lastName, phoneNumber, accountAddress);
         account.email = email;
-        account.setAvatarPath(avatarPath);
+        if(avatarPath != null) account.setAvatarPath(avatarPath);
         return account;
     }
 
