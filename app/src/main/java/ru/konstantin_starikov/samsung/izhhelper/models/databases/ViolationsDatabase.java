@@ -138,11 +138,13 @@ public class ViolationsDatabase implements Serializable {
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_STREET, violationReport.senderAccount.address.street);
         contentValues.put(COLUMN_SENDER_ACCOUNT_ADDRESS_TOWN, violationReport.senderAccount.address.town);
         if(violationReport.carNumber != null) contentValues.put(COLUMN_CAR_NUMBER, violationReport.carNumber.toString());
-        contentValues.put(COLUMN_TYPE, violationReport.violationType.toString());
+        if(violationReport.violationType != null) contentValues.put(COLUMN_TYPE, violationReport.violationType.toString());
         contentValues.put(COLUMN_STATUS, violationReport.getStatus().toString());
-        contentValues.put(COLUMN_LOCATION_LATITUDE, violationReport.location.getLatitude());
-        contentValues.put(COLUMN_LOCATION_LONGITUDE, violationReport.location.getLongitude());
-        contentValues.put(COLUMN_LOCATION_PLACE, violationReport.location.getPlace());
+        if(violationReport.location != null) {
+            contentValues.put(COLUMN_LOCATION_LATITUDE, violationReport.location.getLatitude());
+            contentValues.put(COLUMN_LOCATION_LONGITUDE, violationReport.location.getLongitude());
+            contentValues.put(COLUMN_LOCATION_PLACE, violationReport.location.getPlace());
+        }
         if(violationReport.carNumberPhotoName != null) contentValues.put(COLUMN_CAR_NUMBER_PHOTO, violationReport.carNumberPhotoName);
         if(violationReport.photosNames != null && !violationReport.photosNames.isEmpty()) contentValues.put(COLUMN_PHOTOS, PhotosNamesCompressor.compress(violationReport.photosNames));
 

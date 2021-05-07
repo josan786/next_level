@@ -17,11 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.smarteist.autoimageslider.SliderView;
+import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
+import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationPhotosSliderAdapter;
 import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationReportsListAdapter;
 
 /**
@@ -102,6 +105,11 @@ public class UsersViolationsFragment extends Fragment {
             violationAddress.setText(violationReports.get(position).location.getPlace());
             TextView violationCarNumber = getActivity().findViewById(R.id.violationCarNumberSheet);
             violationCarNumber.setText(violationReports.get(position).carNumber.toString());
+
+            SliderView sliderView = getActivity().findViewById(R.id.violationPhotosSlider);
+            ViolationPhotosSliderAdapter sliderAdapter = new ViolationPhotosSliderAdapter(getContext());
+            for(String photo : violationReports.get(position).photosNames) sliderAdapter.addItem(photo);
+            sliderView.setSliderAdapter(sliderAdapter);
         }
     }
 }

@@ -228,12 +228,13 @@ public class Account implements Serializable {
                         if(existViolationReport != null)
                         {
                             existViolationReport.setStatus(violationReport.getStatus());
-                            if (existViolationReport.photosNames == null || !existViolationReport.photosNames.isEmpty()) {
+                            if (existViolationReport.photosNames == null || existViolationReport.photosNames.isEmpty()) {
                                 existViolationReport.loadPhotosFromFirebase(context);
                             }
                         }
                         else
                         {
+                            Log.i("Loading_Violation", violationReport.getID() + " " + violationReport.location.getPlace());
                             violationReport.senderAccount = Account.this;
                             violationReport.loadPhotosFromFirebase(context);
                             violationReports.add(violationReport);

@@ -119,8 +119,7 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
 
     @Override
     public void saveTakedPicture(String picturePath) {
-        cameraView.refreshCamera();
-        cameraView.ini();
+        cameraView.surfaceCreated(cameraView.getHolder());
         Bitmap rotatedPicture = Helper.rotateImageIfRequired(Helper.getBitmapFromPath(picturePath));
         Helper.deleteImageByPath(picturePath);
         String rotatedPicturePath = Helper.savePictureFromBitmap(rotatedPicture, this);
