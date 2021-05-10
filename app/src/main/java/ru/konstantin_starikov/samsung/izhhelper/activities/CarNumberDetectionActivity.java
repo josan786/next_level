@@ -37,9 +37,11 @@ import org.openalpr.OpenALPR;
 import org.openalpr.model.Result;
 import org.openalpr.model.Results;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -70,6 +72,10 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
     private final static String TAG = "CarNumberDetectionActivity";
 
     public final static String VIOLATION_REPORT = "violation_report";
+
+    private final static String RECOGNIZING_REGION_CODE = "eu";
+
+    private final static String PLATERECOGNIZER_API_URI = "https://api.platerecognizer.com";
 
     private static final int SOCKET_TIMEOUT = 5000;
     private static final String SPEED_TEST_SERVER_URI_UL = "http://ipv4.ikoula.testdebit.info/";
@@ -117,7 +123,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         recognizingListener = this;
         if (!checkIfAlreadyHaveStoragePermission()) requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_READ_EXTERNAL_STORAGE );
         if (!checkIfAlreadyHaveCameraPermission()) requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-        setupALPR();
+        if(!isARM64Architecture()) setupALPR();
     }
 
     private void setStartsValues()
@@ -153,15 +159,15 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
             YuvImage image = new YuvImage(data, parameters.getPreviewFormat(),
                     size.width, size.height, null);
             File file = new File( String.format(getApplicationInfo().dataDir + File.separator + "%d.jpg", System.currentTimeMillis()));
-            FileOutputStream filecon = null;
+            FileOutputStream fileOutputStream = null;
             try {
-                filecon = new FileOutputStream(file);
+                fileOutputStream = new FileOutputStream(file);
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
             image.compressToJpeg(
                     new Rect(0, 0, image.getWidth(), image.getHeight()), 90,
-                    filecon);
+                    fileOutputStream);
             processPicture(file.getPath());
         }
     }
@@ -215,6 +221,20 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         actionBar.setTitle(getString(R.string.CarNumberDetectionActivityTitle));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private boolean isARM64Architecture() {
+        boolean isArm64 = false;
+        try {
+            BufferedReader localBufferedReader = new BufferedReader(new FileReader("/proc/cpuinfo"));
+            if (localBufferedReader.readLine().contains("aarch64")) {
+                isArm64 = true;
+            }
+            localBufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isArm64;
     }
 
     private void setupALPR() {
@@ -345,7 +365,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         {
             if (Helper.isOnline(CarNumberDetectionActivity.this) && isInternetWorks() && isPlateRecognizerWork())
                 recognizeNumberByPlateRecognizer(picturePath);
-            else {
+            else if (alpr != null) {
                 recognizeNumberByOpenALPR(picturePath);
             }
         });
@@ -391,7 +411,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
     {
         final File file = new File(picturePath);
         OkHttpClient client = new OkHttpClient.Builder().build();
-        ApiService apiService = new Retrofit.Builder().baseUrl("https://api.platerecognizer.com").client(client).build().create(ApiService.class);
+        ApiService apiService = new Retrofit.Builder().baseUrl(PLATERECOGNIZER_API_URI).client(client).build().create(ApiService.class);
         RequestBody reqFile = RequestBody.create(okhttp3.MediaType.parse("image/*"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("upload",
                 file.getName(), reqFile);
@@ -400,14 +420,13 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getApplication(), response.code() + " ", Toast.LENGTH_SHORT).show();
                 recognizeFromPlateRecognizerResponse(response, picturePath);
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Helper.deleteImageByPath(picturePath);
-                Toast.makeText(getApplication(), "Request failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplication(), "Проблемы с распознаванием", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
             }
         });
@@ -487,7 +506,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
     {
         Log.i(TAG, "ALPR Recognizing picture path: " + picturePath);
         //хотел использовать 'ru', но не работает(
-        String recognizingResult = alpr.recognizeWithCountryRegionNConfig("eu", "", picturePath, openAlprConfFile, 10);
+        String recognizingResult = alpr.recognizeWithCountryRegionNConfig(RECOGNIZING_REGION_CODE, "", picturePath, openAlprConfFile, 10);
         Log.i(TAG, "OpenALPR result: " + recognizingResult);
         //Результаты представлены в JSON Формате, поэтому парсим их с помощью GSON
         final Results results = new Gson().fromJson(recognizingResult, Results.class);

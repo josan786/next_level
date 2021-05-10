@@ -56,4 +56,7 @@
     <string name="Accepted">Подтверждено</string>
     <string name="Rejected">Палэнтыны</string>
     <string name="Saved">Утьыны</string>
+    <string name="SignOut">Потэм аккаунт</string>
+    <string name="SelectUdmurtLanguage">Удмурт кыллы воштӥзы</string>
+    <string name="SelectRussianLanguage">Ӟуч кыллы воштӥзы</string>
 </resources>

@@ -51,9 +51,9 @@
                     android:layout_height="82dp"
                     android:layout_gravity="bottom|center"
                     android:layout_weight="4"
-                    android:max="15"
+                    android:max="10"
                     android:textAlignment="center"
-                    tools:progress="15" />
+                    tools:progress="10" />
 
                 <TextView
                     android:id="@+id/photofixationTimerText"

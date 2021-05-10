@@ -1,6 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,10 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Settings;
 import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class LoginWithPhoneNumberActivity extends AppCompatActivity {
@@ -193,6 +196,39 @@ public class LoginWithPhoneNumberActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(getApplicationContext(), AccountCreationActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    public void selectUdmurtLanguage(View view)
+    {
+        Locale locale = new Locale("udm");
+        Locale.setDefault(locale);
+        Settings settings = Settings.getInstance();
+        settings.setLocale(locale);
+        settings.save(this);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, null);
+        reloadApplication();
+    }
+
+    public void selectRussianLanguage(View view)
+    {
+        Locale locale = new Locale("ru");
+        Locale.setDefault(locale);
+        Settings settings = Settings.getInstance();
+        settings.setLocale(locale);
+        settings.save(this);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        getBaseContext().getResources().updateConfiguration(configuration, null);
+        reloadApplication();
+    }
+
+    private void reloadApplication()
+    {
+        Intent intent = new Intent(this, SplashScreenActivity.class);
         startActivity(intent);
         finish();
     }

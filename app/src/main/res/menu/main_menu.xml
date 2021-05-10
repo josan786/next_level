@@ -3,13 +3,13 @@
     <item
         android:id="@+id/signOut"
         android:orderInCategory="1"
-        android:title="Выйти из аккаунта" />
+        android:title="@string/SignOut" />
     <item
         android:id="@+id/selectUdmurt"
         android:orderInCategory="2"
-        android:title="Переключить язык на удмуртский" />
+        android:title="@string/SelectUdmurtLanguage" />
     <item
         android:id="@+id/selectRussian"
         android:orderInCategory="3"
-        android:title="Переключить язык на русский" />
+        android:title="@string/SelectRussianLanguage" />
 </menu>

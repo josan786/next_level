@@ -56,7 +56,7 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
 
         tuneActionBar();
         ArrayList<PhotoDescription> photosDescriptions = getPhotosDescriptions();
-        photofixationSequence = new PhotofixationSequence(cameraView, this,15,
+        photofixationSequence = new PhotofixationSequence(cameraView, this,10,
                 progressBar, timerText, photoDescriptionTextView, carViewpointFragment, photosDescriptions);
     }
 

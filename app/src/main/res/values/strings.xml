@@ -56,4 +56,7 @@
     <string name="Accepted" translatable="false">Подтверждено</string>
     <string name="Rejected" translatable="false">Отклонено</string>
     <string name="Saved" translatable="false">Сохранено</string>
+    <string name="SignOut" translatable="false">Выйти из аккаунта</string>
+    <string name="SelectUdmurtLanguage" translatable="false">Переключить язык на удмуртский</string>
+    <string name="SelectRussianLanguage" translatable="false">Переключить язык на русский</string>
 </resources>

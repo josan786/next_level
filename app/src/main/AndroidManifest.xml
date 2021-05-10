@@ -21,11 +21,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_izh_helper_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.IzhHelperGreen">
+        android:theme="@style/Theme.IzhHelperGreen"
+        android:screenOrientation="portrait">
         <activity android:name=".activities.SetUserPasswordActivity"></activity>
         <activity
             android:name=".activities.SplashScreenActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,41 +36,55 @@
         </activity>
         <activity
             android:name=".activities.EditProfileActivity"
-            android:theme="@style/Theme.IzhHelperGreen" />
+            android:theme="@style/Theme.IzhHelperGreen"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.AccountCreationActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBarBlue" />
+            android:theme="@style/Theme.IzhHelper.NoActionBarBlue"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.EnterSMSCodeActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" />
+            android:theme="@style/Theme.IzhHelper.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.LoginWithPhoneNumberActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" />
+            android:theme="@style/Theme.IzhHelper.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.SuccessfullySentActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" />
+            android:theme="@style/Theme.IzhHelper.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.SendViolationActivity"
-            android:theme="@style/Theme.IzhHelperBlue" />
+            android:theme="@style/Theme.IzhHelperBlue"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.PhotofixationActivity"
-            android:theme="@style/Theme.IzhHelperBlue" />
+            android:theme="@style/Theme.IzhHelperBlue"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.CarNumberDetectionActivity"
-            android:theme="@style/Theme.IzhHelperBlue" />
+            android:theme="@style/Theme.IzhHelperBlue"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.ViolationTypeSelectionActivity"
-            android:theme="@style/Theme.IzhHelperBlue" />
+            android:theme="@style/Theme.IzhHelperBlue"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.PlaceChoiceActivity"
-            android:theme="@style/Theme.IzhHelperBlue" />
+            android:theme="@style/Theme.IzhHelperBlue"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.RegistrationActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" />
-        <activity android:name=".activities.MainMenuActivity" />
+            android:theme="@style/Theme.IzhHelper.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activities.MainMenuActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/Theme.IzhHelper.NoActionBar" />
+            android:theme="@style/Theme.IzhHelper.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -8,6 +8,7 @@
     tools:context=".activities.LoginWithPhoneNumberActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="345dp"
         android:layout_height="264dp"
         android:layout_marginStart="28dp"
@@ -24,7 +25,6 @@
             android:id="@+id/enterPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="91dp"
-            android:autoText="false"
             android:text="@string/EnterPhoneNumber"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
@@ -50,6 +50,39 @@
             android:onClick="verifyNumber"
             android:text="@string/FurtherButton" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_marginStart="252dp"
+        android:layout_marginTop="189dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <ImageButton
+            android:id="@+id/selectUdmurtButton"
+            android:layout_width="61dp"
+            android:layout_height="33dp"
+            android:background="#00FFFFFF"
+            android:onClick="selectUdmurtLanguage"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/udmurt" />
+
+        <ImageButton
+            android:id="@+id/selectRussianButton2"
+            android:layout_width="53dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:background="#00FFFFFF"
+            android:onClick="selectRussianLanguage"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/russian" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

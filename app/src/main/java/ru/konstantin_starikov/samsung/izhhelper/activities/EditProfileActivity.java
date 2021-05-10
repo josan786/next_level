@@ -36,7 +36,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextView displayText;
     private EditText firstNameEditText;
     private EditText lastNameEditText;
-    private EditText phoneEditText;
     private EditText emailEditText;
     private EditText flatEditText;
     private EditText homeEditText;
@@ -63,7 +62,6 @@ public class EditProfileActivity extends AppCompatActivity {
         displayText.setText(userAccount.firstName + " " + userAccount.lastName);
         firstNameEditText.setText(userAccount.firstName);
         lastNameEditText.setText(userAccount.lastName);
-        phoneEditText.setText(userAccount.phoneNumber);
         emailEditText.setText(userAccount.email);
         flatEditText.setText(Integer.toString(userAccount.address.flat));
         homeEditText.setText(userAccount.address.home);
@@ -75,7 +73,6 @@ public class EditProfileActivity extends AppCompatActivity {
         displayText = findViewById(R.id.displayName);
         firstNameEditText = findViewById(R.id.editFirstName);
         lastNameEditText = findViewById(R.id.editLastName);
-        phoneEditText = findViewById(R.id.editPhoneNumber);
         emailEditText = findViewById(R.id.editEmail);
         flatEditText = findViewById(R.id.editFlat);
         homeEditText = findViewById(R.id.editHome);
@@ -122,7 +119,6 @@ public class EditProfileActivity extends AppCompatActivity {
     {
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
-        String phoneNumber = phoneEditText.getText().toString();
         String email = emailEditText.getText().toString();
         String flat = flatEditText.getText().toString();
         String home = homeEditText.getText().toString();
@@ -161,7 +157,6 @@ public class EditProfileActivity extends AppCompatActivity {
     {
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
-        String phoneNumber = phoneEditText.getText().toString();
         String email = emailEditText.getText().toString();
         String flat = flatEditText.getText().toString();
         String home = homeEditText.getText().toString();
@@ -169,7 +164,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String town = townEditText.getText().toString();
 
         boolean result = true;
-        if(firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() ||
+        if(firstName.isEmpty() || lastName.isEmpty() ||
                 email.isEmpty() || flat.isEmpty() || home.isEmpty() ||
                 street.isEmpty() || town.isEmpty())
             result = false;
