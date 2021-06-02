@@ -57,6 +57,7 @@
         app:srcCompat="@drawable/mark" />
 
     <FrameLayout
+        android:id="@+id/placeDescriptionLayout"
         android:layout_width="221dp"
         android:layout_height="133dp"
         android:layout_gravity="bottom|center"

@@ -59,4 +59,5 @@
     <string name="SignOut" translatable="false">Выйти из аккаунта</string>
     <string name="SelectUdmurtLanguage" translatable="false">Переключить язык на удмуртский</string>
     <string name="SelectRussianLanguage" translatable="false">Переключить язык на русский</string>
+    <string name="NotSet" translatable="false">Не установлено</string>
 </resources>

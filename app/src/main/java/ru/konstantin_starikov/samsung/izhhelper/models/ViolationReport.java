@@ -48,7 +48,6 @@ public class ViolationReport implements Serializable{
     public ArrayList<String> photosNames;
 
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
 
     private CountDownLatch countDownLatch;
 
@@ -139,6 +138,7 @@ public class ViolationReport implements Serializable{
     @SuppressLint("LongLogTag")
     public void submitViolationToAuthorizedBody(Context context)
     {
+        DatabaseReference databaseReference;
         FirebaseStorage firebaseStorage;
         StorageReference storageReference;
         if (Helper.isOnline(context)) {
@@ -171,7 +171,13 @@ public class ViolationReport implements Serializable{
         } else {
             status = new ViolationStatus(ViolationStatusEnum.Saved);
         }
-        senderAccount.addViolationReport(this, context);
+        if(senderAccount.isViolationReportInSQLDatabase(ID, context))
+        {
+            senderAccount.updateViolationReport(this, context);
+        }
+        else {
+            senderAccount.addViolationReport(this, context);
+        }
         if(countDownLatch != null) countDownLatch.countDown();
     }
 

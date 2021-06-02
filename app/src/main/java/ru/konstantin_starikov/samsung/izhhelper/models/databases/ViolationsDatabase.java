@@ -187,6 +187,7 @@ public class ViolationsDatabase implements Serializable {
         Cursor cursor = database.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
 
         cursor.moveToFirst();
+        if(cursor.getCount() == 0) return null;
         String senderAccountID = cursor.getString(NUM_SENDER_ACCOUNT_ID);
         String senderAccountFirstName = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_FIRST_NAME);
         String senderAccountLastName = cursor.getString(NUM_COLUMN_SENDER_ACCOUNT_lAST_NAME);

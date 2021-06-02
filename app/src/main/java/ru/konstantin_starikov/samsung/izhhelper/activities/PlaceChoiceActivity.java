@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     TextView placeDescription;
 
     private ViolationReport violationReport;
+    private FrameLayout placeDescriptionLayout;
 
     private MapKit mapKit;
     private MapView mapView;
@@ -101,6 +103,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
         mapKit = MapKitFactory.getInstance();
 
         findAndSetViews();
+        if(!Helper.isOnline(this)) placeDescriptionLayout.setVisibility(View.INVISIBLE);
 
         Map map = mapView.getMap();
 
@@ -170,6 +173,7 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     {
         mapView = (MapView) findViewById(R.id.mapFragmentView);
         placeDescription = (TextView) findViewById(R.id.placeDescription);
+        placeDescriptionLayout = (FrameLayout) findViewById(R.id.placeDescriptionLayout);
     }
 
     private ViolationReport getTransmittedViolationReport()
@@ -264,6 +268,9 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     }
 
     public void openViolationTypeSelectionActivity(View v) {
+        String violationPlace = violationReport.location.getPlace();
+        if(violationPlace == null || violationPlace.isEmpty()) violationReport.location.setPlace(getString(R.string.NotSet));
+
         Intent openViolationTypeSelectionIntent = new Intent(PlaceChoiceActivity.this, ViolationTypeSelectionActivity.class);
         openViolationTypeSelectionIntent.putExtra(VIOLATION_REPORT, violationReport);
         startActivity(openViolationTypeSelectionIntent);

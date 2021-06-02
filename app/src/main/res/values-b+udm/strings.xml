@@ -59,4 +59,5 @@
     <string name="SignOut">Потэм аккаунт</string>
     <string name="SelectUdmurtLanguage">Удмурт кыллы воштӥзы</string>
     <string name="SelectRussianLanguage">Ӟуч кыллы воштӥзы</string>
+    <string name="NotSet">Уг тупа</string>
 </resources>

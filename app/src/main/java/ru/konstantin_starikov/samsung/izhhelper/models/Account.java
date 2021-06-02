@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.ViolationsDatabase;
+import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
 import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class Account implements Serializable {
@@ -58,15 +59,26 @@ public class Account implements Serializable {
         this.address = address;
     }
 
-    public void CreateViolationReport(long ID)
+    public void createViolationReport(long ID)
     {
         violationReports.add(new ViolationReport());
     }
 
-    public boolean SendViolationReport(String ID, Context context)
+    public boolean sendViolationReport(String ID, Context context)
     {
         findViolationReportByID(ID).submitViolationToAuthorizedBody(context);
         return true;
+    }
+
+    public void sendNotSentViolations(Context context)
+    {
+        for(ViolationReport violationReport : violationReports)
+        {
+            if(violationReport.getStatus().getViolationStatusEnum() == ViolationStatusEnum.Saved)
+            {
+                violationReport.submitViolationToAuthorizedBody(context);
+            }
+        }
     }
 
     public void updateUserData(Context context)
@@ -196,11 +208,28 @@ public class Account implements Serializable {
         saveViolationReport(violationReport, context);
     }
 
+    public void updateViolationReport(ViolationReport violationReport, Context context)
+    {
+        ViolationsDatabase violationsDatabase;
+        violationsDatabase = new ViolationsDatabase(context);
+        violationsDatabase.update(violationReport);
+    }
+
     private void saveViolationReport(ViolationReport violationReport, Context context)
     {
         ViolationsDatabase violationsDatabase;
         violationsDatabase = new ViolationsDatabase(context);
         violationsDatabase.insert(violationReport);
+    }
+
+    public boolean isViolationReportInSQLDatabase(String ID, Context context)
+    {
+        boolean result = false;
+        ViolationsDatabase violationsDatabase;
+        violationsDatabase = new ViolationsDatabase(context);
+        ViolationReport violationReport = violationsDatabase.select(ID);
+        if(violationReport != null) result = true;
+        return result;
     }
 
     public void loadViolations(Context context)

@@ -60,12 +60,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.ApiService;
 import ru.konstantin_starikov.samsung.izhhelper.models.CarNumber;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.RecognizingListener;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.views.CameraView;
+
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 public class CarNumberDetectionActivity extends AppCompatActivity implements RecognizingListener {
 
@@ -312,7 +316,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         foreground.setVisibility(View.INVISIBLE);
         cancelButton.setVisibility(View.INVISIBLE);
         timerSecondsCountText.setVisibility(View.INVISIBLE);
-        cameraView.camera.startPreview();
+        cameraView.surfaceCreated(cameraView.getHolder());
         isRecognized = false;
         //Todo: удаление фото при омтене распознавания
         cancelTimer.cancel();

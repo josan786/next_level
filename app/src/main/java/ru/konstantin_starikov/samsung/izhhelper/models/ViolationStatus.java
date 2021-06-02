@@ -78,6 +78,10 @@ public class ViolationStatus implements Serializable {
         return result;
     }
 
+    public ViolationStatusEnum getViolationStatusEnum() {
+        return violationStatusEnum;
+    }
+
     @Override
     public String toString() {
         String result = "";

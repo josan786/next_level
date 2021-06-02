@@ -1,8 +1,10 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,6 +71,19 @@ public class MainMenuActivity extends AppCompatActivity {
         userAccount.loadViolationsFromFirebase(this);
 
         addViolationsFragment();
+
+        if(Helper.isOnline(this)){
+            userAccount.sendNotSentViolations(this);
+        }
+        else{
+            ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.addDefaultNetworkActiveListener(new ConnectivityManager.OnNetworkActiveListener() {
+                @Override
+                public void onNetworkActive() {
+                    userAccount.sendNotSentViolations(getApplicationContext());
+                }
+            });
+        }
 
         if(userAccount.getAvatarPath() != null)
             setUserAvatar();

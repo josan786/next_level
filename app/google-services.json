@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1029873666423",
+    "firebase_url": "https://izh-helper-default-rtdb.firebaseio.com",
     "project_id": "izh-helper",
     "storage_bucket": "izh-helper.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1029873666423-fvuh7a99n6po3s71ui0vg07pjdbmqgva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.konstantin_starikov.samsung.izhhelper",
+            "certificate_hash": "bd594b9ac68b4ed8af3b72cfa197fb77060bfb7d"
+          }
+        },
         {
           "client_id": "1029873666423-8b1nlk5g7a0h5qbro4r3bqhcmcu0d1de.apps.googleusercontent.com",
           "client_type": 3
