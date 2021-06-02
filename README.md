@@ -6,12 +6,12 @@
 
 *<div align="center"> Приложение для борьбы с неправильной парковкой в городе Ижевске </div>*
 
-[<div align="center">APK приложения</div>](https://drive.google.com/file/d/1__BdvDmubEx_cKYIE9u-j84F0hxTSedO/view?usp=sharing)
+[<div align="center">APK приложения</div>](https://drive.google.com/file/d/1LqKl_YF8aVw4SG4XcKCb_HErA1nQ6pIk/view?usp=sharing)
 [<div align="center">Презентация приложения</div>](https://github.com/KapustaKosta/IzhHelper/blob/master/Помощник%20Ижевска%20—%20приложение.pptx)
 [<div align="center">Презентация приложения для IT Школы Samsung</div>](https://github.com/KapustaKosta/IzhHelper/blob/master/Помощник%20Ижевска%20Samsung.pptx)
 [<div align="center">Демонстрация работы приложения</div>](https://drive.google.com/file/d/1oIcnMSg8ZGypc_U8-k5fMiEEw6nHN75M/view?usp=sharing)
 [<div align="center">Figma</div>](https://www.figma.com/file/I29B3JGJcYMTeyfpCSZ4Da/IzhHelper?node-id=0%3A1)
-[<div align="center">Диаграмма классов</div>](https://drive.google.com/file/d/1V7rvEoPjWr2Yuo4HSD35qOZ7d4bNo9z4/view)
+[<div align="center">Диаграмма классов</div>](https://drive.google.com/file/d/161sWs5Eu2-df3yCDbin1Sa3-cj1lLUdH/view?usp=sharing)
 
 ___
 
