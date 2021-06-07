@@ -42,6 +42,8 @@
     <string name="SentViolations">Отправленные нарушения</string>
     <string name="Achievements">Достижения</string>
     <string name="Map">Карта</string>
+    <string name="Account">Аккаунт</string>
+    <string name="ViolationsReports">Нарушения</string>
     <string name="CarNumberDetectionInformation">Встаньте на расстояние 3 метров от машины \nНа экране должен быть виден номер</string>
     <string name="Cancel">Отмена</string>
     <string name="EditProfileButton">Отредактировать профиль</string>
@@ -57,7 +59,9 @@
     <string name="Rejected">Отклонено</string>
     <string name="Saved">Сохранено</string>
     <string name="SignOut">Выйти из аккаунта</string>
-    <string name="SelectUdmurtLanguage">Переключить язык на удмуртский</string>
-    <string name="SelectRussianLanguage">Переключить язык на русский</string>
+    <string name="Udmurt">Удмуртский</string>
+    <string name="Russian">Русский</string>
     <string name="NotSet">Не установлено</string>
+    <string name="Settings">Настройки</string>
+    <string name="Language">Язык</string>
 </resources>

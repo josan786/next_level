@@ -15,6 +15,7 @@ import java.util.Locale;
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Settings;
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class SplashScreenActivity extends AppCompatActivity {

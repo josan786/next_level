@@ -42,6 +42,8 @@
     <string name="SentViolations" translatable="false">Отправленные нарушения</string>
     <string name="Achievements" translatable="false">Достижения</string>
     <string name="Map" translatable="false">Карта</string>
+    <string name="Account" translatable="false">Аккаунт</string>
+    <string name="ViolationsReports" translatable="false">Нарушения</string>
     <string name="CarNumberDetectionInformation" translatable="false">Встаньте на расстояние 3 метров от машины \nНа экране должен быть виден номер</string>
     <string name="Cancel" translatable="false">Отмена</string>
     <string name="EditProfileButton" translatable="false">Отредактировать профиль</string>
@@ -57,7 +59,9 @@
     <string name="Rejected" translatable="false">Отклонено</string>
     <string name="Saved" translatable="false">Сохранено</string>
     <string name="SignOut" translatable="false">Выйти из аккаунта</string>
-    <string name="SelectUdmurtLanguage" translatable="false">Переключить язык на удмуртский</string>
-    <string name="SelectRussianLanguage" translatable="false">Переключить язык на русский</string>
+    <string name="Udmurt" translatable="false">Удмуртский</string>
+    <string name="Russian" translatable="false">Русский</string>
     <string name="NotSet" translatable="false">Не установлено</string>
+    <string name="Settings" translatable="false">Настройки</string>
+    <string name="Language" translatable="false">Язык</string>
 </resources>

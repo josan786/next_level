@@ -42,6 +42,8 @@
     <string name="SentViolations">Тӥян ыстыны</string>
     <string name="Achievements">Азинскон</string>
     <string name="Map">Карта</string>
+    <string name="Account">Аккаунт</string>
+    <string name="ViolationsReports">Тӥянъёс</string>
     <string name="CarNumberDetectionInformation">Экран вылэ султыса адӟиське 3 метр\nкемын луыны кулэ машинаослэсь номерзэс</string>
     <string name="Cancel">Воштонъя</string>
     <string name="EditProfileButton">Профильзэс карыны</string>
@@ -57,7 +59,9 @@
     <string name="Rejected">Палэнтыны</string>
     <string name="Saved">Утьыны</string>
     <string name="SignOut">Потэм аккаунт</string>
-    <string name="SelectUdmurtLanguage">Удмурт кыллы воштӥзы</string>
-    <string name="SelectRussianLanguage">Ӟуч кыллы воштӥзы</string>
+    <string name="Udmurt">Удмурт</string>
+    <string name="Russian">Ӟуч</string>
     <string name="NotSet">Уг тупа</string>
+    <string name="Settings">Настройкаосын</string>
+    <string name="Language">Кыл</string>
 </resources>

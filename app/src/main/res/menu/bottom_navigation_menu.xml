@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/page_account"
+        android:enabled="true"
+        android:icon="@drawable/ic_account"
+        android:title="@string/Account"/>
+    <item
+        android:id="@+id/page_violations_reports"
+        android:enabled="true"
+        android:icon="@drawable/ic_violations_reports"
+        android:title="@string/ViolationsReports"/>
+    <item
+        android:id="@+id/page_map"
+        android:enabled="true"
+        android:icon="@drawable/ic_map"
+        android:title="@string/Map"/>
+</menu>

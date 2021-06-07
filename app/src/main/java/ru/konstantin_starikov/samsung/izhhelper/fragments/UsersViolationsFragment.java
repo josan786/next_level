@@ -1,5 +1,6 @@
 package ru.konstantin_starikov.samsung.izhhelper.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,9 +9,12 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +27,9 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.activities.MainMenuActivity;
+import ru.konstantin_starikov.samsung.izhhelper.activities.PlaceChoiceActivity;
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationPhotosSliderAdapter;
 import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationReportsListAdapter;
@@ -34,10 +41,11 @@ import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationReports
  */
 public class UsersViolationsFragment extends Fragment {
 
-    private static final String ARG_VIOLATIONS_REPORTS = "violationsReports";
+    public final static String VIOLATION_REPORT = "violation_report";
+    private static final String ARG_ACCOUNT = "account";
 
     private ListView violationReportsList;
-    private  ArrayList<ViolationReport> violationReports;
+    private Account account;
     private LinearLayout bottomViolationSheet;
     private BottomSheetBehavior bottomSheetBehavior;
 
@@ -45,17 +53,10 @@ public class UsersViolationsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment UsersViolationsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UsersViolationsFragment newInstance(ArrayList<ViolationReport> violationReports) {
+    public static UsersViolationsFragment newInstance(Account account) {
         UsersViolationsFragment fragment = new UsersViolationsFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_VIOLATIONS_REPORTS, violationReports);
+        args.putSerializable(ARG_ACCOUNT, account);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +65,7 @@ public class UsersViolationsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            violationReports = (ArrayList<ViolationReport>) getArguments().getSerializable(ARG_VIOLATIONS_REPORTS);
+            account = (Account)  getArguments().getSerializable(ARG_ACCOUNT);
         }
     }
 
@@ -85,8 +86,9 @@ public class UsersViolationsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().invalidateOptionsMenu();
         violationReportsList = view.findViewById(R.id.violationReports);
-        fillViolationReports(violationReports);
+        fillViolationReports(account.getViolationReports());
         bottomViolationSheet = getActivity().findViewById(R.id.bottomViolationSheetMainMenu);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomViolationSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -96,6 +98,7 @@ public class UsersViolationsFragment extends Fragment {
     {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ArrayList<ViolationReport> violationReports = account.getViolationReports();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
             TextView violationType = getActivity().findViewById(R.id.violationTypeSheet);
             violationType.setText(violationReports.get(position).violationType.toString(getContext()));
@@ -111,5 +114,20 @@ public class UsersViolationsFragment extends Fragment {
             for(String photo : violationReports.get(position).photosNames) sliderAdapter.addItem(photo);
             sliderView.setSliderAdapter(sliderAdapter);
         }
+    }
+
+    public void createViolationReport(View v)
+    {
+        ViolationReport violationReport = new ViolationReport();
+        violationReport.senderAccount = account;
+        Intent choosePlaceIntent = new Intent(getActivity(), PlaceChoiceActivity.class);
+        choosePlaceIntent.putExtra(VIOLATION_REPORT, violationReport);
+        startActivity(choosePlaceIntent);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
     }
 }

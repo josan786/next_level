@@ -9,27 +9,36 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationMenu;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.fragments.AccountFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.AchievementsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.MapFragment;
+import ru.konstantin_starikov.samsung.izhhelper.fragments.SettingsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.UsersViolationsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
@@ -38,6 +47,7 @@ import ru.konstantin_starikov.samsung.izhhelper.models.databases.SettingsDatabas
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.UsersDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 import ru.konstantin_starikov.samsung.izhhelper.models.adapters.ViolationReportsListAdapter;
+import ru.konstantin_starikov.samsung.izhhelper.models.databases.ViolationsDatabase;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -46,11 +56,9 @@ public class MainMenuActivity extends AppCompatActivity {
     public final static String USER_ACCOUNT = "user_account";
     public final static String VIOLATION_REPORT = "violation_report";
 
-    public final static String UDMURT_LANGUAGE = "udm";
-    public final static String RUSSIAN_LANGUAGE = "ru";
-
     private Account userAccount = null;
 
+    private BottomNavigationView bottomNavigationView;
     private ImageView avatarImageView;
 
     private FragmentManager fragmentManager;
@@ -62,6 +70,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         userAccount = new Account();
         loadUserData();
+
         userAccount.loadViolations(this);
 
         findAndSetViews();
@@ -70,7 +79,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
         userAccount.loadViolationsFromFirebase(this);
 
-        addViolationsFragment();
+        addAccountFragment();
+
+        tuneActionBar();
 
         if(Helper.isOnline(this)){
             userAccount.sendNotSentViolations(this);
@@ -85,44 +96,60 @@ public class MainMenuActivity extends AppCompatActivity {
             });
         }
 
-        if(userAccount.getAvatarPath() != null)
-            setUserAvatar();
-
-        getUserNameTextView().setText(userAccount.firstName + " " + userAccount.lastName);
-        getUserIDTextView().setText(userAccount.ID);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.page_account:
+                {
+                    openAccountFragment();
+                    return true;
+                }
+                case R.id.page_violations_reports:
+                {
+                    openViolationsFragment(null);
+                    return true;
+                }
+                case R.id.page_map:
+                {
+                    openMapFragment(null);
+                    return true;
+                }
+                default:
+                {
+                    return false;
+                }
+            }
+        });
     }
 
     private void findAndSetViews()
     {
         avatarImageView = findViewById(R.id.avatar);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+    }
+
+    private void tuneActionBar()
+    {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.Account));
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(!fragments.isEmpty()) return fragments.get(0).onOptionsItemSelected(item);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch(id){
-            case R.id.signOut: {
-                signOut();
-                return true;
-            }
-            case R.id.selectUdmurt: {
-                selectLanguage(UDMURT_LANGUAGE);
-                reloadApplication();
-                return true;
-            }
-            case R.id.selectRussian: {
-                selectLanguage(RUSSIAN_LANGUAGE);
-                reloadApplication();
-                return true;
-            }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (!fragments.isEmpty()) {
+            fragments.get(0).onCreateOptionsMenu(menu, null);
+            return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     private void signOut()
@@ -168,25 +195,31 @@ public class MainMenuActivity extends AppCompatActivity {
             userAccount = userData;
     }
 
-    private void addViolationsFragment()
+    private void addAccountFragment()
     {
-        UsersViolationsFragment usersViolationsFragment = UsersViolationsFragment.newInstance(userAccount.getViolationReports());
+        AccountFragment accountFragment = AccountFragment.newInstance(userAccount);
         fragmentManager
                 .beginTransaction()
-                .add(R.id.usersFragmentsLayout, usersViolationsFragment)
+                .add(R.id.usersFragmentsLayout, accountFragment)
                 .commit();
     }
 
-    private void setUserAvatar()
+    public void openAccountFragment()
     {
-        String avatarPath = Helper.getFullPathFromDataDirectory(userAccount.getAvatarPath(), this);
-        Log.i(TAG, "Avatar path: " + avatarPath);
-        avatarImageView.setImageDrawable(Drawable.createFromPath(avatarPath));
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.Account));
+        AccountFragment accountFragment = AccountFragment.newInstance(userAccount);
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.usersFragmentsLayout, accountFragment)
+                .commit();
     }
 
     public void openViolationsFragment(View view)
     {
-        UsersViolationsFragment usersViolationsFragment = UsersViolationsFragment.newInstance(userAccount.getViolationReports());
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.ViolationsReports));
+        UsersViolationsFragment usersViolationsFragment = UsersViolationsFragment.newInstance(userAccount);
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.usersFragmentsLayout, usersViolationsFragment)
@@ -204,6 +237,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void openMapFragment(View view)
     {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.Map));
         MapFragment mapFragment = new MapFragment();
         fragmentManager
                 .beginTransaction()
@@ -224,18 +259,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void editProfile(View view)
     {
-        Intent editProfileIntent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
+        Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
         editProfileIntent.putExtra(USER_ACCOUNT, userAccount);
         startActivity(editProfileIntent);
-    }
-
-    private TextView getUserNameTextView()
-    {
-        return (TextView) findViewById(R.id.userName);
-    }
-
-    private TextView getUserIDTextView()
-    {
-        return (TextView) findViewById(R.id.userID);
     }
 }

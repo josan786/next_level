@@ -78,6 +78,33 @@ public class ViolationStatus implements Serializable {
         return result;
     }
 
+    public int getStatusBlob()
+    {
+        int result = 0;
+        switch (violationStatusEnum)
+        {
+            case Created:
+                result = R.drawable.ic_blob_4;
+                break;
+            case Sent:
+                result = R.drawable.ic_blob_3;
+                break;
+            case Received:
+                result = R.drawable.ic_blob_3;
+                break;
+            case Accepted:
+                result = R.drawable.ic_blob_2;
+                break;
+            case Rejected:
+                result = R.drawable.ic_blob_1;
+                break;
+            case Saved:
+                result = R.drawable.ic_blob_4;
+                break;
+        }
+        return result;
+    }
+
     public ViolationStatusEnum getViolationStatusEnum() {
         return violationStatusEnum;
     }

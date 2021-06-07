@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -89,6 +91,12 @@ public class MapFragment extends Fragment {
         tuneMap(map);
         addViolationsOnMap(map);
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().invalidateOptionsMenu();
     }
 
     private void setupMapKitFactory() {
@@ -175,5 +183,11 @@ public class MapFragment extends Fragment {
                 }
             }
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
     }
 }
