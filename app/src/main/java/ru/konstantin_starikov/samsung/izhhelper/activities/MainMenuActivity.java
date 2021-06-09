@@ -41,6 +41,7 @@ import ru.konstantin_starikov.samsung.izhhelper.fragments.MapFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.SettingsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.UsersViolationsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
+import ru.konstantin_starikov.samsung.izhhelper.models.Cleaner;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.Settings;
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.SettingsDatabase;
@@ -67,6 +68,8 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        Cleaner.deleteUnusedFiles(this);
 
         userAccount = new Account();
         loadUserData();
@@ -172,18 +175,6 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SplashScreenActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    private void selectLanguage(String language)
-    {
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Settings settings = Settings.getInstance();
-        settings.setLocale(locale);
-        settings.save(this);
-        Configuration configuration = new Configuration();
-        configuration.locale = locale;
-        getBaseContext().getResources().updateConfiguration(configuration, null);
     }
 
     private void loadUserData()

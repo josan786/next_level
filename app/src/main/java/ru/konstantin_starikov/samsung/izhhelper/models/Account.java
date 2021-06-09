@@ -28,7 +28,7 @@ public class Account implements Serializable {
     public String phoneNumber;
     public Address address;
     public String email;
-    private String avatarPath;
+    private String avatarFilename;
     private ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
 
     public Account()
@@ -38,7 +38,7 @@ public class Account implements Serializable {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(currentUser != null) ID = currentUser.getUid();
         email = null;
-        avatarPath = null;
+        avatarFilename = null;
         address = new Address();
     }
 
@@ -293,11 +293,11 @@ public class Account implements Serializable {
         return violationReports;
     }
 
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
+    public void setAvatarFilename(String avatarFilename) {
+        this.avatarFilename = avatarFilename;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public String getAvatarFilename() {
+        return avatarFilename;
     }
 }

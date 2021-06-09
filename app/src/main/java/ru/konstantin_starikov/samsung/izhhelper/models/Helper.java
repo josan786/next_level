@@ -18,6 +18,8 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import com.van.fanyu.library.Compresser;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.Properties;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public final class Helper {
     private static final String TAG = "Helper";

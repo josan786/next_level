@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -16,8 +15,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
@@ -57,7 +54,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void setGotDataInViews() {
-        if (userAccount.getAvatarPath() != null) setUserAvatar();
+        if (userAccount.getAvatarFilename() != null) setUserAvatar();
 
         displayText.setText(userAccount.firstName + " " + userAccount.lastName);
         firstNameEditText.setText(userAccount.firstName);
@@ -83,7 +80,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void setUserAvatar() {
-        avatarImageView.setImageDrawable(Drawable.createFromPath((Helper.getFullPathFromDataDirectory(userAccount.getAvatarPath(), this))));
+        avatarImageView.setImageDrawable(Drawable.createFromPath((Helper.getFullPathFromDataDirectory(userAccount.getAvatarFilename(), this))));
     }
 
     private void tuneActionBar() {
@@ -134,7 +131,7 @@ public class EditProfileActivity extends AppCompatActivity {
             userAccount.address.home = home;
             userAccount.address.street = street;
             userAccount.address.town = town;
-            if(avatarPath != null) userAccount.setAvatarPath(avatarPath);
+            if(avatarPath != null) userAccount.setAvatarFilename(avatarPath);
             userAccount.updateUserData(this);
             userAccount.updateUserDataOnFirebase();
             goToNextActivity();

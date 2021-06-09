@@ -39,6 +39,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.fanyu2013:PhotoCompress:v1.0'
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'fr.bmartel:jspeedtest:1.32.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'

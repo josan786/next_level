@@ -6,6 +6,7 @@ import java.util.List;
 public class PhotosNamesCompressor {
     public static String compress(List<String> photosNames)
     {
+        if(photosNames.isEmpty()) return null;
         String result ="";
         for(int i = 0; i < photosNames.size() - 1; i++)
         {

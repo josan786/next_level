@@ -47,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:onClick="verifySentCode"
-            android:text="@string/CheckButton" />
+            android:text="@string/CheckButton"
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/incorrectSMSCodeTextView"

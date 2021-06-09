@@ -10,7 +10,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,8 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
-import ru.konstantin_starikov.samsung.izhhelper.activities.EditProfileActivity;
-import ru.konstantin_starikov.samsung.izhhelper.activities.MainMenuActivity;
 import ru.konstantin_starikov.samsung.izhhelper.activities.SplashScreenActivity;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
@@ -83,7 +80,7 @@ public class AccountFragment extends Fragment {
         getActivity().invalidateOptionsMenu();
         tuneActionBar();
         avatarImageView = view.findViewById(R.id.avatar);
-        if(account.getAvatarPath() != null)
+        if(account.getAvatarFilename() != null)
             setUserAvatar();
         ((TextView) view.findViewById(R.id.userName)).setText(account.firstName);
         ((TextView) view.findViewById(R.id.userID)).setText(account.ID);
@@ -120,7 +117,7 @@ public class AccountFragment extends Fragment {
 
     private void setUserAvatar()
     {
-        String avatarPath = Helper.getFullPathFromDataDirectory(account.getAvatarPath(), getContext());
+        String avatarPath = Helper.getFullPathFromDataDirectory(account.getAvatarFilename(), getContext());
         avatarImageView.setImageDrawable(Drawable.createFromPath(avatarPath));
     }
 

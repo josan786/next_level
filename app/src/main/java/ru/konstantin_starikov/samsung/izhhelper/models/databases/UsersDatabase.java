@@ -72,7 +72,7 @@ public class UsersDatabase {
         contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
         contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
         contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
-        if(userAccount.getAvatarPath() != null && !userAccount.getAvatarPath().isEmpty()) contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
+        if(userAccount.getAvatarFilename() != null && !userAccount.getAvatarFilename().isEmpty()) contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarFilename());
 
         return database.insert(TABLE_NAME, null, contentValues);
     }
@@ -88,7 +88,7 @@ public class UsersDatabase {
         if (userAccount.address.home != null && !userAccount.address.home.isEmpty()) contentValues.put(COLUMN_ADDRESS_HOME, userAccount.address.home);
         if (userAccount.address.street != null && !userAccount.address.street.isEmpty()) contentValues.put(COLUMN_ADDRESS_STREET, userAccount.address.street);
         if (userAccount.address.town != null && !userAccount.address.town.isEmpty()) contentValues.put(COLUMN_ADDRESS_TOWN, userAccount.address.town);
-        if (userAccount.getAvatarPath() != null && !userAccount.getAvatarPath().isEmpty()) contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarPath());
+        if (userAccount.getAvatarFilename() != null && !userAccount.getAvatarFilename().isEmpty()) contentValues.put(COLUMN_AVATAR_PATH, userAccount.getAvatarFilename());
 
         int result = database.update(TABLE_NAME, contentValues, COLUMN_ID + " = ?",new String[] { String.valueOf(userAccount.ID)});
         Log.i("SQL_UPDATE", Integer.toString(result));
@@ -121,7 +121,7 @@ public class UsersDatabase {
         Address accountAddress = new Address(addressHome, addressStreet, addressFlat, addressTown);
         Account account = new Account(ID, firstName, lastName, phoneNumber, accountAddress);
         account.email = email;
-        if(avatarPath != null) account.setAvatarPath(avatarPath);
+        if(avatarPath != null) account.setAvatarFilename(avatarPath);
         return account;
     }
 
@@ -145,7 +145,7 @@ public class UsersDatabase {
                 Address accountAddress = new Address(addressHome, addressStreet, addressFlat, addressTown);
                 Account account = new Account(ID, firstName, lastName, phoneNumber, accountAddress);
                 account.email = email;
-                account.setAvatarPath(avatarPath);
+                account.setAvatarFilename(avatarPath);
                 arrayList.add(account);
             } while (cursor.moveToNext());
         }

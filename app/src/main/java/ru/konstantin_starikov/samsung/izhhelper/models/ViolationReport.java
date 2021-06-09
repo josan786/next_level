@@ -20,6 +20,7 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.van.fanyu.library.Compresser;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.util.concurrent.CountDownLatch;
 
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.ViolationsDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class ViolationReport implements Serializable{
     public String ID;
@@ -157,7 +159,7 @@ public class ViolationReport implements Serializable{
             firebaseStorage = FirebaseStorage.getInstance();
             String violationReportStorageURL = "gs://izh-helper.appspot.com/" + senderAccount.ID + "/Violations reports/" + ID + "/";
             storageReference = firebaseStorage.getReferenceFromUrl(violationReportStorageURL + "CarNumberPhoto");
-            File file = new File(context.getApplicationInfo().dataDir + File.separator + carNumberPhotoName);
+            File file = new File(Helper.getFullPathFromDataDirectory(carNumberPhotoName, context));
             UploadTask uploadTask = storageReference.putFile(Uri.fromFile(file));
             for(int i = 0 ; i < photosNames.size(); i++)
             {
@@ -214,6 +216,44 @@ public class ViolationReport implements Serializable{
                         e.printStackTrace();
                     }
                 });
+    }
+
+    public void doIfHasAllPhotosInFirebase(Context context, Action action)
+    {
+        FirebaseStorage firebaseStorage;
+        StorageReference storageReference;
+        firebaseStorage = FirebaseStorage.getInstance();
+        String violationReportPhotosStorageURL = "gs://izh-helper.appspot.com/" + senderAccount.ID + "/Violations reports/" + ID + "/Photos/";
+        storageReference = firebaseStorage.getReferenceFromUrl(violationReportPhotosStorageURL);
+        storageReference.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    @Override
+                    public void onSuccess(ListResult listResult) {
+                        if(listResult.getItems().size() >= photosNames.size()) action.run();
+                    }
+                });
+    }
+
+    public void compressPhotos(Context context) {
+        for (int i = 0; i < photosNames.size(); i++) {
+            final int INDEX = i;
+            String photoPath = Helper.getFullPathFromDataDirectory(photosNames.get(i), context);
+            File mainPhotoFile = new File(photoPath);
+            if(mainPhotoFile.exists() && mainPhotoFile.length() > 1000000) {
+                Compresser compresser = new Compresser(20, photoPath);
+                compresser.doCompress(new Compresser.CompleteListener() {
+                    @Override
+                    public void onSuccess(String newPath) {
+                        File compressedPhotoFile = new File(newPath);
+                        photosNames.set(INDEX, compressedPhotoFile.getName());
+                        Log.i("CompressedFileName", compressedPhotoFile.getName());
+                        mainPhotoFile.delete();
+                    }
+                });
+            }
+        }
+        ViolationsDatabase violationsDatabase = new ViolationsDatabase(context);
+        violationsDatabase.update(this);
     }
 
     private void setID(String ID)

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,9 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import cn.carbs.android.avatarimageview.library.AvatarImageView;
@@ -90,7 +86,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                 Bitmap avatar = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
                 userAvatarImageView.setBitmap(avatar);
                 String avatarPath = Helper.saveAvatarFromBitmap(avatar, userAccount.ID, this);
-                userAccount.setAvatarPath(avatarPath.substring(avatarPath.lastIndexOf('/') + 1));
+                userAccount.setAvatarFilename(avatarPath.substring(avatarPath.lastIndexOf('/') + 1));
             }
             catch (IOException exception)
             {

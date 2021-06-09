@@ -87,11 +87,21 @@ public class UsersViolationsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().invalidateOptionsMenu();
+        replaceViolationPhotosToCompressed();
         violationReportsList = view.findViewById(R.id.violationReports);
         fillViolationReports(account.getViolationReports());
         bottomViolationSheet = getActivity().findViewById(R.id.bottomViolationSheetMainMenu);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomViolationSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    private void replaceViolationPhotosToCompressed()
+    {
+        for(ViolationReport violationReport : account.getViolationReports())
+        {
+            violationReport.doIfHasAllPhotosInFirebase(getContext(), () ->
+                    violationReport.compressPhotos(getContext()));
+        }
     }
 
     class ViolationItemClickListener implements AdapterView.OnItemClickListener

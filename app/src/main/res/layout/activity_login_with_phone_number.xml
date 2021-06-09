@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/layout_round_background"
             android:onClick="verifyNumber"
-            android:text="@string/FurtherButton" />
+            android:text="@string/FurtherButton"
+            android:textColor="#000000" />
 
     </LinearLayout>
 
