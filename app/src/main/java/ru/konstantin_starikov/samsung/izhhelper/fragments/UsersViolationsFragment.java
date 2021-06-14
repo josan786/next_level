@@ -100,7 +100,13 @@ public class UsersViolationsFragment extends Fragment {
         for(ViolationReport violationReport : account.getViolationReports())
         {
             violationReport.doIfHasAllPhotosInFirebase(getContext(), () ->
-                    violationReport.compressPhotos(getContext()));
+            {
+                try {
+                    violationReport.compressPhotos(getContext());
+                } catch (NullPointerException exception) {
+                    exception.printStackTrace();
+                }
+            });
         }
     }
 

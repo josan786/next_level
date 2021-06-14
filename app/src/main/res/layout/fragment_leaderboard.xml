@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LeaderboardFragment">
+
+    <ListView
+        android:id="@+id/leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:divider="@color/white"
+        android:dividerHeight="10dp"
+        android:fadeScrollbars="false"
+        android:fastScrollAlwaysVisible="false"
+        android:scrollbars="none" />
+</FrameLayout>

@@ -1,6 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -29,7 +34,9 @@ public class Account implements Serializable {
     public Address address;
     public String email;
     private String avatarFilename;
+    private String avatarURL;
     private ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
+    private int score;
 
     public Account()
     {
@@ -40,6 +47,7 @@ public class Account implements Serializable {
         email = null;
         avatarFilename = null;
         address = new Address();
+        score = 0;
     }
 
     public Account(FirebaseUser firebaseUser)
@@ -128,6 +136,18 @@ public class Account implements Serializable {
         databaseReference.setValue(address.street);
         databaseReference = firebaseDatabase.getReference("Users accounts").child(ID).child("Address").child("Town");
         databaseReference.setValue(address.town);
+    }
+
+    public void uploadUserAvatarOnFirebase(Context context)
+    {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageReference;
+        String avatarStorageURL = "gs://izh-helper.appspot.com/" + ID + "/avatar";
+        if (Helper.isOnline(context)) {
+            storageReference = firebaseStorage.getReferenceFromUrl(avatarStorageURL);
+            File file = new File(Helper.getFullPathFromDataDirectory(avatarFilename, context));
+            UploadTask uploadTask = storageReference.putFile(Uri.fromFile(file));
+        }
     }
 
     public void doIfUserPhoneAndPasswordRight(String phoneNumber, String password, Action rightAction, Action falseAction)
@@ -299,5 +319,21 @@ public class Account implements Serializable {
 
     public String getAvatarFilename() {
         return avatarFilename;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 }

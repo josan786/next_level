@@ -33,11 +33,11 @@ import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
 
 public class ViolationReportsListAdapter extends ArrayAdapter<ViolationReport> {
-    List<ViolationReport> violationReportsList;
+    private List<ViolationReport> violationReportsList;
 
-    Context context;
+    private Context context;
 
-    int resource;
+    private int resource;
 
     public ViolationReportsListAdapter(Context context, int resource, List<ViolationReport> violationReportsList) {
         super(context, resource, violationReportsList);

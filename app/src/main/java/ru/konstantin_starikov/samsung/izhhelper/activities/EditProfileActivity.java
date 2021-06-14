@@ -131,7 +131,10 @@ public class EditProfileActivity extends AppCompatActivity {
             userAccount.address.home = home;
             userAccount.address.street = street;
             userAccount.address.town = town;
-            if(avatarPath != null) userAccount.setAvatarFilename(avatarPath);
+            if(avatarPath != null) {
+                userAccount.setAvatarFilename(avatarPath);
+                userAccount.uploadUserAvatarOnFirebase(this);
+            }
             userAccount.updateUserData(this);
             userAccount.updateUserDataOnFirebase();
             goToNextActivity();

@@ -118,8 +118,10 @@ public final class Helper {
 
     public static String getFullPathFromDataDirectory(String fileName, Context context)
     {
+        String result = "";
         String ANDROID_DATA_DIR = context.getApplicationInfo().dataDir;
-        return ANDROID_DATA_DIR + File.separatorChar + fileName;
+        result = ANDROID_DATA_DIR + File.separatorChar + fileName;
+        return result;
     }
 
     public static Bitmap getBitmapFromPath(String imagePath) {
@@ -148,5 +150,13 @@ public final class Helper {
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    public static int convertDpInPixels(int dp, Context context)
+    {
+        int result = -1;
+        final float scale = context.getResources().getDisplayMetrics().density;
+        result = (int) (dp * scale + 0.5f);
+        return result;
     }
 }

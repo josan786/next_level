@@ -64,4 +64,5 @@
     <string name="NotSet">Не установлено</string>
     <string name="Settings">Настройки</string>
     <string name="Language">Язык</string>
+    <string name="Leaderboard">Рейтинг пользователей</string>
 </resources>

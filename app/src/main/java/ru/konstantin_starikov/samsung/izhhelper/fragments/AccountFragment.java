@@ -87,8 +87,8 @@ public class AccountFragment extends Fragment {
         capabilitiesListView = view.findViewById(R.id.accountCapabilities);
         ArrayList<String> capabilities = new ArrayList<String>();
         capabilities.add(getString(R.string.Settings));
+        capabilities.add(getString(R.string.Leaderboard));
         capabilities.add("Достижения");
-        capabilities.add("Таблица лидеров");
         ArrayAdapter<String> capabilitiesAdapter =
                 new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, capabilities);
         capabilitiesListView.setAdapter(capabilitiesAdapter);
@@ -104,6 +104,7 @@ public class AccountFragment extends Fragment {
                     }
                     case 1:
                     {
+                        openLeaderboardFragment();
                         break;
                     }
                     case 2:
@@ -127,6 +128,15 @@ public class AccountFragment extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .replace(R.id.usersFragmentsLayout, settingsFragment)
+                .commit();
+    }
+
+    public void openLeaderboardFragment()
+    {
+        LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.usersFragmentsLayout, leaderboardFragment)
                 .commit();
     }
 

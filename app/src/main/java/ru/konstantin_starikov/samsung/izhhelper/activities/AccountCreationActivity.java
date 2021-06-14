@@ -87,6 +87,7 @@ public class AccountCreationActivity extends AppCompatActivity {
                 userAvatarImageView.setBitmap(avatar);
                 String avatarPath = Helper.saveAvatarFromBitmap(avatar, userAccount.ID, this);
                 userAccount.setAvatarFilename(avatarPath.substring(avatarPath.lastIndexOf('/') + 1));
+                userAccount.uploadUserAvatarOnFirebase(this);
             }
             catch (IOException exception)
             {
