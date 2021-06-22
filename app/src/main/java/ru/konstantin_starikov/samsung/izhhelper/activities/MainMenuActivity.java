@@ -37,6 +37,7 @@ import java.util.Locale;
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.AccountFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.AchievementsFragment;
+import ru.konstantin_starikov.samsung.izhhelper.fragments.LeaderboardFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.MapFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.SettingsFragment;
 import ru.konstantin_starikov.samsung.izhhelper.fragments.UsersViolationsFragment;
@@ -219,12 +220,31 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void openAchievementsFragment(View view)
     {
-        AchievementsFragment achievementsFragment = new AchievementsFragment();
+        AchievementsFragment achievementsFragment = AchievementsFragment.newInstance();
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.usersFragmentsLayout, achievementsFragment)
                 .commit();
     }
+
+    public void openSettingsFragment(View view)
+    {
+        SettingsFragment settingsFragment = new SettingsFragment();
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.usersFragmentsLayout, settingsFragment)
+                .commit();
+    }
+
+    public void openLeaderboardFragment(View view)
+    {
+        LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
+        fragmentManager
+                .beginTransaction()
+                .replace(R.id.usersFragmentsLayout, leaderboardFragment)
+                .commit();
+    }
+
 
     public void openMapFragment(View view)
     {
@@ -254,4 +274,5 @@ public class MainMenuActivity extends AppCompatActivity {
         editProfileIntent.putExtra(USER_ACCOUNT, userAccount);
         startActivity(editProfileIntent);
     }
+
 }

@@ -84,60 +84,12 @@ public class AccountFragment extends Fragment {
             setUserAvatar();
         ((TextView) view.findViewById(R.id.userName)).setText(account.firstName);
         ((TextView) view.findViewById(R.id.userID)).setText(account.ID);
-        capabilitiesListView = view.findViewById(R.id.accountCapabilities);
-        ArrayList<String> capabilities = new ArrayList<String>();
-        capabilities.add(getString(R.string.Settings));
-        capabilities.add(getString(R.string.Leaderboard));
-        capabilities.add("Достижения");
-        ArrayAdapter<String> capabilitiesAdapter =
-                new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, capabilities);
-        capabilitiesListView.setAdapter(capabilitiesAdapter);
-        capabilitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position)
-                {
-                    case 0:
-                    {
-                        openSettingsFragment();
-                        break;
-                    }
-                    case 1:
-                    {
-                        openLeaderboardFragment();
-                        break;
-                    }
-                    case 2:
-                    {
-                        break;
-                    }
-                }
-            }
-        });
     }
 
     private void setUserAvatar()
     {
         String avatarPath = Helper.getFullPathFromDataDirectory(account.getAvatarFilename(), getContext());
         avatarImageView.setImageDrawable(Drawable.createFromPath(avatarPath));
-    }
-
-    public void openSettingsFragment()
-    {
-        SettingsFragment settingsFragment = new SettingsFragment();
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.usersFragmentsLayout, settingsFragment)
-                .commit();
-    }
-
-    public void openLeaderboardFragment()
-    {
-        LeaderboardFragment leaderboardFragment = new LeaderboardFragment();
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.usersFragmentsLayout, leaderboardFragment)
-                .commit();
     }
 
     @Override

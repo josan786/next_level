@@ -36,11 +36,13 @@ public class Account implements Serializable {
     private String avatarFilename;
     private String avatarURL;
     private ArrayList<ViolationReport> violationReports = new ArrayList<ViolationReport>();
+    private ArrayList<Achievement> achievements;
     private int score;
 
     public Account()
     {
         violationReports = new ArrayList<ViolationReport>();
+        achievements = new ArrayList<Achievement>();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if(currentUser != null) ID = currentUser.getUid();
@@ -256,6 +258,7 @@ public class Account implements Serializable {
     {
         ViolationsDatabase violationsDatabase;
         violationsDatabase = new ViolationsDatabase(context);
+        violationsDatabase.delete("74f24ae2-f1e2-419f-8a71-3342f03facbe");
         ArrayList<ViolationReport> allReports = violationsDatabase.selectAll();
         for (ViolationReport violationReport : allReports)
         {
@@ -297,6 +300,34 @@ public class Account implements Serializable {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    //получает достижения пользователя с Firebase
+    public void loadAchievementsFromFirebase(Context context)
+    {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users accounts").child(ID).child("Achievements");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for(DataSnapshot dataViolationReport : snapshot.getChildren())
+                    {
+                        String achievement = dataViolationReport.getValue(String.class);
+                        //Todo: Получение иконок, описания и количества баллов по названию достижения
+                        achievements.add(new Achievement(achievement, null, null, true));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public static void loadAvailableAchievementsFromFirebase()
+    {
+
     }
 
     private ViolationReport findViolationReportByID(String ID)

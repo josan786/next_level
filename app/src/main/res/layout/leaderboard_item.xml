@@ -28,6 +28,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="25dp"
             android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
             android:text="Владимир Троицкий"
             android:textColor="#000000" />
 
@@ -41,6 +42,6 @@
             android:gravity="right"
             android:text="164"
             android:textColor="#2F4859"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
     </LinearLayout>
 </FrameLayout>
