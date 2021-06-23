@@ -229,8 +229,11 @@
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/userAchievementsRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="115dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal" />
 
             </LinearLayout>

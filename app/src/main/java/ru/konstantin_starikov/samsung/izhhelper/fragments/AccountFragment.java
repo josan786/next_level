@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,20 +18,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-
 import ru.konstantin_starikov.samsung.izhhelper.R;
 import ru.konstantin_starikov.samsung.izhhelper.activities.SplashScreenActivity;
 import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
+import ru.konstantin_starikov.samsung.izhhelper.models.adapters.AccountAchievementsAdapter;
+import ru.konstantin_starikov.samsung.izhhelper.models.adapters.LeaderboardListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +77,7 @@ public class AccountFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        account.loadAchievementsFromFirebase(getContext());
         getActivity().invalidateOptionsMenu();
         tuneActionBar();
         avatarImageView = view.findViewById(R.id.avatar);
@@ -84,6 +85,12 @@ public class AccountFragment extends Fragment {
             setUserAvatar();
         ((TextView) view.findViewById(R.id.userName)).setText(account.firstName);
         ((TextView) view.findViewById(R.id.userID)).setText(account.ID);
+
+        LinearLayoutManager layoutManager= new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.userAchievementsRecyclerView);
+        recyclerView.setLayoutManager(layoutManager);
+        AccountAchievementsAdapter achievementsAdapter = new AccountAchievementsAdapter(getContext(), account);
+        recyclerView.setAdapter(achievementsAdapter);
     }
 
     private void setUserAvatar()

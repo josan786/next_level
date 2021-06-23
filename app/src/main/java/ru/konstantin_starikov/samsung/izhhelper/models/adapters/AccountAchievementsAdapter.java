@@ -1,29 +1,38 @@
 package ru.konstantin_starikov.samsung.izhhelper.models.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.konstantin_starikov.samsung.izhhelper.R;
+import ru.konstantin_starikov.samsung.izhhelper.models.Account;
 import ru.konstantin_starikov.samsung.izhhelper.models.Achievement;
 
 
 //Todo: создание адаптера с достижениями
 public class AccountAchievementsAdapter extends RecyclerView.Adapter<AccountAchievementsAdapter.ViewHolder>{
 
+    private Context context;
     private LayoutInflater inflater;
     private List<Achievement> achievements;
+    private ArrayList<Achievement> availableAchievements;
 
-    public AccountAchievementsAdapter(Context context, List<Achievement> achievements) {
-        this.achievements = achievements;
+    public AccountAchievementsAdapter(Context context, Account account) {
+        this.context = context;
+        this.achievements = account.getAchievements();
         this.inflater = LayoutInflater.from(context);
+        availableAchievements = Achievement.getAllAvailableAchievements(context);
     }
+
     @Override
     public AccountAchievementsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -33,23 +42,34 @@ public class AccountAchievementsAdapter extends RecyclerView.Adapter<AccountAchi
 
     @Override
     public void onBindViewHolder(AccountAchievementsAdapter.ViewHolder holder, int position) {
-        Achievement achievement = achievements.get(position);
-/*        holder.title.setText(form.title);
-        holder.questionsCount.setText(Integer.toString(form.questions.size()));*/
+        Achievement achievement = availableAchievements.get(position);
+        Resources res = context.getResources();
+        if (hasAchievementInUser(achievement)) {
+            holder.achievementIcon.setImageDrawable((ResourcesCompat.getDrawable(res, achievement.colorIconID, null)));
+        } else {
+            holder.achievementIcon.setImageDrawable((ResourcesCompat.getDrawable(res, achievement.wbIconID, null)));
+        }
+    }
+
+    private boolean hasAchievementInUser(Achievement achievement)
+    {
+        for(Achievement userAchievement : achievements)
+        {
+            if(achievement.ID.equals(userAchievement.ID)) return true;
+        }
+        return false;
     }
 
     @Override
     public int getItemCount() {
-        return achievements.size();
+        return availableAchievements.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView title = null;
-        final TextView questionsCount = null;
+        final ImageView achievementIcon;
         ViewHolder(View view){
             super(view);
-/*            title = view.findViewById(R.id.availableFormTitle);
-            questionsCount = view.findViewById(R.id.availableFormQuestionsCount);*/
+            achievementIcon = view.findViewById(R.id.achievementIcon);
         }
     }
 }

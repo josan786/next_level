@@ -65,4 +65,8 @@
     <string name="Settings">Настройки</string>
     <string name="Language">Язык</string>
     <string name="Leaderboard">Рейтинг пользователей</string>
+    <string name="FirstReportName">Первая фиксация</string>
+    <string name="InLeaderboardName">Попал в топ пользователей</string>
+    <string name="FirstReportDescription">Выдаётся после первой подтверждённой фиксации правонарушения</string>
+    <string name="InLeaderboardDescription">Выдаётся за попадание в топ пользователей</string>
 </resources>

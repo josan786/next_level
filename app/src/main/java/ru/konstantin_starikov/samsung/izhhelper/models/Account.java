@@ -310,11 +310,12 @@ public class Account implements Serializable {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    achievements.clear();
                     for(DataSnapshot dataViolationReport : snapshot.getChildren())
                     {
-                        String achievement = dataViolationReport.getValue(String.class);
+                        String achievement = dataViolationReport.getKey();
                         //Todo: Получение иконок, описания и количества баллов по названию достижения
-                        achievements.add(new Achievement(achievement, null, null, true));
+                        achievements.add(new Achievement(achievement, true, context));
                     }
                 }
             }
@@ -366,5 +367,9 @@ public class Account implements Serializable {
 
     public void setAvatarURL(String avatarURL) {
         this.avatarURL = avatarURL;
+    }
+
+    public ArrayList<Achievement> getAchievements() {
+        return achievements;
     }
 }

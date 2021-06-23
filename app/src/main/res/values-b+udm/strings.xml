@@ -65,4 +65,8 @@
     <string name="Settings">Настройкаосын</string>
     <string name="Language">Кыл</string>
     <string name="Leaderboard">Лидер года таблицаосын</string>
+    <string name="FirstReportName">Нырысетӥ фиксация</string>
+    <string name="InLeaderboardName">Топ шедьтыны пользователь</string>
+    <string name="FirstReportDescription">Нырысетӥез кемдӥз бере правонарушениос юнматэм фиксация</string>
+    <string name="InLeaderboardDescription">Топ мычиськыса шедён понна пользователям</string>
 </resources>
