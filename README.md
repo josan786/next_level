@@ -6,7 +6,7 @@
 
 *<div align="center"> Приложение для борьбы с неправильной парковкой в городе Ижевске </div>*
 
-[<div align="center">APK приложения</div>](https://drive.google.com/file/d/1LqKl_YF8aVw4SG4XcKCb_HErA1nQ6pIk/view?usp=sharing)
+[<div align="center">APK приложения</div>](https://drive.google.com/file/d/1ju0or4dnrqf2SEAjhGpX-zuIPkGr1j45/view?usp=sharing)
 [<div align="center">Презентация приложения для IT Школы Samsung</div>](https://github.com/KapustaKosta/IzhHelper/blob/master/Помощник%20Ижевска%20Samsung.pptx)
 [<div align="center">Демонстрация работы приложения</div>](https://drive.google.com/file/d/1oIcnMSg8ZGypc_U8-k5fMiEEw6nHN75M/view?usp=sharing)
 [<div align="center">Figma</div>](https://www.figma.com/file/I29B3JGJcYMTeyfpCSZ4Da/IzhHelper?node-id=0%3A1)
