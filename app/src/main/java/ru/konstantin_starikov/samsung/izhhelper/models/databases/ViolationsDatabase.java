@@ -255,6 +255,13 @@ public class ViolationsDatabase implements Serializable {
         return arrayList;
     }
 
+    public boolean hasViolation(String id) {
+        boolean result = true;
+        Cursor cursor = database.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor.getCount() == 0) result = false;
+        return result;
+    }
+
     private class OpenHelper extends SQLiteOpenHelper implements Serializable {
 
         OpenHelper(Context context) {

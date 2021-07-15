@@ -9,8 +9,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import ru.konstantin_starikov.samsung.izhhelper.models.databases.ViolationsDatabase;
 import ru.konstantin_starikov.samsung.izhhelper.models.enumerators.ViolationStatusEnum;
@@ -48,8 +56,6 @@ public class ViolationReport implements Serializable{
     public String carNumberPhotoName;
 
     public ArrayList<String> photosNames;
-
-    FirebaseDatabase firebaseDatabase;
 
     private CountDownLatch countDownLatch;
 
@@ -137,50 +143,72 @@ public class ViolationReport implements Serializable{
         photosNames.add(photoName);
     }
 
-    @SuppressLint("LongLogTag")
-    public void submitViolationToAuthorizedBody(Context context)
-    {
+    public void submitViolationToAuthorizedBodyAndDoAction(Context context, Action successAction) {
         DatabaseReference databaseReference;
+        DatabaseReference violationReportReference;
+        DatabaseReference reference;
         FirebaseStorage firebaseStorage;
         StorageReference storageReference;
         if (Helper.isOnline(context)) {
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Place");
-            databaseReference.setValue(location.getPlace());
-            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Latitude");
-            databaseReference.setValue(location.getLatitude());
-            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Location").child("Longitude");
-            databaseReference.setValue(location.getLongitude());
-            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Type");
-            databaseReference.setValue(violationType.toString());
-            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("CarNumber");
-            databaseReference.setValue(carNumber.toString());
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            violationReportReference = databaseReference.child("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID);
+            // Дело в "Users accounts" почему? не знаю
+            reference = violationReportReference.child("Location").child("Place");
+            if (location.getPlace() != null) reference.setValue(location.getPlace());
+            reference = violationReportReference.child("Location").child("Latitude");
+            reference.setValue(location.getLatitude());
+            reference = violationReportReference.child("Location").child("Longitude");
+            reference.setValue(location.getLongitude());
+            reference = violationReportReference.child("Type");
+            if (violationType != null) reference.setValue(violationType.toString());
+            reference = violationReportReference.child("CarNumber");
+            if (carNumber != null) reference.setValue(carNumber.toString());
 
             firebaseStorage = FirebaseStorage.getInstance();
             String violationReportStorageURL = "gs://izh-helper.appspot.com/" + senderAccount.ID + "/Violations reports/" + ID + "/";
             storageReference = firebaseStorage.getReferenceFromUrl(violationReportStorageURL + "CarNumberPhoto");
             File file = new File(Helper.getFullPathFromDataDirectory(carNumberPhotoName, context));
             UploadTask uploadTask = storageReference.putFile(Uri.fromFile(file));
-            for(int i = 0 ; i < photosNames.size(); i++)
-            {
+            ArrayList<UploadTask> photosUploadTasks = new ArrayList<UploadTask>();
+            for (int i = 0; i < photosNames.size(); i++) {
                 File photoFile = new File(context.getApplicationInfo().dataDir + File.separator + photosNames.get(i));
                 storageReference = firebaseStorage.getReferenceFromUrl(violationReportStorageURL + "/Photos/" + photosNames.get(i));
                 UploadTask photoUploadTask = storageReference.putFile(Uri.fromFile(photoFile));
+                photosUploadTasks.add(photoUploadTask);
+                photoUploadTask
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                if (countDownLatch != null) countDownLatch.countDown();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                if (countDownLatch != null) countDownLatch.countDown();
+                            }
+                        });
             }
+            Tasks.whenAll(photosUploadTasks).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    successAction.run();
+                }
+            });
             status = new ViolationStatus(ViolationStatusEnum.Sent);
-            databaseReference = firebaseDatabase.getReference("Users accounts").child(senderAccount.ID).child("Violations reports").child(ID).child("Status");
-            databaseReference.setValue(status.toString());
+            reference = violationReportReference.child("Status");
+            reference.setValue(status.toString());
         } else {
             status = new ViolationStatus(ViolationStatusEnum.Saved);
         }
-        if(senderAccount.isViolationReportInSQLDatabase(ID, context))
-        {
+        if (senderAccount.isViolationReportInSQLDatabase(ID, context)) {
             senderAccount.updateViolationReport(this, context);
-        }
-        else {
+        } else {
             senderAccount.addViolationReport(this, context);
+            if (countDownLatch != null) countDownLatch.countDown();
+            if (countDownLatch != null) countDownLatch.countDown();
+            if (countDownLatch != null) countDownLatch.countDown();
         }
-        if(countDownLatch != null) countDownLatch.countDown();
     }
 
     public void loadPhotosFromFirebase(Context context)

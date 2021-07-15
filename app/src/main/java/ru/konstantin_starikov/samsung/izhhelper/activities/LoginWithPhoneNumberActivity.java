@@ -172,7 +172,7 @@ public class LoginWithPhoneNumberActivity extends AppCompatActivity {
                                 public void run() {
                                     goToAccountCreation();
                                 }
-                            });
+                            }, LoginWithPhoneNumberActivity.this);
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

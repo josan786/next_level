@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.konstantin_starikov.samsung.izhhelper">
 
     <uses-feature
@@ -22,7 +23,8 @@
         android:roundIcon="@mipmap/ic_izh_helper_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IzhHelper"
-        android:screenOrientation="portrait">
+        android:screenOrientation="portrait"
+        tools:replace="android:icon">
         <activity android:name=".activities.SetUserPasswordActivity"></activity>
         <activity
             android:name=".activities.SplashScreenActivity"

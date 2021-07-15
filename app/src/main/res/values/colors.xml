@@ -15,4 +15,6 @@
     <color name="gold">#FFDA4D</color>
     <color name="silver">#D8D9C9</color>
     <color name="copper">#F5AB6C</color>
+    <color name="achievement_background">#A7D7DC</color>
+    <color name="orange">#DD8767</color>
 </resources>

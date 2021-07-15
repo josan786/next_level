@@ -132,4 +132,12 @@ public class Achievement implements Serializable {
         }
         return result;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

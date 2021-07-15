@@ -69,4 +69,5 @@
     <string name="InLeaderboardName">Топ шедьтыны пользователь</string>
     <string name="FirstReportDescription">Нырысетӥез кемдӥз бере правонарушениос юнматэм фиксация</string>
     <string name="InLeaderboardDescription">Топ мычиськыса шедён понна пользователям</string>
+    <string name="Loading">Витё</string>
 </resources>

@@ -69,4 +69,5 @@
     <string name="InLeaderboardName">Попал в топ пользователей</string>
     <string name="FirstReportDescription">Выдаётся после первой подтверждённой фиксации правонарушения</string>
     <string name="InLeaderboardDescription">Выдаётся за попадание в топ пользователей</string>
+    <string name="Loading">Загрузка</string>
 </resources>

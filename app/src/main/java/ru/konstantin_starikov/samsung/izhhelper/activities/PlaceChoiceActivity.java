@@ -270,7 +270,6 @@ public class PlaceChoiceActivity extends AppCompatActivity implements UserLocati
     public void openViolationTypeSelectionActivity(View v) {
         String violationPlace = violationReport.location.getPlace();
         if(violationPlace == null || violationPlace.isEmpty()) violationReport.location.setPlace(getString(R.string.NotSet));
-
         Intent openViolationTypeSelectionIntent = new Intent(PlaceChoiceActivity.this, ViolationTypeSelectionActivity.class);
         openViolationTypeSelectionIntent.putExtra(VIOLATION_REPORT, violationReport);
         startActivity(openViolationTypeSelectionIntent);

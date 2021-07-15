@@ -81,8 +81,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
 
-        userAccount.loadViolationsFromFirebase(this);
-
         addAccountFragment();
 
         tuneActionBar();
@@ -123,6 +121,12 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        userAccount.loadViolationsFromFirebase(this);
     }
 
     private void findAndSetViews()
@@ -220,7 +224,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void openAchievementsFragment(View view)
     {
-        AchievementsFragment achievementsFragment = AchievementsFragment.newInstance();
+        AchievementsFragment achievementsFragment = AchievementsFragment.newInstance(userAccount);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(getString(R.string.Achievements));
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.usersFragmentsLayout, achievementsFragment)
@@ -266,6 +272,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent choosePlaceIntent = new Intent(MainMenuActivity.this, PlaceChoiceActivity.class);
         choosePlaceIntent.putExtra(VIOLATION_REPORT, violationReport);
         startActivity(choosePlaceIntent);
+        finish();
     }
 
     public void editProfile(View view)

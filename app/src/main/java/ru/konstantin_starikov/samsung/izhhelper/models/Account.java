@@ -1,5 +1,6 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -76,7 +77,12 @@ public class Account implements Serializable {
 
     public boolean sendViolationReport(String ID, Context context)
     {
-        findViolationReportByID(ID).submitViolationToAuthorizedBody(context);
+        findViolationReportByID(ID).submitViolationToAuthorizedBodyAndDoAction(context, new Action() {
+            @Override
+            public void run() {
+
+            }
+        });
         return true;
     }
 
@@ -86,7 +92,12 @@ public class Account implements Serializable {
         {
             if(violationReport.getStatus().getViolationStatusEnum() == ViolationStatusEnum.Saved)
             {
-                violationReport.submitViolationToAuthorizedBody(context);
+                violationReport.submitViolationToAuthorizedBodyAndDoAction(context, new Action() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
             }
         }
     }
@@ -191,37 +202,38 @@ public class Account implements Serializable {
         databaseReference.setValue(password);
     }
 
-    public void retrieveUserDataFromFirebase(Action dataReceivedAction, Action dataIsEmptyAction)
+    public void retrieveUserDataFromFirebase(Action dataReceivedAction, Action dataIsEmptyAction, Activity activity)
     {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users accounts").child(ID);
-        reference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    if(!snapshot.hasChild("FirstName") || !snapshot.hasChild("LastName")
-                    || !snapshot.hasChild("Address"))
-                    {
-                        dataIsEmptyAction.run();
-                        return;
-                    }
-                    firstName = snapshot.child("FirstName").getValue(String.class);
-                    lastName = snapshot.child("LastName").getValue(String.class);
-                    Log.i("DataRetrieved", firstName);
-                    Log.i("DataRetrieved", lastName);
-                    address.flat = snapshot.child("Address").child("Flat").getValue(Integer.class);
-                    address.home = snapshot.child("Address").child("Home").getValue(String.class);
-                    address.street = snapshot.child("Address").child("Street").getValue(String.class);
-                    address.town = snapshot.child("Address").child("Town").getValue(String.class);
-                    dataReceivedAction.run();
+                if(!activity.isFinishing()) {
+                    if (snapshot.exists()) {
+                        if (!snapshot.hasChild("FirstName") || !snapshot.hasChild("LastName")
+                                || !snapshot.hasChild("Address")) {
+                            dataIsEmptyAction.run();
+                            return;
+                        }
+                        firstName = snapshot.child("FirstName").getValue(String.class);
+                        lastName = snapshot.child("LastName").getValue(String.class);
+                        Log.i("DataRetrieved", firstName);
+                        Log.i("DataRetrieved", lastName);
+                        address.flat = snapshot.child("Address").child("Flat").getValue(Integer.class);
+                        address.home = snapshot.child("Address").child("Home").getValue(String.class);
+                        address.street = snapshot.child("Address").child("Street").getValue(String.class);
+                        address.town = snapshot.child("Address").child("Town").getValue(String.class);
+                        dataReceivedAction.run();
+                    } else dataIsEmptyAction.run();
                 }
-                else dataIsEmptyAction.run();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                dataIsEmptyAction.run();
+
             }
-        });
+        };
+        reference.addValueEventListener(eventListener);
     }
 
     public void addViolationReport(ViolationReport violationReport, Context context)
@@ -249,8 +261,7 @@ public class Account implements Serializable {
         boolean result = false;
         ViolationsDatabase violationsDatabase;
         violationsDatabase = new ViolationsDatabase(context);
-        ViolationReport violationReport = violationsDatabase.select(ID);
-        if(violationReport != null) result = true;
+        result = violationsDatabase.hasViolation(ID);
         return result;
     }
 
@@ -258,7 +269,7 @@ public class Account implements Serializable {
     {
         ViolationsDatabase violationsDatabase;
         violationsDatabase = new ViolationsDatabase(context);
-        violationsDatabase.delete("74f24ae2-f1e2-419f-8a71-3342f03facbe");
+        //violationsDatabase.deleteAll();
         ArrayList<ViolationReport> allReports = violationsDatabase.selectAll();
         for (ViolationReport violationReport : allReports)
         {

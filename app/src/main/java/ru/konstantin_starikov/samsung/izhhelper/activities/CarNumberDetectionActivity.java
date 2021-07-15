@@ -298,6 +298,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         Intent openPhotofixationIntent = new Intent(CarNumberDetectionActivity.this, PhotofixationActivity.class);
         openPhotofixationIntent.putExtra(VIOLATION_REPORT, violationReport);
         startActivity(openPhotofixationIntent);
+        finish();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -318,7 +319,7 @@ public class CarNumberDetectionActivity extends AppCompatActivity implements Rec
         timerSecondsCountText.setVisibility(View.INVISIBLE);
         cameraView.surfaceCreated(cameraView.getHolder());
         isRecognized = false;
-        //Todo: удаление фото при омтене распознавания
+        //Todo: удаление фото при отмене распознавания
         cancelTimer.cancel();
     }
 

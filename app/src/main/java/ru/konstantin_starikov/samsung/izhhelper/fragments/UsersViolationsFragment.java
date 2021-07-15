@@ -132,15 +132,6 @@ public class UsersViolationsFragment extends Fragment {
         }
     }
 
-    public void createViolationReport(View v)
-    {
-        ViolationReport violationReport = new ViolationReport();
-        violationReport.senderAccount = account;
-        Intent choosePlaceIntent = new Intent(getActivity(), PlaceChoiceActivity.class);
-        choosePlaceIntent.putExtra(VIOLATION_REPORT, violationReport);
-        startActivity(choosePlaceIntent);
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);

@@ -94,7 +94,7 @@ public class EnterSMSCodeActivity extends AppCompatActivity {
                                     userAccount.setUserPhone(phoneNumber);
                                     goToAccountCreationActivity();
                                 }
-                            });
+                            }, EnterSMSCodeActivity.this);
                         } else {
                             incorrectSMSCodeTextView.setVisibility(View.VISIBLE);
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

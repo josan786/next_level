@@ -1,9 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -13,9 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.CountDownLatch;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import ru.konstantin_starikov.samsung.izhhelper.R;
-import ru.konstantin_starikov.samsung.izhhelper.models.Helper;
 import ru.konstantin_starikov.samsung.izhhelper.models.ViolationReport;
+import ru.konstantin_starikov.samsung.izhhelper.models.interfaces.Action;
 
 public class SendViolationActivity extends AppCompatActivity {
 
@@ -75,22 +74,35 @@ public class SendViolationActivity extends AppCompatActivity {
 
     public void sendViolation(View v)
     {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(R.color.blueAppBarColor);
+        pDialog.setTitleText(getString(R.string.Loading));
+        pDialog.setCancelable(false);
+        pDialog.show();
+/*        CountDownLatch countDownLatch = new CountDownLatch(3);
         violationReport.setCountDownLatch(countDownLatch);
         try {
             Thread submitViolationThread = new Thread(){
                 @Override
                 public void run()
-                {
-                    violationReport.submitViolationToAuthorizedBody(SendViolationActivity.this);
-                }
+                {*/
+                    violationReport.submitViolationToAuthorizedBodyAndDoAction(SendViolationActivity.this, new Action() {
+                        @Override
+                        public void run() {
+                            Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
+                            startActivity(openSuccessfullySentIntent);
+                        }
+                    });
+/*                }
             };
             submitViolationThread.start();
             countDownLatch.await();
-            Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
-            startActivity(openSuccessfullySentIntent);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        finally {
+            Intent openSuccessfullySentIntent = new Intent(SendViolationActivity.this, SuccessfullySentActivity.class);
+            startActivity(openSuccessfullySentIntent);
+        }*/
     }
 }

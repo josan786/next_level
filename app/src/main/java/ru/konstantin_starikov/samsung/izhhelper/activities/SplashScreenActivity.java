@@ -57,7 +57,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             goToMainMenu();
         }, () -> {
             goToAccountCreation();
-        });
+        }, SplashScreenActivity.this);
     }
 
     private void goToMainMenu()

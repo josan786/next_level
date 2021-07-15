@@ -137,5 +137,6 @@ public class PhotofixationActivity extends AppCompatActivity implements Photofix
         Intent openSendViolationIntent = new Intent(PhotofixationActivity.this, SendViolationActivity.class);
         openSendViolationIntent.putExtra(VIOLATION_REPORT, violationReport);
         startActivity(openSendViolationIntent);
+        finish();
     }
 }

@@ -159,4 +159,12 @@ public final class Helper {
         result = (int) (dp * scale + 0.5f);
         return result;
     }
+
+    public static int convertPixelsInDp(int pixels, Context context)
+    {
+        int result = -1;
+        final float scale = context.getResources().getDisplayMetrics().density;
+        result = (int) ((pixels - 0.5f) / scale);
+        return result;
+    }
 }

@@ -1,6 +1,7 @@
 package ru.konstantin_starikov.samsung.izhhelper.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Cleaner {
                 if(file.getName().equals(usedFilename))
                 {
                     isUsed = true;
+                    break;
                 }
             }
             if(!isUsed && isImage(file)) file.delete();
@@ -58,11 +60,11 @@ public class Cleaner {
     {
         boolean result = false;
         String fileExtension = getFileExtension(file);
-        if(fileExtension.equals("png")
-                || fileExtension.equals("jpg")
-                || fileExtension.equals("jpeg")
-                || fileExtension.equals("JPG")
-                || fileExtension.equals("JPEG")) result = true;
+        if(fileExtension.equals(".png")
+                || fileExtension.equals(".jpg")
+                || fileExtension.equals(".jpeg")
+                || fileExtension.equals(".JPG")
+                || fileExtension.equals(".JPEG")) result = true;
         return result;
     }
 

@@ -14,8 +14,8 @@
         android:layout_marginBottom="25dp"
         android:clickable="true"
         android:longClickable="false"
-        android:src="@drawable/send"
         android:onClick="sendViolation"
+        android:src="@drawable/send"
         app:backgroundTint="#28ABB9"
         app:backgroundTintMode="add"
         app:tint="@color/white" />
